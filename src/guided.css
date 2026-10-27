@@ -1,0 +1,3119 @@
+.guidedApp {
+  min-height: 100dvh;
+  background: #f5f6fa;
+  color: #243047;
+  font-family: "DM Sans", sans-serif;
+  --guide-purple: #6f4ce6;
+  --guide-ink: #243047;
+  --guide-muted: #748096;
+  --guide-line: #e3e6ef;
+  font-size: 15px;
+}
+.guidedApp h1,
+.guidedApp h2,
+.guidedApp h3 {
+  font-family: Manrope, "DM Sans", sans-serif;
+}
+.guidedApp button:focus-visible,
+.guidedApp input:focus-visible,
+.guidedApp select:focus-visible,
+.guidedApp textarea:focus-visible {
+  outline: 3px solid #ac96f7;
+  outline-offset: 3px;
+}
+.guidedApp button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+.guidedApp svg {
+  vertical-align: middle;
+}
+.guideHeader {
+  height: 81px;
+  background: #fff;
+  border-bottom: 1px solid #e5e8f0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 max(28px, calc((100vw - 1040px) / 2));
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  gap: 15px;
+}
+.guideBrand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border: 0;
+  background: none;
+  padding: 0;
+  text-align: left;
+  color: #26324a;
+}
+.guideBrand > span {
+  width: 43px;
+  height: 43px;
+  border-radius: 13px;
+  background: #7050df;
+  color: white;
+  display: grid;
+  place-items: center;
+  box-shadow: 0 4px 12px #7050df19;
+}
+.guideBrand > b {
+  font:
+    800 18px Manrope,
+    sans-serif;
+  letter-spacing: 1px;
+}
+.guideBrand small {
+  font:
+    12px "DM Sans",
+    sans-serif;
+  display: block;
+  letter-spacing: 0;
+  color: #8a92a4;
+  margin-top: 4px;
+}
+.guideHeaderActions {
+  display: flex;
+  align-items: center;
+  gap: 17px;
+}
+.guideOutline,
+.guidePrimary,
+.guidePractice {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  border-radius: 10px;
+  min-height: 45px;
+  padding: 12px 17px;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.5;
+}
+.guideOutline {
+  background: #fff;
+  border: 1px solid #dce1eb;
+  color: #58647a;
+}
+.guideOutline:hover:not(:disabled) {
+  border-color: #ac97ea;
+  background: #faf8ff;
+}
+.guidePrimary {
+  background: #7050df;
+  border: 1px solid #7050df;
+  color: #fff;
+  min-height: 54px;
+  padding: 15px 23px;
+  font-size: 16px;
+  font-weight: 650;
+  box-shadow: 0 4px 10px #7050df13;
+}
+.guidePrimary:hover:not(:disabled) {
+  background: #5f3cd2;
+  border-color: #5f3cd2;
+}
+.guidePrimary:disabled {
+  background: #eeebf5;
+  border-color: #eeebf5;
+  color: #a29aac;
+  opacity: 1 !important;
+  box-shadow: none;
+}
+.guidePractice {
+  background: white;
+  border: 1px solid #d8ddea;
+  color: #53617a;
+  min-height: 54px;
+  padding: 15px 23px;
+  font-size: 15px;
+}
+.guidePractice:hover {
+  background: #f9f7ff;
+  border-color: #b09ae9;
+}
+.guideTextButton {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 10px 0;
+  background: none;
+  border: 0;
+  color: #758096;
+  font-size: 13px;
+}
+.guideTextButton:hover,
+.guideTextButton.selected {
+  color: #7050df;
+}
+.guideMenuWrap {
+  position: relative;
+}
+.guideMenu {
+  position: absolute;
+  right: 0;
+  top: 44px;
+  width: 260px;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  padding: 9px;
+  border: 1px solid #e1e5ef;
+  border-radius: 13px;
+  background: white;
+  box-shadow: 0 13px 45px #293b6a1f;
+  z-index: 50;
+}
+.guideMenu > button {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  padding: 12px;
+  border: 0;
+  border-radius: 7px;
+  background: none;
+  color: #5c6880;
+  font-size: 13px;
+  text-align: left;
+}
+.guideMenu > button:hover {
+  background: #f3efff;
+  color: #7050df;
+}
+.guideMenu > button svg {
+  color: #9a91ac;
+}
+.guideMenu > hr {
+  height: 1px;
+  background: #edeef4;
+  border: 0;
+  margin: 5px;
+}
+.practiceBanner {
+  padding: 10px 30px;
+  background: #fff6de;
+  border-bottom: 1px solid #efddb4;
+  color: #8b6427;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 40px;
+  font-size: 12px;
+  line-height: 1.6;
+}
+.practiceBanner > span {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+.practiceBanner > span > span {
+  color: #a0865d;
+}
+.practiceBanner button {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  border: 0;
+  background: none;
+  color: #936527;
+  font-size: 12px;
+  font-weight: 650;
+  white-space: nowrap;
+}
+.guideWelcome {
+  max-width: 900px;
+  margin: 0 auto;
+  text-align: center;
+  padding: 48px 25px 35px;
+}
+.welcomeTag {
+  display: inline-flex;
+  align-items: center;
+  background: #eee9fc;
+  border: 1px solid #e4dcf9;
+  color: #8a75b9;
+  font-size: 10px;
+  font-weight: 650;
+  letter-spacing: 1.3px;
+  padding: 7px 11px;
+  border-radius: 20px;
+  margin-bottom: 20px;
+}
+.guideWelcome > h1 {
+  font-size: 44px;
+  font-weight: 800;
+  line-height: 1.3;
+  letter-spacing: -1.8px;
+  color: #29334b;
+}
+.welcomeIntro {
+  font-size: 16px;
+  color: #8891a3;
+  line-height: 1.85;
+  margin-top: 19px;
+}
+.welcomeSteps {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 27px;
+  margin: 34px 0 31px;
+}
+.welcomeSteps > div {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 165px;
+}
+.welcomeSteps > div > span {
+  width: 49px;
+  height: 49px;
+  border-radius: 14px;
+  border: 1px solid #e4e1f1;
+  background: #efedf7;
+  color: #9a84c6;
+  display: grid;
+  place-items: center;
+  margin-bottom: 13px;
+}
+.welcomeSteps > div:nth-of-type(2) > span {
+  background: #f6f0e7;
+  border-color: #ece3d3;
+  color: #baa276;
+}
+.welcomeSteps > div:nth-of-type(3) > span {
+  background: #eaf3ef;
+  border-color: #d6e7de;
+  color: #79a48e;
+}
+.welcomeSteps b {
+  font-size: 14px;
+  font-weight: 750;
+  color: #3f4960;
+}
+.welcomeSteps p {
+  font-size: 12px;
+  color: #979fb0;
+  margin-top: 7px;
+  line-height: 1.6;
+}
+.welcomeSteps > svg {
+  color: #cbd0df;
+  margin-top: -10px;
+}
+.welcomeActions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 13px;
+}
+.welcomeActions > .guidePrimary {
+  min-width: 225px;
+}
+.practicePromise {
+  font-size: 11px;
+  color: #a0a7b7;
+  line-height: 1.7;
+  margin-top: 14px;
+  text-align: center;
+}
+.welcomePrepare {
+  margin-top: 31px;
+  padding: 20px 5px 0;
+  border: 0;
+  border-top: 1px solid #e5e8f0;
+  background: none;
+  color: #9ca4b4;
+  font-size: 12px;
+  line-height: 1.7;
+}
+.welcomePrepare span {
+  color: #8b74bc;
+  margin-left: 7px;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-weight: 550;
+}
+.guideShell {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 25px 26px 35px;
+}
+.simpleScoreStrip {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  border: 1px solid #e5e8f0;
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+  margin-bottom: 20px;
+}
+.simpleScoreStrip > div {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 9px;
+  background: none;
+  border: 0;
+  border-right: 1px solid #edf0f5;
+  text-align: left;
+  padding: 17px 18px;
+  min-width: 0;
+}
+.simpleScoreStrip > div:last-child {
+  border-right: 0;
+}
+.simpleScoreStrip > div:hover {
+  background: #faf9ff;
+}
+.simpleScoreStrip > div > span {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  color: #727f94;
+  font-size: 13px;
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.simpleScoreStrip i {
+  width: 6px;
+  height: 6px;
+  background: var(--team);
+  border-radius: 50%;
+  flex: none;
+}
+.simpleScoreStrip b {
+  display: flex;
+  gap: 5px;
+  align-items: baseline;
+  color: #3a465d;
+  font:
+    750 22px Manrope,
+    sans-serif;
+  letter-spacing: -0.5px;
+  white-space: nowrap;
+}
+.simpleScoreStrip small {
+  font:
+    10px "DM Sans",
+    sans-serif;
+  color: #a0a9b8;
+  letter-spacing: 0;
+}
+.guideRoundLine {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 0 3px 16px;
+  font-size: 12px;
+  color: #9099aa;
+  gap: 15px;
+}
+.guideRoundLine > span {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.guideRoundLine > span > b {
+  font-weight: 600;
+  color: #68768d;
+}
+.guideRoundLine i {
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: #c1c8d5;
+  margin: 0 7px;
+}
+.guideRoundLine em {
+  font-style: normal;
+  font-size: 8px;
+  padding: 3px 6px;
+  color: #b2a17f;
+  border: 1px solid #ebe3d4;
+  background: #faf5eb;
+  border-radius: 4px;
+  margin-left: 8px;
+  letter-spacing: 0.5px;
+}
+.guideRoundLine > button {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  border: 0;
+  background: none;
+  color: #9b8bb5;
+  font-size: 11px;
+}
+.guideStep {
+  background: white;
+  border: 1px solid #e1e5ed;
+  box-shadow: 0 3px 14px #2d426904;
+  border-radius: 17px;
+  padding: 31px 34px;
+  animation: guideEnter 0.18s ease-out;
+}
+.guideStepHeading {
+  display: flex;
+  align-items: start;
+  justify-content: space-between;
+  gap: 28px;
+  margin-bottom: 25px;
+}
+.guideStepHeading > div:first-child {
+  flex: 1;
+  min-width: 0;
+}
+.guideStepNumber {
+  display: block;
+  font-size: 10px;
+  font-weight: 650;
+  letter-spacing: 1.1px;
+  color: #a294b8;
+  margin-bottom: 9px;
+}
+.guideStepHeading h1 {
+  font-size: 27px;
+  line-height: 1.45;
+  font-weight: 800;
+  letter-spacing: -0.9px;
+  color: #2e3850;
+}
+.guideStepHeading p {
+  font-size: 14px;
+  color: #939bac;
+  line-height: 1.8;
+  margin-top: 8px;
+  max-width: 680px;
+}
+.guideStepAside {
+  flex: none;
+}
+.guideCoach {
+  display: flex;
+  gap: 12px;
+  align-items: start;
+  background: #f5f1ff;
+  border: 1px solid #e9e0fc;
+  border-radius: 9px;
+  padding: 13px 16px;
+  margin-bottom: 20px;
+  color: #8e7aa8;
+  font-size: 12px;
+  line-height: 1.8;
+}
+.guideCoach > span {
+  flex: none;
+  font-size: 8px;
+  font-weight: 700;
+  color: #a28fbd;
+  border: 1px solid #e3d7f5;
+  border-radius: 4px;
+  padding: 2px 5px;
+  margin-top: 3px;
+  letter-spacing: 0.6px;
+}
+.guideCoach p {
+  color: #9b8bad;
+}
+.guideCoach b {
+  font-weight: 650;
+  color: #82708f;
+}
+.simpleQuestionChoice {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+  background: #f7f8fb;
+  border: 1px solid #e9ebf2;
+  border-radius: 10px;
+  padding: 13px 17px;
+  margin-bottom: 19px;
+}
+.simpleQuestionChoice > div {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+}
+.simpleQuestionChoice > div > svg {
+  color: #a29ab4;
+}
+.simpleQuestionChoice > div > span {
+  font-size: 12px;
+  font-weight: 550;
+  color: #7a8397;
+}
+.simpleQuestionChoice small {
+  display: block;
+  color: #a1a8b6;
+  font-size: 11px;
+  font-weight: 400;
+  margin-top: 4px;
+}
+.simpleQuestionChoice > button {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  border: 0;
+  background: none;
+  color: #9885b7;
+  font-size: 12px;
+  padding: 5px;
+}
+.simpleTeamGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 11px;
+}
+.simpleTeamGrid > button {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-align: left;
+  border: 1px solid #e1e5ed;
+  background: #fff;
+  border-radius: 10px;
+  padding: 16px 18px;
+}
+.simpleTeamGrid > button:hover {
+  border-color: #bca7e9;
+  background: #fcfaff;
+}
+.simpleTeamGrid > button.selected {
+  border-color: #a68add;
+  background: #f7f2ff;
+  box-shadow: 0 0 0 1px #c1a9ed33;
+}
+.simpleTeamInitial {
+  width: 33px;
+  height: 33px;
+  border-radius: 9px;
+  display: grid;
+  place-items: center;
+  font-size: 12px;
+  font-weight: 650;
+  background: color-mix(in srgb, var(--team) 13%, #fff);
+  color: color-mix(in srgb, var(--team) 65%, #3c4054);
+  border: 1px solid color-mix(in srgb, var(--team) 20%, #fff);
+  flex: none;
+}
+.simpleTeamGrid b {
+  font-size: 15px;
+  font-weight: 550;
+  color: #627087;
+  flex: 1;
+}
+.simpleTeamGrid.selected b {
+  color: #655078;
+}
+.simpleTeamCheck {
+  display: grid;
+  place-items: center;
+  width: 18px;
+  height: 18px;
+  border: 1px solid #e1e4ec;
+  border-radius: 50%;
+  color: white;
+  flex: none;
+}
+.simpleTeamGrid .selected .simpleTeamCheck {
+  background: #8f6ece;
+  border-color: #8f6ece;
+}
+.guideNext {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 25px;
+  gap: 12px;
+}
+.guideNext > .guidePrimary {
+  width: 100%;
+  justify-content: center;
+}
+.guideNext > .guideOutline {
+  min-height: 52px;
+}
+.full {
+  width: 100%;
+}
+.simplePreview {
+  border-top: 1px solid #f0f1f6;
+  margin-top: 19px;
+  padding-top: 13px;
+  font-size: 12px;
+  color: #a1a8b7;
+}
+.simplePreview summary {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  cursor: pointer;
+  list-style: none;
+}
+.simplePreview summary::-webkit-details-marker {
+  display: none;
+}
+.simplePreview p {
+  color: #76839b;
+  font-size: 13px;
+  line-height: 1.8;
+  margin-top: 12px;
+}
+.simplePreview > span {
+  display: block;
+  color: #84a18e;
+  font-size: 12px;
+  margin-top: 8px;
+}
+.guideSubline {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  color: #9a93a5;
+  font-size: 11px;
+  line-height: 1.8;
+  margin: 14px 0;
+}
+.guideSubline button {
+  border: 0;
+  background: none;
+  color: #8d76b7;
+  font-size: 11px;
+  white-space: nowrap;
+}
+.guideRead {
+  padding: 20px 23px;
+  border: 1px solid #e9e7f1;
+  border-left: 3px solid #c6b6e7;
+  border-radius: 0 10px 10px 0;
+  background: #f8f7fb;
+  margin-bottom: 19px;
+}
+.guideRead > span {
+  display: block;
+  font-size: 9px;
+  color: #a59cb3;
+  letter-spacing: 0.7px;
+  font-weight: 600;
+  margin-bottom: 9px;
+}
+.guideRead > p {
+  font-size: 21px;
+  font-weight: 550;
+  line-height: 1.7;
+  color: #4a546a;
+  text-wrap: pretty;
+}
+.powerQuestion {
+  margin: 23px 0 13px;
+}
+.powerQuestion h3 {
+  font-size: 15px;
+  font-weight: 650;
+  color: #657087;
+  letter-spacing: -0.2px;
+}
+.powerQuestion > span {
+  display: block;
+  font-size: 12px;
+  color: #a2a8b7;
+  margin-top: 6px;
+  line-height: 1.7;
+}
+.simplePowers {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+.simplePowers > button {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  gap: 9px;
+  background: #fff;
+  border: 1px solid #e2e5ee;
+  border-radius: 10px;
+  padding: 18px 15px;
+}
+.simplePowers > button.selected {
+  border-color: #aa8cdd;
+  background: #f8f4ff;
+  opacity: 1 !important;
+}
+.powerRadio {
+  width: 17px;
+  height: 17px;
+  border-radius: 50%;
+  border: 1px solid #dfe2eb;
+  display: grid;
+  place-items: center;
+  color: white;
+  position: absolute;
+  top: 17px;
+  right: 14px;
+}
+.simplePowers > button.selected .powerRadio {
+  background: #9a7bcf;
+  border-color: #9a7bcf;
+}
+.simplePowers strong {
+  font-size: 14px;
+  font-weight: 600;
+  color: #6f7890;
+  margin-right: 12px;
+}
+.simplePowers > button.selected strong {
+  color: #8b74a9;
+}
+.simplePowers > button > span:last-child {
+  font-size: 11px;
+  color: #a2a8b6;
+  line-height: 1.7;
+  margin-top: 3px;
+}
+.guideBack {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  background: none;
+  border: 0;
+  font-size: 12px;
+  color: #a69bb5;
+  padding: 0;
+  margin: 17px auto 0;
+}
+.guideBack:hover:not(:disabled) {
+  color: #7959b0;
+}
+.guideAnswer {
+  border: 1px solid #e3ece8;
+  border-radius: 10px;
+  background: #f2f8f5;
+  padding: 15px 19px;
+  margin-bottom: 21px;
+}
+.guideAnswer > span {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 9px;
+  letter-spacing: 0.6px;
+  color: #9fb6a9;
+  font-weight: 600;
+}
+.guideAnswer > p {
+  font-size: 17px;
+  font-weight: 550;
+  line-height: 1.7;
+  color: #708d7c;
+  margin-top: 7px;
+}
+.guideClock {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: #f8f6fc;
+  border: 1px solid #e9e3f4;
+  border-radius: 11px;
+  min-width: 115px;
+  padding: 12px 15px;
+  gap: 9px;
+}
+.guideClock > span {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font:
+    600 26px "DM Mono",
+    monospace;
+  color: #a898b8;
+  letter-spacing: -1px;
+}
+.guideClock > span > svg {
+  color: #bbaccb;
+}
+.guideClock > button {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  border: 0;
+  border-top: 1px solid #ece5f5;
+  background: none;
+  color: #b09fc3;
+  font-size: 10px;
+  padding: 7px 0 0;
+  width: 100%;
+  justify-content: center;
+}
+.guideClock.timeUp {
+  background: #fff3f3;
+  border-color: #efdada;
+}
+.guideClock.timeUp > span {
+  color: #d39099;
+}
+.guideTimeUp {
+  padding: 12px 15px;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  background: #fff6ed;
+  border: 1px solid #f0dfc8;
+  color: #bf9b6c;
+  font-size: 12px;
+  border-radius: 8px;
+  line-height: 1.7;
+  margin-bottom: 19px;
+}
+.simpleGrades {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 13px;
+  margin-top: 22px;
+}
+.simpleGrades > button {
+  min-height: 78px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 17px 20px;
+  border-radius: 11px;
+  border: 1px solid transparent;
+}
+.simpleGrades > button > span {
+  text-align: left;
+}
+.simpleGrades b {
+  display: block;
+  font-size: 17px;
+  font-weight: 700;
+  letter-spacing: -0.2px;
+}
+.simpleGrades small {
+  display: block;
+  font-size: 12px;
+  margin-top: 5px;
+  opacity: 0.7;
+}
+.gradeWrong {
+  background: #fff4f4;
+  border-color: #f0dadc !important;
+  color: #b58188;
+}
+.gradeWrong:hover {
+  background: #ffebed;
+  border-color: #dba2ab !important;
+  color: #a65d69;
+}
+.gradeCorrect {
+  background: #79a68c;
+  border-color: #79a68c !important;
+  color: white;
+}
+.gradeCorrect:hover {
+  background: #648f76;
+  border-color: #648f76 !important;
+}
+.guideActivePower {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #b69b7e;
+  font-size: 11px;
+  line-height: 1.7;
+  margin: -7px 0 19px;
+}
+.guideActivePower b {
+  font-weight: 650;
+}
+.simpleChallenge {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 15px;
+  border-top: 1px solid #eff0f5;
+  padding-top: 19px;
+  margin-top: 23px;
+}
+.simpleChallenge > span {
+  flex: 1;
+  min-width: 0;
+}
+.simpleChallenge b {
+  font-size: 12px;
+  color: #a29aaf;
+  font-weight: 550;
+}
+.simpleChallenge small {
+  display: block;
+  font-size: 10px;
+  color: #b9b1c4;
+  margin-top: 4px;
+  line-height: 1.7;
+}
+.simpleChallenge button {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  background: white;
+  border: 1px solid #e5dfef;
+  color: #a18ab9;
+  border-radius: 8px;
+  padding: 10px 13px;
+  font-size: 12px;
+  white-space: nowrap;
+}
+.simpleChallenge button:hover:not(:disabled) {
+  background: #f8f3ff;
+  border-color: #bea8da;
+}
+.challengeDeadline {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  background: #fbf4e8;
+  color: #b7a17d;
+  border: 1px solid #eee0c9;
+  border-radius: 8px;
+  padding: 10px 13px;
+  font-size: 13px;
+  font-weight: 650;
+  white-space: nowrap;
+}
+.guideBurn {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  background: #fff3e9;
+  border: 1px solid #f1decb;
+  color: #bb967c;
+  font-size: 13px;
+  line-height: 1.8;
+  padding: 15px 18px;
+  border-radius: 9px;
+  margin-bottom: 19px;
+}
+.guideTargetList {
+  display: flex;
+  flex-direction: column;
+  gap: 11px;
+  margin-top: 19px;
+}
+.guideTargetList > button {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  text-align: left;
+  border: 1px solid #e1e6ef;
+  background: white;
+  border-radius: 10px;
+  padding: 17px 19px;
+  color: #a08ab6;
+}
+.guideTargetList > button:hover:not(:disabled) {
+  background: #fbf8ff;
+  border-color: #baa6d8;
+}
+.guideTargetList > button > b,
+.guideTargetList > button > span:nth-child(2) {
+  flex: 1;
+}
+.guideTargetList b {
+  font-size: 15px;
+  font-weight: 550;
+  color: #68788e;
+}
+.guideTargetList small {
+  display: block;
+  font-size: 11px;
+  color: #a6afbd;
+  margin-top: 6px;
+  line-height: 1.65;
+}
+.guideInlineNote {
+  font-size: 12px;
+  color: #a9afbb;
+  line-height: 1.85;
+  margin-top: 17px;
+}
+.simpleResultChanges {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 5px 0 22px;
+}
+.simpleResultChanges > div {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+  padding: 18px 20px;
+  border: 1px solid #e6e9f1;
+  border-radius: 10px;
+  background: #fafbfc;
+}
+.simpleResultChanges b {
+  display: block;
+  font-size: 15px;
+  color: #748197;
+  font-weight: 600;
+}
+.simpleResultChanges small {
+  display: block;
+  font-size: 11px;
+  color: #adb6c4;
+  margin-top: 6px;
+}
+.simpleResultChanges strong {
+  font-size: 17px;
+  font-weight: 650;
+  color: #a6adbb;
+  white-space: nowrap;
+}
+.simpleResultChanges strong.positive {
+  color: #83a58f !important;
+}
+.simpleResultChanges strong.negative {
+  color: #bb8991 !important;
+}
+.publishedAnswer {
+  border: 1px solid #dbe9e1;
+  background: #f2f8f4;
+  border-radius: 10px;
+  padding: 20px;
+  margin-bottom: 23px;
+}
+.publishedAnswer > span {
+  font-size: 10px;
+  font-weight: 650;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #8eac99;
+  letter-spacing: 0.5px;
+}
+.publishedAnswer > p {
+  font-size: 19px;
+  font-weight: 550;
+  line-height: 1.7;
+  color: #728f7e;
+  margin-top: 11px;
+}
+.guideUtilities {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin: 19px 4px 0;
+}
+.guideUtilities button {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  border: 0;
+  background: none;
+  color: #a9a3b4;
+  font-size: 11px;
+  padding: 4px 0;
+}
+.guideUtilities button:hover:not(:disabled) {
+  color: #8a74b2;
+}
+.guideQuietActions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin: 15px 4px 0;
+  padding-top: 14px;
+  border-top: 1px solid #e9ebf2;
+}
+.guideQuietActions button {
+  background: none;
+  border: 0;
+  font-size: 10px;
+  color: #b0a8bc;
+  padding: 0;
+}
+.guideQuietActions > span {
+  font-size: 10px;
+  color: #b0b6c2;
+}
+.guideFeedback {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border: 1px solid #eee2c9;
+  background: #fff9e9;
+  border-radius: 8px;
+  padding: 11px 15px;
+  margin-top: 14px;
+  color: #b8a475;
+  font-size: 12px;
+  line-height: 1.7;
+}
+.guideEmpty {
+  text-align: center;
+  padding: 20px 0;
+}
+.guideEmpty > svg {
+  color: #bfb1d4;
+  margin: 0 auto 18px;
+}
+.guideEmpty h3 {
+  font-size: 18px;
+  color: #8992a5;
+}
+.guideEmpty p {
+  font-size: 13px;
+  color: #adb4c1;
+  margin: 12px 0 20px;
+  line-height: 1.7;
+}
+.guideEmpty > button {
+  margin: 5px;
+}
+.guideWinner {
+  text-align: center;
+  margin: 10px 0 25px;
+}
+.guideWinner > svg {
+  color: #d4b37b;
+  margin-bottom: 12px;
+}
+.guideWinner h2 {
+  color: #bca272;
+  font-size: 28px;
+  font-weight: 800;
+  line-height: 1.5;
+}
+.simpleRanking {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  margin-top: 20px;
+}
+.simpleRanking > div {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  padding: 15px 18px;
+  background: #fafbfc;
+  border: 1px solid #e8ebf2;
+  border-radius: 9px;
+}
+.simpleRanking > div > span {
+  font-size: 12px;
+  color: #aeb9c8;
+  width: 14px;
+}
+.simpleRanking b {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  font-weight: 550;
+  color: #8491a5;
+}
+.simpleRanking b i {
+  width: 6px;
+  height: 6px;
+  background: var(--team);
+  border-radius: 50%;
+  flex: none;
+}
+.simpleRanking small {
+  font-size: 11px;
+  color: #b3bdcb;
+}
+.simpleRanking strong {
+  font-size: 16px;
+  font-weight: 650;
+  color: #929fb3;
+  min-width: 75px;
+  text-align: right;
+}
+.guideLink {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  color: #a28abb;
+  font-size: 12px;
+  background: none;
+  border: 0;
+  padding: 0;
+  margin: 15px 0;
+}
+.guideToast {
+  position: fixed;
+  z-index: 150;
+  bottom: 25px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  max-width: 90vw;
+  min-width: 250px;
+  background: #fff;
+  box-shadow: 0 8px 45px #35466b22;
+  border: 1px solid #cddfd3;
+  border-radius: 11px;
+  padding: 15px 20px;
+  font-size: 13px;
+  color: #7e9d89;
+  line-height: 1.7;
+}
+.guideStorageError {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  justify-content: center;
+  background: #fff3dc;
+  color: #b89a6e;
+  padding: 10px 20px;
+  font-size: 12px;
+}
+.guideManagement {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 24px 25px 50px;
+}
+.managementBack {
+  background: none;
+  border: 0;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  color: #9b86b8;
+  font-size: 13px;
+  margin: 0 0 22px;
+  padding: 0;
+}
+.managementPrepHint {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 9px;
+  background: #fff;
+  border: 1px solid #e4e7ef;
+  padding: 14px 18px;
+  border-radius: 10px;
+  font-size: 12px;
+  color: #a7b0c1;
+  margin-bottom: 23px;
+  line-height: 1.8;
+}
+.managementPrepHint b {
+  font-weight: 550;
+  color: #909bb0;
+}
+.managementPrepHint button {
+  background: none;
+  border: 0;
+  color: #ad98c3;
+  padding: 0;
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.guidedApp .managePage {
+  padding: 0;
+  max-width: none;
+}
+.guidedApp .pageTitle {
+  margin-bottom: 23px;
+}
+.guidedApp .pageTitle h1 {
+  font-size: 26px;
+  color: #75859d;
+}
+.guidedApp .pageTitle .eyebrow {
+  color: #b7a6ca;
+}
+.guidedApp .pageTitle p {
+  color: #b0b9c7;
+  font-size: 12px;
+}
+.guidedApp .surface {
+  background: #fff;
+  border-color: #e3e8f1;
+  color: #8a9bb2;
+  box-shadow: none;
+  animation: none;
+}
+.guidedApp .sectionHeading h2 {
+  color: #8494ab;
+  font-size: 17px;
+}
+.guidedApp .sectionHeading p {
+  color: #aebacb;
+}
+.guidedApp .setting {
+  border-color: #e9edf3;
+}
+.guidedApp .setting h3 {
+  color: #8999af;
+}
+.guidedApp .setting p {
+  color: #b5c0cf;
+}
+.guidedApp .settingNo {
+  color: #b5a2c8;
+  background: #f4f0fa;
+  border-color: #e7ddf0;
+}
+.guidedApp .teamLabel {
+  color: #9babc1;
+}
+.guidedApp label {
+  color: #99a9c0;
+  font-size: 12px;
+}
+.guidedApp input,
+.guidedApp select,
+.guidedApp textarea {
+  background: white;
+  border-color: #dce4ef;
+  color: #6f849f;
+  font-size: 13px;
+  border-radius: 8px;
+}
+.guidedApp input::placeholder,
+.guidedApp textarea::placeholder {
+  color: #bac6d6;
+}
+.guidedApp select {
+  color-scheme: light;
+}
+.guidedApp .numberField {
+  color: #b0bfd2;
+}
+.guidedApp .infoBanner {
+  background: #f6f3fc;
+  border-color: #e6dff2;
+  color: #b0a1c2;
+}
+.guidedApp .infoBanner b {
+  color: #aa95bd;
+}
+.guidedApp .difficultyTable > div {
+  border-color: #e8edf5;
+  color: #afbed1;
+}
+.guidedApp .difficultyTable > div > b {
+  color: #b8a27f;
+}
+.guidedApp .difficultyTable small {
+  color: #b8c5d6;
+}
+.guidedApp .difficulty.easy {
+  background: #edf6f1;
+  color: #9bb4a3;
+}
+.guidedApp .difficulty.medium {
+  background: #faf3e7;
+  color: #c1af8d;
+}
+.guidedApp .difficulty.hard {
+  background: #fbecf0;
+  color: #cba3ae;
+}
+.guidedApp .ruleReference ul {
+  color: #b1bfd0;
+}
+.guidedApp .ruleFoot {
+  background: #f6f2fc;
+  border-color: #e9e0f4;
+}
+.guidedApp .ruleFoot b {
+  color: #b29ec5;
+}
+.guidedApp .ruleFoot p {
+  color: #bcaace;
+}
+.guidedApp .demoTag {
+  background: #fcf7eb;
+  border-color: #efe5ce;
+  color: #c0b08e;
+}
+.guidedApp .pageDecoration {
+  color: #c6b6db;
+}
+.guidedApp .btn.primary {
+  background: #9c83cb;
+  border-color: #9c83cb;
+  color: white;
+  box-shadow: none;
+}
+.guidedApp .btn.primary:hover:not(:disabled) {
+  background: #8e72be;
+  border-color: #8e72be;
+}
+.guidedApp .btn.secondary {
+  background: white;
+  border-color: #dfe6f0;
+  color: #9aaac0;
+}
+.guidedApp .btn.secondary:hover:not(:disabled) {
+  background: #f9f6fd;
+  border-color: #c7b4e0;
+}
+.guidedApp .btn.danger {
+  background: #c795a0;
+  border-color: #c795a0;
+  color: white;
+}
+.guidedApp .segments {
+  background: #fff;
+  border-color: #e1e7f0;
+}
+.guidedApp .segments button {
+  color: #b1bed0;
+}
+.guidedApp .segments button.selected {
+  background: #f2edf9;
+  border-color: #e3d7f0;
+  color: #b09bc6;
+}
+.guidedApp .segments button > span {
+  color: #bba9ce;
+}
+.guidedApp .searchField {
+  background: white;
+  border-color: #e0e6f0;
+  color: #bbc8d9;
+}
+.guidedApp .searchField input {
+  color: #99adc7;
+}
+.guidedApp .bankItem {
+  background: white;
+  border-color: #e1e8f1;
+}
+.guidedApp .bankNumber {
+  background: #f4eff9;
+  border-color: #e9def1;
+  color: #c3afd3;
+}
+.guidedApp .bankContent h3 {
+  color: #93a4bc;
+  font-size: 15px;
+}
+.guidedApp .bankContent > p {
+  color: #b7c4d5;
+}
+.guidedApp .bankAnswer {
+  color: #a1bdab;
+}
+.guidedApp .muted {
+  color: #b2c0d1 !important;
+}
+.guidedApp .iconBtn {
+  color: #b8c3d3;
+}
+.guidedApp .iconBtn:hover:not(:disabled) {
+  color: #a28aba;
+  border-color: #ece4f5;
+  background: #faf7fd;
+}
+.guidedApp .statusTag {
+  color: #b6a1cb;
+  background: #f6f1fc;
+  border-color: #e8ddf2;
+}
+.guidedApp .dangerText {
+  color: #c69ba6 !important;
+}
+.guidedApp .emptyState {
+  color: #c4cfdf;
+}
+.guidedApp .emptyState h3 {
+  color: #afbed1;
+}
+.guidedApp .emptyState p {
+  color: #c2cedc;
+}
+.guidedApp .modal {
+  background: #fff;
+  border-color: #e0e7f0;
+  color: #8296b1;
+  box-shadow: 0 25px 100px #111a3f24;
+}
+.guidedApp .modalBackdrop {
+  background: #1d2a4c55;
+  backdrop-filter: blur(5px);
+}
+.guidedApp .modalHeading h2 {
+  color: #6b809e;
+  font-size: 21px;
+}
+.guidedApp .modalHeading p {
+  color: #a8b9ce;
+  font-size: 13px;
+}
+.guidedApp .modalHeading .iconBtn {
+  color: #bdc9d9;
+}
+.guidedApp .modalFooter {
+  border-color: #edf0f6;
+}
+.guideQuestionList {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.guideQuestionList > button {
+  position: relative;
+  text-align: left;
+  background: #fff;
+  border: 1px solid #e3e8f1;
+  border-radius: 9px;
+  padding: 15px 18px;
+}
+.guideQuestionList > button > span {
+  font-size: 11px;
+  color: #b2bfd1;
+  display: block;
+  line-height: 1.7;
+  margin-bottom: 7px;
+}
+.guideQuestionList b {
+  display: block;
+  font-size: 14px;
+  line-height: 1.8;
+  color: #95a8c2;
+  font-weight: 550;
+  padding-right: 20px;
+}
+.guideQuestionList .selected {
+  border-color: #c5b0df;
+  background: #fcf9ff;
+}
+.guideQuestionList button > svg {
+  position: absolute;
+  right: 14px;
+  top: 18px;
+  color: #baa2d1;
+}
+.guideDetailedScores {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+}
+.guideDetailedScores > section {
+  border: 1px solid #e5ebf3;
+  border-radius: 10px;
+  padding: 17px;
+}
+.guideDetailedScores > section > div {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding-bottom: 13px;
+  border-bottom: 1px solid #edf1f6;
+}
+.guideDetailedScores > section > div > span {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 14px;
+  color: #9baec8;
+}
+.guideDetailedScores i {
+  height: 6px;
+  width: 6px;
+  border-radius: 50%;
+  background: var(--team);
+}
+.guideDetailedScores > section > div > b {
+  font-size: 16px;
+  font-weight: 600;
+  color: #a4b7ce;
+}
+.guideDetailedScores dl {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 15px;
+}
+.guideDetailedScores dl > div {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 12px;
+  color: #b0bfd3;
+  gap: 8px;
+}
+.guideDetailedScores dl > div.exhausted {
+  opacity: 0.4;
+}
+.guideDetailedScores dd {
+  font-weight: 550;
+  color: #a6bad2;
+}
+.simpleHelp {
+  list-style: none;
+  counter-reset: help;
+  padding: 0;
+  margin-bottom: 25px;
+  display: flex;
+  flex-direction: column;
+  gap: 19px;
+}
+.simpleHelp > li {
+  position: relative;
+  padding-left: 36px;
+  counter-increment: help;
+}
+.simpleHelp > li:before {
+  content: counter(help);
+  display: grid;
+  place-items: center;
+  width: 23px;
+  height: 23px;
+  border: 1px solid #e2d6f1;
+  background: #f5effc;
+  color: #b8a0cd;
+  border-radius: 7px;
+  position: absolute;
+  left: 0;
+  top: 1px;
+  font-size: 10px;
+}
+.simpleHelp b {
+  display: block;
+  font-size: 14px;
+  font-weight: 600;
+  color: #98abc4;
+  line-height: 1.7;
+}
+.simpleHelp span {
+  display: block;
+  font-size: 12px;
+  color: #b5c4d8;
+  line-height: 1.8;
+  margin-top: 5px;
+}
+.simpleHistory {
+  padding: 5px 0 25px;
+}
+.simpleHistory > h1 {
+  font-size: 27px;
+  color: #92a9c5;
+  letter-spacing: -0.7px;
+}
+.simpleHistory > p {
+  font-size: 13px;
+  color: #b9c7d9;
+  margin: 12px 0 25px;
+}
+.simpleHistory > div {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  border-bottom: 1px solid #e9eef5;
+  padding: 17px 4px;
+}
+.simpleHistory time {
+  font-size: 12px;
+  color: #bac8dc;
+}
+.simpleHistory b {
+  font-size: 13px;
+  color: #a0b5cf;
+  font-weight: 550;
+  flex: 1;
+}
+.simpleHistory strong {
+  font-size: 14px;
+  color: #a6bdd5;
+  font-weight: 550;
+}
+.simpleHistory > span {
+  font-size: 13px;
+  color: #bbcadc;
+}
+.guideQuestionImage {
+  display: block;
+  max-width: 100%;
+  max-height: 240px;
+  object-fit: contain;
+  margin: 0 auto 20px;
+  border-radius: 8px;
+}
+.presentation {
+  color: #edf0f7;
+}
+.guidedApp .guideToast {
+  animation: guideEnter 0.15s ease-out;
+}
+@keyframes guideEnter {
+  from {
+    opacity: 0.3;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+/* The control screen uses readable foregrounds; decorative metadata stays secondary. */
+.guidedApp {
+  --guide-ink: #26334a;
+}
+.guideStepHeading p {
+  color: #778398;
+}
+.guideRoundLine {
+  color: #8793a5;
+}
+.simpleScoreStrip > div > span {
+  color: #64728a;
+}
+.guideCoach p {
+  color: #8b79a4;
+}
+.guideCoach b {
+  color: #6c5685;
+}
+.guideRead > span {
+  color: #988ba8;
+}
+.guideRead > p {
+  color: #414d64;
+}
+.powerQuestion h3 {
+  color: #56647e;
+}
+.powerQuestion > span {
+  color: #8f99ac;
+}
+.simplePowers strong {
+  color: #69748c;
+}
+.simplePowers > button.selected strong {
+  color: #785a9e;
+}
+.simplePowers > button > span:last-child {
+  color: #8f9aad;
+}
+.guideAnswer > p {
+  color: #557c65;
+}
+.guideAnswer > span {
+  color: #8ea997;
+}
+.gradeWrong {
+  color: #b46877;
+}
+.gradeCorrect {
+  background: #478667;
+  border-color: #478667 !important;
+}
+.gradeCorrect:hover {
+  background: #367356;
+  border-color: #367356 !important;
+}
+.guideTargetList b {
+  color: #5e728c;
+}
+.guideTargetList small {
+  color: #98a8bd;
+}
+.simpleResultChanges b {
+  color: #63758e;
+}
+.publishedAnswer > p {
+  color: #577c66;
+}
+.guidePrimary {
+  background: #7653d9;
+  border-color: #7653d9;
+}
+.guidePrimary:hover:not(:disabled) {
+  background: #6440c3;
+  border-color: #6440c3;
+}
+.guideWelcome h1 {
+  color: #303a51;
+}
+.welcomeIntro {
+  color: #8791a3;
+}
+.guideStep .guideInlineNote {
+  color: #9ba6b9;
+}
+.guidedApp .modalHeading h2 {
+  color: #5c7090;
+}
+.guidedApp .modalHeading p {
+  color: #97aac4;
+}
+.guidedApp .managePage h1 {
+  color: #546c8c;
+}
+.guidedApp .sectionHeading h2 {
+  color: #617b9b;
+}
+.guidedApp .setting h3 {
+  color: #6c83a0;
+}
+.guidedApp .bankContent h3 {
+  color: #637f9f;
+}
+.guidedApp input,
+.guidedApp select,
+.guidedApp textarea {
+  color: #5c7596;
+}
+.guideQuestionList b {
+  color: #6b86a7;
+}
+.simpleHelp b {
+  color: #728dad;
+}
+.simpleRanking b {
+  color: #71869f;
+}
+.guideDetailedScores > section > div > span {
+  color: #7f96b3;
+}
+.simpleHistory b {
+  color: #7f97b6;
+}
+@media (min-width: 1400px) {
+  .guideShell {
+    max-width: 990px;
+  }
+  .guideStep {
+    padding: 33px 39px;
+  }
+  .guideStepHeading h1 {
+    font-size: 29px;
+  }
+  .guideRead > p {
+    font-size: 23px;
+  }
+  .guidePrimary {
+    font-size: 17px;
+  }
+  .guideStepHeading p {
+    font-size: 15px;
+  }
+  .simpleTeamGrid > button {
+    padding: 18px 20px;
+  }
+}
+@media (max-width: 900px) {
+  .guideHeader {
+    padding: 0 25px;
+    height: 75px;
+  }
+  .guideShell {
+    padding-top: 23px;
+  }
+  .guideWelcome {
+    padding-top: 41px;
+  }
+  .guideWelcome > h1 {
+    font-size: 40px;
+  }
+  .welcomeSteps {
+    gap: 21px;
+  }
+  .guideStep {
+    padding: 27px;
+  }
+  .guideStepHeading {
+    gap: 20px;
+  }
+  .guideStepHeading h1 {
+    font-size: 25px;
+  }
+  .guideRead > p {
+    font-size: 20px;
+  }
+  .simpleScoreStrip > div {
+    padding: 15px;
+  }
+  .simpleScoreStrip > div > span {
+    font-size: 12px;
+  }
+  .simpleScoreStrip b {
+    font-size: 21px;
+  }
+  .simpleScoreStrip small {
+    font-size: 9px;
+  }
+  .practiceBanner {
+    padding: 9px 23px;
+    gap: 20px;
+    justify-content: space-between;
+  }
+  .practiceBanner > span {
+    gap: 7px;
+    font-size: 11px;
+  }
+  .practiceBanner > span > span {
+    font-size: 10px;
+  }
+  .practiceBanner button {
+    font-size: 11px;
+  }
+  .guideManagement {
+    padding: 22px;
+  }
+  .guidedApp .settingsColumns {
+    grid-template-columns: 1fr;
+  }
+  .guideCoach {
+    font-size: 12px;
+  }
+  .simpleGrades b {
+    font-size: 17px;
+  }
+  .guideClock > span {
+    font-size: 25px;
+  }
+}
+@media (max-width: 650px) {
+  .guideHeader {
+    height: 70px;
+    padding: 0 17px;
+  }
+  .guideBrand {
+    gap: 9px;
+  }
+  .guideBrand > span {
+    width: 36px;
+    height: 36px;
+    border-radius: 11px;
+  }
+  .guideBrand > b {
+    font-size: 15px;
+  }
+  .guideBrand small {
+    font-size: 9px;
+    margin-top: 4px;
+  }
+  .guideHeaderActions {
+    gap: 13px;
+  }
+  .guideHeaderActions > .guideOutline {
+    font-size: 11px;
+    min-height: 37px;
+    padding: 8px 10px;
+    gap: 6px;
+  }
+  .guideHeaderActions > .guideOutline > svg {
+    width: 15px;
+  }
+  .guideTextButton {
+    font-size: 11px;
+    gap: 5px;
+  }
+  .guideTextButton > svg {
+    width: 15px;
+  }
+  .guideMenu {
+    width: 247px;
+    top: 41px;
+  }
+  .guideShell {
+    padding: 19px 16px 26px;
+  }
+  .simpleScoreStrip {
+    margin-bottom: 18px;
+    border-radius: 10px;
+  }
+  .simpleScoreStrip > div {
+    flex-direction: column;
+    align-items: start;
+    gap: 9px;
+    padding: 12px 11px;
+  }
+  .simpleScoreStrip > div > span {
+    font-size: 10px;
+    gap: 5px;
+    max-width: 100%;
+  }
+  .simpleScoreStrip i {
+    width: 5px;
+    height: 5px;
+  }
+  .simpleScoreStrip b {
+    font-size: 22px;
+    gap: 5px;
+  }
+  .simpleScoreStrip small {
+    font-size: 8px;
+  }
+  .guideRoundLine {
+    font-size: 11px;
+    margin-bottom: 14px;
+  }
+  .guideRoundLine > button {
+    font-size: 10px;
+  }
+  .guideRoundLine em {
+    font-size: 6px;
+    margin-left: 2px;
+  }
+  .guideRoundLine i {
+    margin: 0 4px;
+  }
+  .guideStep {
+    border-radius: 13px;
+    padding: 23px 21px;
+  }
+  .guideStepHeading {
+    margin-bottom: 21px;
+    gap: 14px;
+  }
+  .guideStepHeading h1 {
+    font-size: 23px;
+    letter-spacing: -0.7px;
+  }
+  .guideStepHeading p {
+    font-size: 13px;
+    line-height: 1.8;
+    margin-top: 8px;
+  }
+  .guideStepNumber {
+    font-size: 8px;
+    letter-spacing: 1px;
+    margin-bottom: 9px;
+  }
+  .simpleQuestionChoice {
+    padding: 12px 14px;
+    margin-bottom: 16px;
+    gap: 10px;
+  }
+  .simpleQuestionChoice > div {
+    gap: 8px;
+  }
+  .simpleQuestionChoice > div > svg {
+    width: 16px;
+  }
+  .simpleQuestionChoice > div > span {
+    font-size: 11px;
+  }
+  .simpleQuestionChoice small {
+    font-size: 10px;
+  }
+  .simpleQuestionChoice > button {
+    font-size: 10px;
+    gap: 3px;
+    white-space: nowrap;
+  }
+  .simpleTeamGrid {
+    gap: 9px;
+  }
+  .simpleTeamGrid > button {
+    padding: 13px 11px;
+    gap: 9px;
+  }
+  .simpleTeamInitial {
+    width: 29px;
+    height: 29px;
+    border-radius: 8px;
+    font-size: 10px;
+  }
+  .simpleTeamGrid b {
+    font-size: 13px;
+  }
+  .simpleTeamCheck {
+    width: 16px;
+    height: 16px;
+  }
+  .simpleTeamCheck svg {
+    width: 13px;
+  }
+  .guideNext {
+    margin-top: 22px;
+  }
+  .guidePrimary {
+    font-size: 14px;
+    min-height: 51px;
+    padding: 14px 17px;
+    gap: 8px;
+  }
+  .guidePrimary > svg {
+    width: 17px;
+  }
+  .simplePreview {
+    font-size: 10px;
+    margin-top: 17px;
+    padding-top: 12px;
+  }
+  .simplePreview p {
+    font-size: 12px;
+  }
+  .simplePreview > span {
+    font-size: 11px;
+  }
+  .guideUtilities {
+    flex-wrap: wrap;
+    margin-top: 17px;
+    gap: 9px;
+  }
+  .guideUtilities button {
+    font-size: 10px;
+    gap: 5px;
+  }
+  .guideUtilities svg {
+    width: 13px;
+  }
+  .guideQuietActions button,
+  .guideQuietActions > span {
+    font-size: 9px;
+  }
+  .guideQuietActions {
+    margin-top: 13px;
+    gap: 12px;
+  }
+  .guideRead {
+    padding: 17px 18px;
+    margin-bottom: 17px;
+  }
+  .guideRead > span {
+    font-size: 8px;
+    line-height: 1.7;
+    letter-spacing: 0.5px;
+  }
+  .guideRead > p {
+    font-size: 18px;
+    line-height: 1.75;
+  }
+  .powerQuestion {
+    margin-top: 21px;
+  }
+  .powerQuestion h3 {
+    font-size: 14px;
+  }
+  .powerQuestion > span {
+    font-size: 11px;
+    line-height: 1.8;
+  }
+  .simplePowers {
+    gap: 8px;
+  }
+  .simplePowers > button {
+    padding: 15px 10px;
+    gap: 8px;
+  }
+  .simplePowers strong {
+    font-size: 12px;
+    margin-right: 14px;
+    white-space: nowrap;
+  }
+  .simplePowers > button > span:last-child {
+    font-size: 9px;
+    line-height: 1.7;
+  }
+  .powerRadio {
+    width: 14px;
+    height: 14px;
+    right: 8px;
+    top: 16px;
+  }
+  .powerRadio > svg {
+    width: 11px;
+  }
+  .guideBack {
+    font-size: 11px;
+    margin-top: 16px;
+  }
+  .guideAnswer {
+    padding: 14px 16px;
+    margin-bottom: 18px;
+  }
+  .guideAnswer > span {
+    font-size: 8px;
+  }
+  .guideAnswer > p {
+    font-size: 16px;
+  }
+  .guideClock {
+    padding: 11px;
+    min-width: 98px;
+    gap: 7px;
+  }
+  .guideClock > span {
+    font-size: 22px;
+    gap: 6px;
+  }
+  .guideClock > span > svg {
+    width: 14px;
+  }
+  .guideClock > button {
+    font-size: 9px;
+    padding-top: 7px;
+  }
+  .simpleGrades {
+    margin-top: 19px;
+    gap: 10px;
+  }
+  .simpleGrades > button {
+    min-height: 71px;
+    padding: 15px 13px;
+    gap: 9px;
+  }
+  .simpleGrades b {
+    font-size: 15px;
+  }
+  .simpleGrades small {
+    font-size: 10px;
+    margin-top: 5px;
+  }
+  .simpleGrades > button > svg {
+    width: 21px;
+  }
+  .simpleChallenge {
+    padding-top: 17px;
+    margin-top: 20px;
+    gap: 12px;
+  }
+  .simpleChallenge b {
+    font-size: 11px;
+  }
+  .simpleChallenge small {
+    font-size: 9px;
+  }
+  .simpleChallenge button {
+    font-size: 10px;
+    padding: 9px 10px;
+    gap: 5px;
+  }
+  .simpleChallenge button > svg {
+    width: 15px;
+  }
+  .guideTimeUp {
+    font-size: 11px;
+    padding: 11px 13px;
+    gap: 7px;
+  }
+  .guideCoach {
+    padding: 12px 13px;
+    font-size: 11px;
+    gap: 9px;
+    margin-bottom: 18px;
+  }
+  .guideCoach > span {
+    font-size: 7px;
+    padding: 2px 4px;
+  }
+  .guideBurn {
+    font-size: 12px;
+    padding: 13px 15px;
+    gap: 9px;
+  }
+  .guideBurn > svg {
+    width: 17px;
+  }
+  .challengeDeadline {
+    font-size: 12px;
+    padding: 9px 10px;
+    gap: 5px;
+  }
+  .guideTargetList {
+    gap: 9px;
+    margin-top: 17px;
+  }
+  .guideTargetList > button {
+    padding: 14px 15px;
+    gap: 11px;
+  }
+  .guideTargetList b {
+    font-size: 13px;
+  }
+  .guideTargetList small {
+    font-size: 10px;
+  }
+  .guideInlineNote {
+    font-size: 11px;
+  }
+  .simpleResultChanges > div {
+    padding: 16px;
+  }
+  .simpleResultChanges b {
+    font-size: 13px;
+    line-height: 1.6;
+  }
+  .simpleResultChanges small {
+    font-size: 10px;
+  }
+  .simpleResultChanges strong {
+    font-size: 14px;
+  }
+  .publishedAnswer {
+    padding: 17px;
+  }
+  .publishedAnswer > span {
+    font-size: 9px;
+  }
+  .publishedAnswer > p {
+    font-size: 18px;
+  }
+  .simpleRanking > div {
+    gap: 8px;
+    padding: 13px;
+  }
+  .simpleRanking > div > span {
+    font-size: 10px;
+  }
+  .simpleRanking b {
+    font-size: 12px;
+    gap: 6px;
+  }
+  .simpleRanking small {
+    font-size: 9px;
+  }
+  .simpleRanking strong {
+    font-size: 14px;
+    min-width: 67px;
+  }
+  .guideWinner h2 {
+    font-size: 24px;
+  }
+  .guideWelcome {
+    padding: 37px 22px 30px;
+  }
+  .welcomeTag {
+    font-size: 8px;
+    letter-spacing: 1px;
+    padding: 6px 9px;
+    margin-bottom: 18px;
+  }
+  .guideWelcome > h1 {
+    font-size: 35px;
+    letter-spacing: -1.5px;
+    line-height: 1.35;
+  }
+  .welcomeIntro {
+    font-size: 14px;
+    margin-top: 17px;
+    line-height: 1.9;
+  }
+  .welcomeSteps {
+    gap: 12px;
+    margin: 28px 0;
+  }
+  .welcomeSteps > div {
+    width: 135px;
+  }
+  .welcomeSteps > div > span {
+    width: 43px;
+    height: 43px;
+    border-radius: 12px;
+    margin-bottom: 12px;
+  }
+  .welcomeSteps > div > span > svg {
+    width: 22px;
+  }
+  .welcomeSteps b {
+    font-size: 12px;
+    line-height: 1.7;
+  }
+  .welcomeSteps p {
+    font-size: 10px;
+    line-height: 1.7;
+    margin-top: 5px;
+  }
+  .welcomeSteps > svg {
+    width: 15px;
+  }
+  .welcomeActions {
+    gap: 10px;
+  }
+  .welcomeActions > .guidePrimary {
+    min-width: 0;
+  }
+  .guidePractice {
+    font-size: 12px;
+    min-height: 51px;
+    padding: 13px 17px;
+    gap: 7px;
+  }
+  .guidePractice > svg {
+    width: 16px;
+  }
+  .practicePromise {
+    font-size: 10px;
+    line-height: 1.8;
+    margin-top: 12px;
+  }
+  .welcomePrepare {
+    font-size: 10px;
+    margin-top: 25px;
+    padding-top: 20px;
+    line-height: 1.9;
+  }
+  .welcomePrepare span {
+    margin-left: 5px;
+  }
+  .guideManagement {
+    padding: 21px 17px 35px;
+  }
+  .managementBack {
+    font-size: 12px;
+    margin-bottom: 19px;
+  }
+  .managementPrepHint {
+    font-size: 10px;
+    padding: 12px 14px;
+    gap: 7px;
+  }
+  .managementPrepHint button {
+    font-size: 10px;
+  }
+  .guideDetailedScores {
+    gap: 11px;
+  }
+  .guideDetailedScores > section {
+    padding: 14px;
+  }
+  .guideDetailedScores > section > div > span {
+    font-size: 12px;
+  }
+  .guideDetailedScores > section > div > b {
+    font-size: 13px;
+  }
+  .guideDetailedScores dl > div {
+    font-size: 11px;
+  }
+  .simpleHelp b {
+    font-size: 13px;
+  }
+  .simpleHelp span {
+    font-size: 11px;
+  }
+  .simpleHelp > li {
+    padding-left: 32px;
+  }
+  .guidedApp .modalHeading h2 {
+    font-size: 19px;
+  }
+  .guidedApp .modalHeading p {
+    font-size: 12px;
+  }
+  .guideQuestionList b {
+    font-size: 13px;
+  }
+  .guideQuestionList > button > span {
+    font-size: 10px;
+  }
+  .guideToast {
+    font-size: 12px;
+    min-width: 240px;
+    padding: 13px 17px;
+    bottom: 20px;
+  }
+  .practiceBanner {
+    padding: 9px 17px;
+    gap: 14px;
+  }
+  .practiceBanner > span {
+    font-size: 10px;
+    gap: 6px;
+  }
+  .practiceBanner > span > span {
+    display: none;
+  }
+  .practiceBanner button {
+    font-size: 10px;
+  }
+  .guideSubline {
+    font-size: 10px;
+    flex-wrap: wrap;
+  }
+  .guideLink {
+    font-size: 11px;
+  }
+  .guideFeedback {
+    font-size: 11px;
+  }
+}
+@media (max-width: 440px) {
+  .guideHeader {
+    padding: 0 13px;
+    height: 65px;
+  }
+  .guideBrand > span {
+    width: 32px;
+    height: 32px;
+    border-radius: 10px;
+  }
+  .guideBrand > span > svg {
+    width: 21px;
+  }
+  .guideBrand > b {
+    font-size: 13px;
+    letter-spacing: 0.7px;
+  }
+  .guideBrand small {
+    font-size: 8px;
+  }
+  .guideHeaderActions {
+    gap: 10px;
+  }
+  .guideHeaderActions > .guideOutline {
+    padding: 8px;
+    font-size: 10px;
+    gap: 5px;
+  }
+  .guideHeaderActions > .guideOutline > span {
+    max-width: 77px;
+    line-height: 1.4;
+    text-align: left;
+  }
+  .guideTextButton {
+    gap: 4px;
+    font-size: 10px;
+  }
+  .guideTextButton > svg:first-child {
+    display: none;
+  }
+  .guideTextButton > svg:last-child {
+    width: 11px;
+  }
+  .guideShell {
+    padding: 17px 12px 25px;
+  }
+  .guideStep {
+    padding: 21px 17px;
+  }
+  .guideStepHeading {
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  .guideStepHeading h1 {
+    font-size: 22px;
+  }
+  .guideStepHeading p {
+    font-size: 12px;
+  }
+  .guideStepAside {
+    margin-left: auto;
+  }
+  .guideStepHeading:has(.guideClock) > div:first-child {
+    flex-basis: 60%;
+  }
+  .guideClock {
+    min-width: 88px;
+    padding: 10px;
+  }
+  .guideClock > span {
+    font-size: 21px;
+  }
+  .guideClock > span > svg {
+    display: none;
+  }
+  .simpleScoreStrip > div {
+    padding: 11px 9px;
+  }
+  .simpleScoreStrip > div > span {
+    font-size: 9px;
+    gap: 4px;
+  }
+  .simpleScoreStrip b {
+    font-size: 21px;
+  }
+  .simpleTeamGrid > button {
+    padding: 13px 10px;
+    gap: 7px;
+  }
+  .simpleTeamGrid b {
+    font-size: 12px;
+  }
+  .simpleTeamInitial {
+    width: 27px;
+    height: 27px;
+    border-radius: 7px;
+  }
+  .simpleTeamCheck {
+    width: 14px;
+    height: 14px;
+  }
+  .simpleTeamCheck > svg {
+    width: 11px;
+  }
+  .simpleQuestionChoice {
+    padding: 12px;
+  }
+  .simpleQuestionChoice > div > svg {
+    display: none;
+  }
+  .simpleQuestionChoice > button {
+    font-size: 9px;
+  }
+  .simpleQuestionChoice small {
+    font-size: 9px;
+  }
+  .guidePrimary {
+    font-size: 13px;
+    padding: 13px 15px;
+    min-height: 50px;
+  }
+  .simplePowers {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+  .simplePowers > button {
+    flex-direction: row;
+    align-items: center;
+    gap: 9px;
+    padding: 13px 12px;
+  }
+  .simplePowers > button > span:last-child {
+    margin: 0 0 0 auto;
+    font-size: 10px;
+  }
+  .simplePowers strong {
+    font-size: 13px;
+    margin: 0;
+  }
+  .powerRadio {
+    position: static;
+    flex: none;
+    width: 15px;
+    height: 15px;
+  }
+  .guideRead {
+    padding: 16px 16px;
+  }
+  .guideRead > p {
+    font-size: 17px;
+  }
+  .guideRead > span {
+    font-size: 7px;
+  }
+  .simpleGrades {
+    gap: 9px;
+  }
+  .simpleGrades b {
+    font-size: 13px;
+  }
+  .simpleGrades small {
+    font-size: 10px;
+  }
+  .simpleGrades > button {
+    gap: 7px;
+    padding: 14px 10px;
+  }
+  .simpleGrades > button > svg {
+    width: 19px;
+  }
+  .simpleChallenge {
+    gap: 9px;
+  }
+  .simpleChallenge b {
+    font-size: 10px;
+  }
+  .simpleChallenge small {
+    font-size: 8px;
+  }
+  .simpleChallenge button {
+    font-size: 9px;
+    padding: 9px;
+    gap: 4px;
+  }
+  .simpleChallenge button > svg {
+    width: 13px;
+  }
+  .guideUtilities {
+    justify-content: center;
+    gap: 13px;
+  }
+  .guideUtilities button {
+    font-size: 9px;
+  }
+  .guideQuietActions {
+    align-items: start;
+  }
+  .guideQuietActions > span {
+    text-align: right;
+    max-width: 160px;
+    line-height: 1.7;
+    font-size: 8px;
+  }
+  .guideQuietActions button {
+    font-size: 8px;
+    margin-top: 2px;
+  }
+  .guideWelcome {
+    padding-top: 31px;
+  }
+  .guideWelcome > h1 {
+    font-size: 31px;
+    letter-spacing: -1.4px;
+  }
+  .welcomeIntro {
+    font-size: 13px;
+    line-height: 1.9;
+  }
+  .welcomeSteps {
+    gap: 7px;
+    margin: 28px 0 27px;
+  }
+  .welcomeSteps > div {
+    width: 100px;
+  }
+  .welcomeSteps > svg {
+    width: 12px;
+  }
+  .welcomeSteps b {
+    font-size: 10px;
+  }
+  .welcomeSteps p {
+    font-size: 9px;
+  }
+  .welcomeSteps > div > span {
+    width: 39px;
+    height: 39px;
+    border-radius: 11px;
+  }
+  .welcomeSteps > div > span > svg {
+    width: 20px;
+  }
+  .welcomeActions {
+    flex-direction: column;
+    gap: 11px;
+  }
+  .welcomeActions > button {
+    width: 100%;
+    max-width: 325px;
+  }
+  .guidePractice {
+    font-size: 13px;
+    min-height: 48px;
+  }
+  .practicePromise {
+    font-size: 9px;
+    max-width: 305px;
+    margin: 12px auto 0;
+  }
+  .welcomePrepare {
+    font-size: 10px;
+    max-width: 325px;
+    display: block;
+    margin: 23px auto 0;
+  }
+  .welcomePrepare > span {
+    display: flex;
+    justify-content: center;
+    margin: 8px 0 0;
+    font-size: 11px;
+  }
+  .guideDetailedScores {
+    grid-template-columns: 1fr;
+  }
+  .guidedApp .modalFooter {
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .guidedApp .modalFooter > button {
+    flex: 1;
+    min-width: 125px;
+    font-size: 12px;
+  }
+  .guideTargetList b {
+    font-size: 12px;
+  }
+  .guideTargetList small {
+    font-size: 9px;
+  }
+  .guideTargetList > button {
+    padding: 14px 13px;
+    gap: 9px;
+  }
+  .simpleResultChanges > div {
+    padding: 15px 13px;
+  }
+  .simpleResultChanges b {
+    font-size: 12px;
+  }
+  .simpleResultChanges strong {
+    font-size: 13px;
+  }
+  .simpleRanking small {
+    display: none;
+  }
+  .simpleRanking b {
+    font-size: 12px;
+  }
+  .guideRoundLine {
+    font-size: 10px;
+  }
+  .guideRoundLine > button {
+    font-size: 9px;
+  }
+  .guideAnswer > p {
+    font-size: 15px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .guideStep,
+  .guideToast {
+    animation: none !important;
+  }
+}
+
+/* Clear text contrast for live operation and preparation screens. */
+.guideStepHeading p {
+  color: #68758b;
+}
+.guideCoach p {
+  color: #816b96;
+}
+.guideCoach b {
+  color: #684980;
+}
+.guideAnswer > span {
+  color: #6f8d79;
+}
+.guideAnswer > p {
+  color: #426d51;
+}
+.guideRead > span {
+  color: #8b7b9f;
+}
+.simplePowers > button > span:last-child {
+  color: #78859a;
+}
+.simpleQuestionChoice > div > span {
+  color: #65738c;
+}
+.simpleQuestionChoice small {
+  color: #8995a8;
+}
+.simpleQuestionChoice > button {
+  color: #8669a7;
+}
+.guideInlineNote,
+.guideStep .guideInlineNote {
+  color: #8793a6;
+}
+.gradeWrong {
+  color: #a9485c;
+  border-color: #edc8d1 !important;
+}
+.gradeCorrect {
+  background: #347e58;
+  border-color: #347e58 !important;
+}
+.simpleChallenge b {
+  color: #86758f;
+}
+.simpleChallenge small {
+  color: #9b8ca7;
+}
+.simpleChallenge button {
+  color: #8b6aa9;
+}
+.simpleResultChanges b {
+  color: #5d6e85;
+}
+.simpleResultChanges strong.positive {
+  color: #3b865b !important;
+}
+.simpleResultChanges strong.negative {
+  color: #ac4b5d !important;
+}
+.publishedAnswer > span {
+  color: #6d9279;
+}
+.publishedAnswer > p {
+  color: #456e52;
+}
+.guideTargetList b {
+  color: #576c88;
+}
+.guideTargetList small {
+  color: #8b9cb3;
+}
+.guideUtilities button {
+  color: #9485a8;
+}
+.simpleHistory b {
+  color: #637a99;
+}
+.simpleRanking b {
+  color: #60758f;
+}
+.simpleRanking strong {
+  color: #667d9b;
+}
+.simpleRanking small {
+  color: #96a5b8;
+}
+.guideDetailedScores > section > div > span {
+  color: #627b9c;
+}
+.guideDetailedScores > section > div > b {
+  color: #7189a7;
+}
+.guideDetailedScores dl > div {
+  color: #859bb7;
+}
+.guideDetailedScores dd {
+  color: #748eac;
+}
+.guidedApp .sectionHeading h2,
+.guidedApp .pageTitle h1 {
+  color: #435b7b;
+}
+.guidedApp .sectionHeading p,
+.guidedApp .pageTitle p {
+  color: #8297b1;
+}
+.guidedApp .setting h3 {
+  color: #526d8d;
+}
+.guidedApp .setting p,
+.guidedApp .ruleReference ul {
+  color: #869cb6;
+}
+.guidedApp .bankContent h3 {
+  color: #4c6788;
+}
+.guidedApp .bankContent > p {
+  color: #8ca3be;
+}
+.guidedApp .bankAnswer {
+  color: #648c71;
+}
+.guidedApp label {
+  color: #7288a5;
+}
+.guidedApp .btn.secondary {
+  color: #7d92ad;
+}
+.guidedApp input,
+.guidedApp select,
+.guidedApp textarea {
+  color: #4f6b90;
+}
+.guidedApp .modalHeading h2 {
+  color: #445e80;
+}
+.guidedApp .modalHeading p {
+  color: #8da2bf;
+}
+.guideQuestionList b {
+  color: #567397;
+}
+.simpleHelp b {
+  color: #5f7b9e;
+}
+.simpleHelp span {
+  color: #94a9c5;
+}
+.guidedApp .infoBanner {
+  color: #9b85b3;
+}
+.guidedApp .difficultyTable > div {
+  color: #8097b4;
+}
+.guidedApp .ruleFoot p {
+  color: #a48bbd;
+}
+.welcomeIntro {
+  color: #7b879b;
+}
+.welcomeSteps p {
+  color: #8d98ac;
+}
+
+@media (max-height: 850px) and (min-width: 700px) {
+  .guideHeader {
+    height: 69px;
+  }
+  .practiceBanner {
+    padding-top: 7px;
+    padding-bottom: 7px;
+  }
+  .guideShell {
+    padding-top: 17px;
+  }
+  .simpleScoreStrip {
+    margin-bottom: 15px;
+  }
+  .simpleScoreStrip > div {
+    padding-top: 12px;
+    padding-bottom: 12px;
+  }
+  .guideRoundLine {
+    margin-bottom: 13px;
+  }
+  .guideStep {
+    padding: 25px 30px;
+  }
+  .guideStepHeading {
+    margin-bottom: 20px;
+  }
+  .guideStepHeading h1 {
+    font-size: 25px;
+  }
+  .guideStepHeading p {
+    font-size: 13px;
+    margin-top: 7px;
+  }
+  .simpleQuestionChoice {
+    padding: 12px 16px;
+    margin-bottom: 15px;
+  }
+  .simpleTeamGrid > button {
+    padding: 14px 17px;
+  }
+  .guideNext {
+    margin-top: 20px;
+  }
+  .simplePreview {
+    margin-top: 15px;
+    padding-top: 11px;
+  }
+  .guideRead {
+    padding: 17px 21px;
+    margin-bottom: 17px;
+  }
+  .guideRead > p {
+    font-size: 20px;
+  }
+  .guideAnswer {
+    padding: 13px 18px;
+    margin-bottom: 18px;
+  }
+  .simpleGrades {
+    margin-top: 19px;
+  }
+  .simpleGrades > button {
+    min-height: 69px;
+    padding: 15px 18px;
+  }
+  .simpleChallenge {
+    margin-top: 20px;
+    padding-top: 17px;
+  }
+}
+
+.guideStep {
+  animation: none;
+}
