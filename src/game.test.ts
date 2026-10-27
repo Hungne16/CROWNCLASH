@@ -11,7 +11,14 @@ import { testQuestions } from "./testQuestions";
 const initialGame = () => ({ ...emptyGame(), questions: testQuestions });
 const game = (phase: any = "hint") => {
   const g = initialGame();
-  return { ...g, phase, questionIndex: 0, host: 0, startedAt: 1000 };
+  return {
+    ...g,
+    phase,
+    hintRead: true,
+    questionIndex: 0,
+    host: 0,
+    startedAt: 1000,
+  };
 };
 describe("game rules", () => {
   it("maps difficulty to points and timer", () => {

@@ -1,0 +1,38 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function owner(uid) { return request.auth != null && request.auth.uid == uid; }
+    function admin(uid) {
+      return owner(uid) && exists(/databases/$(database)/documents/admins/$(uid))
+        && get(/databases/$(database)/documents/admins/$(uid)).data.active == true;
+    }
+    function valid() {
+      let d = request.resource.data;
+      let p = d.payload;
+      let s = p.settings;
+      return d.keys().hasOnly(['payload','revision','updatedAt'])
+        && d.revision is int && d.revision > 0 && d.updatedAt == request.time
+        && p.keys().hasOnly(['schemaVersion','questions','teamNames','settings'])
+        && p.schemaVersion == 1 && p.questions is list && p.questions.size() <= 1000
+        && p.teamNames is list && p.teamNames.size() == 4
+        && p.teamNames[0] is string && p.teamNames[0].size() > 0 && p.teamNames[0].size() <= 35
+        && p.teamNames[1] is string && p.teamNames[1].size() > 0 && p.teamNames[1].size() <= 35
+        && p.teamNames[2] is string && p.teamNames[2].size() > 0 && p.teamNames[2].size() <= 35
+        && p.teamNames[3] is string && p.teamNames[3].size() > 0 && p.teamNames[3].size() <= 35
+        && s.keys().hasOnly(['hostMode','challengeCorrect','stealSeconds','noSteal','multiTie'])
+        && s.hostMode in ['manual','rotate','random'] && s.challengeCorrect in ['end','host']
+        && s.noSteal in ['end','host'] && s.multiTie in ['bracket','shared']
+        && s.stealSeconds is int && s.stealSeconds >= 0 && s.stealSeconds <= 120;
+    }
+    match /admins/{uid} {
+      allow get: if owner(uid);
+      allow list, write: if false;
+    }
+    match /adminPreparations/{uid} {
+      allow get: if admin(uid);
+      allow list, delete: if false;
+      allow create: if admin(uid) && valid() && request.resource.data.revision == 1;
+      allow update: if admin(uid) && valid() && request.resource.data.revision == resource.data.revision + 1;
+    }
+  }
+}

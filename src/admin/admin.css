@@ -1,0 +1,517 @@
+.accountHeader {
+  height: 82px;
+  background: #fff;
+  border-bottom: 1px solid #e2e7ef;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 0 max(26px, calc((100vw - 1120px) / 2));
+}
+.accountHeader .guideBrand b {
+  font-size: 16px;
+}
+.accountHeader .guideBrand small {
+  font-size: 11px;
+  letter-spacing: 0;
+}
+.accountEntry {
+  max-width: 1020px;
+  margin: auto;
+  padding: 65px 28px;
+  display: grid;
+  grid-template-columns: 1fr 420px;
+  gap: 70px;
+  align-items: center;
+}
+.accountIntro {
+  padding-bottom: 20px;
+}
+.accountIcon {
+  width: 59px;
+  height: 59px;
+  border-radius: 17px;
+  border: 1px solid #ddd5f2;
+  display: grid;
+  place-items: center;
+  color: #8465c5;
+  background: #eee9f9;
+  margin-bottom: 24px;
+}
+.accountIntro h1 {
+  font-size: 36px;
+  line-height: 1.4;
+  font-weight: 800;
+  letter-spacing: -1px;
+  color: #344059;
+}
+.accountIntro > p {
+  font-size: 15px;
+  line-height: 1.9;
+  color: #8190a7;
+  margin: 20px 0 30px;
+}
+.accountIntro > div {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  font-size: 13px;
+  color: #8a99b0;
+  margin-top: 17px;
+}
+.accountIntro > div > svg {
+  color: #ac9ac6;
+}
+.accountCard {
+  background: white;
+  border: 1px solid #dfe5ee;
+  border-radius: 17px;
+  padding: 31px;
+  box-shadow: 0 8px 35px #40577907;
+}
+.accountCardIcon {
+  width: 43px;
+  height: 43px;
+  background: #f1edf9;
+  color: #9a83c2;
+  border-radius: 12px;
+  display: grid;
+  place-items: center;
+  margin-bottom: 17px;
+}
+.accountCard h2 {
+  font-size: 23px;
+  font-weight: 750;
+  letter-spacing: -0.5px;
+  color: #3c4c67;
+  line-height: 1.5;
+}
+.accountCard > p {
+  font-size: 13px;
+  line-height: 1.8;
+  color: #8b9db7;
+  margin: 12px 0 23px;
+}
+.accountCard form {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+.accountCard input {
+  height: 46px;
+  color: #4b6385 !important;
+  border-color: #dbe2ed !important;
+  background: #fff !important;
+}
+.accountCard label {
+  font-size: 12px;
+  color: #6d829f;
+}
+.accountCard form > .guidePrimary {
+  margin-top: 6px;
+  font-size: 14px;
+}
+.accountNotice,
+.accountError,
+.accountSuccess {
+  font-size: 12px;
+  line-height: 1.85;
+  padding: 13px 16px;
+  border-radius: 9px;
+  margin: 17px 0 22px;
+  border: 1px solid #e7dff1;
+  background: #f7f3fc;
+  color: #a090b4;
+}
+.accountError {
+  background: #fff4f3;
+  border-color: #efdadb;
+  color: #b37f87;
+}
+.accountSuccess {
+  background: #f0f8f3;
+  border-color: #d4e5d9;
+  color: #779d84;
+}
+.accountCard > .guidePrimary {
+  font-size: 13px;
+}
+.accountSwitch {
+  display: block;
+  border: 0;
+  background: none;
+  color: #a28aba;
+  font-size: 12px;
+  margin: 20px auto 0;
+  padding: 0;
+}
+.accountFootnote {
+  font-size: 10px;
+  color: #aab8cd;
+  line-height: 1.9;
+  text-align: center;
+  border-top: 1px solid #eff1f6;
+  padding-top: 18px;
+  margin-top: 22px;
+}
+.accountEmail {
+  color: #957ab6 !important;
+}
+.accountLoading {
+  text-align: center;
+  padding: 30px 0;
+  color: #a290bf;
+}
+.accountLoading p {
+  color: #9eaec4;
+  font-size: 13px;
+  margin-top: 18px;
+}
+.accountHeaderRight {
+  display: flex;
+  align-items: center;
+  gap: 23px;
+}
+.accountHeaderRight > span {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #899bb6;
+  font-size: 12px;
+  max-width: 260px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.cloudWorkspace {
+  max-width: 1170px;
+  margin: auto;
+  padding: 34px 28px 65px;
+}
+.cloudHeading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 25px;
+  margin-bottom: 27px;
+}
+.cloudHeading .eyebrow {
+  color: #ad99c7;
+  font-size: 9px;
+}
+.cloudHeading h1 {
+  font-size: 26px;
+  letter-spacing: -0.7px;
+  font-weight: 750;
+  color: #465c7a;
+}
+.cloudHeading p {
+  font-size: 13px;
+  color: #96a6bc;
+  line-height: 1.8;
+  margin-top: 9px;
+}
+.cloudHeading > .guidePrimary {
+  font-size: 13px;
+  min-height: 47px;
+  padding: 12px 17px;
+}
+.cloudToolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+  border-bottom: 1px solid #e0e6ef;
+  margin-bottom: 25px;
+}
+.cloudToolbar nav {
+  display: flex;
+  align-items: center;
+  gap: 23px;
+}
+.cloudToolbar nav > button {
+  border: 0;
+  border-bottom: 2px solid transparent;
+  padding: 14px 0;
+  background: none;
+  font-size: 13px;
+  color: #96a5bb;
+}
+.cloudToolbar nav > button.selected {
+  color: #9578b9;
+  border-color: #ae93d2;
+  font-weight: 650;
+}
+.cloudSaveState {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #9cabbe;
+  font-size: 11px;
+}
+.cloudSaveState.saved {
+  color: #80a58c;
+}
+.cloudSaveState.error,
+.cloudSaveState.conflict {
+  color: #c2937c;
+}
+.cloudSaveState.saving,
+.cloudSaveState.unsaved {
+  color: #b29bc3;
+}
+.cloudEditor > .managePage > .pageTitle .eyebrow {
+  display: none;
+}
+.cloudEditor > .managePage > .pageTitle h1 {
+  font-size: 20px;
+  color: #7186a3;
+}
+.cloudEditor > .managePage > .pageTitle p {
+  font-size: 11px;
+  max-width: 450px;
+}
+.cloudEditor .settingsTeams {
+  margin-bottom: 19px;
+}
+.cloudLoading {
+  padding: 65px 20px;
+  text-align: center;
+  color: #b29fc8;
+}
+.cloudLoading h2 {
+  font-size: 17px;
+  color: #9badc4;
+  margin-top: 18px;
+}
+.cloudProblem {
+  display: flex;
+  align-items: start;
+  gap: 12px;
+  background: #fff7ea;
+  border: 1px solid #eadcc5;
+  padding: 17px 20px;
+  border-radius: 10px;
+  margin-bottom: 25px;
+  color: #b49b78;
+  line-height: 1.8;
+}
+.cloudProblem > svg {
+  margin-top: 2px;
+}
+.cloudProblem b {
+  font-size: 13px;
+  font-weight: 650;
+}
+.cloudProblem p {
+  font-size: 11px;
+  line-height: 1.9;
+  color: #c1ab8a;
+  margin-top: 7px;
+}
+.cloudProblem .guideOutline {
+  font-size: 11px;
+  padding: 8px 12px;
+  min-height: 36px;
+  background: #fffaf3;
+  border-color: #eddfc9;
+  color: #b59b75;
+  margin-top: 13px;
+}
+.cloudProblem .buttonRow {
+  gap: 8px;
+}
+.spinning {
+  animation: spinAccount 1s linear infinite;
+}
+@keyframes spinAccount {
+  to {
+    transform: rotate(360deg);
+  }
+}
+@media (max-width: 950px) {
+  .accountHeader {
+    padding: 0 24px;
+    height: 75px;
+  }
+  .accountEntry {
+    grid-template-columns: 1fr 390px;
+    gap: 35px;
+    padding: 45px 25px;
+  }
+  .accountIntro h1 {
+    font-size: 30px;
+  }
+  .accountIntro > p {
+    font-size: 13px;
+  }
+  .accountIntro > div {
+    font-size: 11px;
+    gap: 8px;
+  }
+  .accountCard {
+    padding: 27px;
+  }
+  .accountHeaderRight {
+    gap: 15px;
+  }
+  .accountHeaderRight > span {
+    max-width: 190px;
+    font-size: 11px;
+  }
+  .cloudWorkspace {
+    padding: 28px 23px 55px;
+  }
+  .cloudHeading h1 {
+    font-size: 23px;
+  }
+  .cloudHeading p {
+    font-size: 12px;
+  }
+  .cloudHeading > .guidePrimary {
+    font-size: 11px;
+    padding: 10px 13px;
+  }
+  .cloudSaveState {
+    font-size: 10px;
+  }
+  .cloudToolbar nav > button {
+    font-size: 12px;
+  }
+  .cloudEditor .pageTitle > .buttonRow {
+    justify-content: flex-start;
+  }
+}
+@media (max-width: 700px) {
+  .accountEntry {
+    grid-template-columns: 1fr;
+    gap: 30px;
+    padding: 30px 22px;
+    max-width: 500px;
+  }
+  .accountIntro {
+    padding-bottom: 0;
+  }
+  .accountIcon {
+    width: 44px;
+    height: 44px;
+    border-radius: 13px;
+    margin-bottom: 15px;
+  }
+  .accountIcon > svg {
+    width: 24px;
+  }
+  .accountIntro h1 {
+    font-size: 27px;
+    line-height: 1.45;
+  }
+  .accountIntro h1 br {
+    display: none;
+  }
+  .accountIntro > p {
+    font-size: 12px;
+    margin: 13px 0 15px;
+    line-height: 1.9;
+  }
+  .accountIntro > div {
+    display: none;
+  }
+  .accountCard {
+    padding: 25px;
+  }
+  .accountHeader {
+    height: 69px;
+    padding: 0 19px;
+  }
+  .accountHeader .guideBrand b {
+    font-size: 13px;
+  }
+  .accountHeader .guideBrand small {
+    font-size: 8px;
+  }
+  .accountHeader .guideOutline {
+    font-size: 11px;
+    padding: 8px 11px;
+    min-height: 37px;
+  }
+  .accountHeader .guideBrand > span {
+    width: 35px;
+    height: 35px;
+  }
+  .accountCard h2 {
+    font-size: 22px;
+  }
+  .accountHeaderRight {
+    gap: 12px;
+  }
+  .accountHeaderRight > span {
+    max-width: 120px;
+    font-size: 9px;
+  }
+  .accountHeaderRight > .guideTextButton {
+    font-size: 10px;
+  }
+  .accountHeaderRight > .guideTextButton > svg {
+    display: none;
+  }
+  .cloudWorkspace {
+    padding: 24px 17px 45px;
+  }
+  .cloudHeading {
+    display: block;
+    margin-bottom: 22px;
+  }
+  .cloudHeading h1 {
+    font-size: 23px;
+  }
+  .cloudHeading p {
+    font-size: 11px;
+  }
+  .cloudHeading > .guidePrimary {
+    margin-top: 17px;
+    font-size: 12px;
+    min-height: 44px;
+  }
+  .cloudToolbar {
+    align-items: start;
+    gap: 12px;
+    flex-wrap: wrap;
+    padding-bottom: 12px;
+    margin-bottom: 21px;
+  }
+  .cloudToolbar nav {
+    gap: 20px;
+    flex: none;
+  }
+  .cloudToolbar nav > button {
+    font-size: 12px;
+    padding: 11px 0;
+  }
+  .cloudSaveState {
+    font-size: 10px;
+    margin-top: 4px;
+    line-height: 1.7;
+  }
+  .cloudEditor > .managePage > .pageTitle h1 {
+    font-size: 19px;
+  }
+  .cloudEditor > .managePage > .pageTitle p {
+    font-size: 10px;
+  }
+  .cloudProblem {
+    padding: 14px;
+    gap: 9px;
+  }
+  .cloudProblem b {
+    font-size: 12px;
+  }
+  .cloudProblem p {
+    font-size: 10px;
+  }
+  .cloudProblem .guideOutline {
+    font-size: 10px;
+  }
+  .accountHeaderRight > span > svg {
+    width: 13px;
+  }
+}

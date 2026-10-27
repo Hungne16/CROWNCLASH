@@ -62,7 +62,9 @@ export function Presentation({
               <span>{DIFFICULTY[q.difficulty].points} ĐIỂM</span>
               <i />
               {game.phase === "hint"
-                ? "GỢI Ý"
+                ? game.hintRead
+                  ? "CHỐT THẺ · CÂU HỎI CHƯA MỞ"
+                  : "GỢI Ý · CÂU HỎI CHƯA MỞ"
                 : game.phase === "steal-window"
                   ? "CƠ HỘI STEAL"
                   : game.phase === "result"
@@ -107,7 +109,7 @@ export function Presentation({
                 </strong>
               </div>
             )}
-            {game.answerRevealed && (
+            {game.phase === "result" && game.answerRevealed && (
               <div className="audienceAnswer">
                 <Check size={21} />
                 {q.answer}

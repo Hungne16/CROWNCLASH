@@ -2,6 +2,9 @@ import { describe, expect, it } from "vitest";
 import { initialGame as emptyGame, type Game } from "./game";
 import {
   activateCard,
+  acknowledgeHint,
+  confirmRules,
+  rankingRows,
   buzz,
   challengeTeam,
   chooseQuestion,
@@ -22,10 +25,122 @@ import {
   createPracticeGame,
 } from "./controller";
 import { testQuestions } from "./testQuestions";
-const initialGame = () => ({ ...emptyGame(), questions: testQuestions });
+const initialGame = () => ({
+  ...emptyGame(),
+  questions: testQuestions,
+  rulesConfirmed: true,
+});
 const prepared = () =>
-  prepareHint(selectHost(chooseQuestion(initialGame(), "demo-1"), 0));
+  acknowledgeHint(
+    prepareHint(selectHost(chooseQuestion(initialGame(), "demo-1"), 0)),
+  );
 describe("MC control flow", () => {
+  it("shows equal point/card standings as shared places rather than breaking ties by team order", () => {
+    let g = initialGame();
+    expect(rankingRows(g).map((row) => [row.place, row.shared])).toEqual([
+      [1, true],
+      [1, true],
+      [1, true],
+      [1, true],
+    ]);
+    g = { ...g, suddenWinner: 3 };
+    const rows = rankingRows(g);
+    expect(rows[0].index).toBe(3);
+    expect(rows[0].place).toBe(1);
+    expect(rows[0].shared).toBe(false);
+    expect(rows.slice(1).map((row) => [row.place, row.shared])).toEqual([
+      [2, true],
+      [2, true],
+      [2, true],
+    ]);
+  });
+  it("requires agreement on supplemental rules before the first hint", () => {
+    let g: Game = { ...initialGame(), rulesConfirmed: false };
+    g = selectHost(chooseQuestion(g, "demo-1"), 0);
+    expect(prepareHint(g).phase).toBe("setup");
+    g = prepareHint(confirmRules(g));
+    expect(g.phase).toBe("hint");
+    expect(g.startedAt).toBeNull();
+    expect(g.hintRead).toBe(false);
+  });
+  it("keeps reading the hint separate from choosing a card and opening the question", () => {
+    const hint = prepareHint(
+      selectHost(chooseQuestion(initialGame(), "demo-1"), 0),
+    );
+    expect(activateCard(hint, "double").teams[0].cards.double).toBe(1);
+    expect(openQuestion(hint, 1000)).toBe(hint);
+    const acknowledged = acknowledgeHint(hint);
+    expect(acknowledged.startedAt).toBeNull();
+    const active = openQuestion(activateCard(acknowledged, "double"), 1000);
+    expect(active.phase).toBe("question");
+    expect(active.startedAt).toBe(1000);
+    expect(active.teams[0].cards.double).toBe(0);
+  });
+  it.each([
+    ["demo-1", 10, 30, 15],
+    ["demo-2", 20, 45, 20],
+    ["demo-3", 30, 60, 30],
+  ] as const)(
+    "applies the source difficulty, time and Challenge deadline for %s",
+    (id, points, duration, deadline) => {
+      const hint = acknowledgeHint(
+        prepareHint(selectHost(chooseQuestion(initialGame(), id), 0)),
+      );
+      const plain = openQuestion(hint, 1000);
+      expect(questionTime(plain, 1000).seconds).toBe(duration);
+      expect(scoreAnswer(plain, true, 2000).teams[0].score).toBe(points);
+      expect(scoreAnswer(plain, false, 2000).teams[0].score).toBe(-points);
+      expect(
+        scoreAnswer(
+          openQuestion(activateCard(hint, "double"), 1000),
+          true,
+          2000,
+        ).teams[0].score,
+      ).toBe(points * 2);
+      expect(
+        scoreAnswer(
+          openQuestion(activateCard(hint, "double"), 1000),
+          false,
+          2000,
+        ).teams[0].score,
+      ).toBe(-points * 2);
+      expect(
+        scoreAnswer(openQuestion(activateCard(hint, "safe"), 1000), false, 2000)
+          .teams[0].score,
+      ).toBe(0);
+      expect(challengeTeam(plain, 1, 1000 + deadline * 1000).phase).toBe(
+        "challenge",
+      );
+      expect(challengeTeam(plain, 1, 1001 + deadline * 1000).phase).toBe(
+        "question",
+      );
+    },
+  );
+  it("rejects a late Steal without consuming a card or adding points", () => {
+    const window = scoreAnswer(openQuestion(prepared(), 1000), false, 2000);
+    const late = stealTeam(window, 1, window.stealDeadline!);
+    expect(late.phase).toBe("result");
+    expect(late.teams[1].cards.steal).toBe(2);
+    expect(late.teams[1].score).toBe(0);
+  });
+  it("does not let a repeated Challenge score action grade the returning host", () => {
+    let g = prepared();
+    g = { ...g, settings: { ...g.settings, challengeCorrect: "host" } };
+    g = challengeTeam(openQuestion(g, 1000), 1, 2000);
+    g = scoreAnswer(g, true, 2500, "challenge");
+    expect(g.phase).toBe("host-answer");
+    expect(scoreAnswer(g, true, 2501, "challenge")).toBe(g);
+    expect(g.teams[0].score).toBe(0);
+    expect(scoreAnswer(g, true, 2600, "host-answer").teams[0].score).toBe(10);
+  });
+  it("requires separately authored hint, question and answer", () => {
+    const g = initialGame();
+    g.questions = [{ ...testQuestions[0], hint: "   " }];
+    expect(prepareHint(selectHost(chooseQuestion(g, "demo-1"), 0)).phase).toBe(
+      "setup",
+    );
+    expect(() => validateQuestions(g.questions)).toThrow();
+  });
   it("starts with an empty bank and removes legacy question content only once", () => {
     expect(emptyGame().questions).toEqual([]);
     const old = initialGame();
@@ -61,7 +176,7 @@ describe("MC control flow", () => {
     expect(g.phase).toBe("steal-window");
     expect(g.teams[0].score).toBe(-20);
     expect(scoreAnswer(g, false, 2001)).toBe(g);
-    g = stealTeam(g, 1);
+    g = stealTeam(g, 1, 2500);
     expect(g.teams[1].cards.steal).toBe(1);
     expect(g.phase).toBe("steal-answer");
     const duplicate = stealTeam(g, 2);

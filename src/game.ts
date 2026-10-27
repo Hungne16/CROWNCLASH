@@ -37,6 +37,8 @@ export type Game = {
   teams: Team[];
   questions: Question[];
   questionBankVersion?: number;
+  hintRead?: boolean;
+  rulesConfirmed?: boolean;
   round: 1 | 2 | 3;
   phase: Phase;
   questionIndex: number | null;
@@ -78,6 +80,8 @@ export const initialGame = (): Game => ({
   })),
   questions: [],
   questionBankVersion: 2,
+  hintRead: false,
+  rulesConfirmed: false,
   round: 1,
   phase: "setup",
   questionIndex: null,
@@ -158,6 +162,8 @@ export function useCard(
     error,
   });
   const host = g.host;
+  if (!Number.isInteger(team) || team < 0 || team >= g.teams.length)
+    return fail("Đội không hợp lệ.");
   if (
     host === null ||
     (card === "steal" && team === host) ||
@@ -168,12 +174,20 @@ export function useCard(
   if (card === "double" || card === "safe") {
     if (g.phase !== "hint")
       return fail("Thẻ này chỉ dùng sau gợi ý, trước khi mở câu hỏi.");
+    if (!g.hintRead)
+      return fail("MC cần đọc xong gợi ý trước khi nhận lựa chọn thẻ.");
     if (g.usedCard)
       return fail("Mỗi câu chỉ dùng một thẻ trước khi mở câu hỏi.");
   } else if (card === "challenge") {
     if (g.phase !== "question")
       return fail("Challenge chỉ dùng khi câu hỏi đang mở.");
     if (g.paused) return fail("Hãy tiếp tục đồng hồ trước khi dùng Challenge.");
+    if (
+      g.startedAt === null ||
+      g.questionIndex === null ||
+      !g.questions[g.questionIndex]
+    )
+      return fail("Câu hỏi chưa được mở.");
     const elapsed = (now - (g.startedAt ?? now)) / 1000,
       limit = DIFFICULTY[g.questions[g.questionIndex!].difficulty].challenge;
     if (elapsed > limit) return fail("Đã hết thời hạn Challenge.");
@@ -181,6 +195,8 @@ export function useCard(
     if (g.phase !== "steal-window")
       return fail("Steal chỉ dùng sau khi chủ nhà trả lời sai.");
     if (g.stealUsed) return fail("Câu này đã có một lượt Steal.");
+    if (g.stealDeadline != null && now >= g.stealDeadline)
+      return fail("Đã hết thời gian nhận Steal.");
   }
   const teams = g.teams.map((t, i) => {
     if (i !== team) return t;

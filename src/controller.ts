@@ -22,6 +22,7 @@ export function createPracticeGame(questions: Question[] = []): Game {
         ? null
         : questions.findIndex((q) => q.round === 1),
     settings: { ...game.settings, stealSeconds: 60 },
+    rulesConfirmed: true,
   };
 }
 export const isLive = (g: Game) =>
@@ -49,6 +50,36 @@ export function tiedLeaders(g: Game) {
         remainingCards(team) === remainingCards(top),
     )
     .map(({ index }) => index);
+}
+export function rankingRows(g: Game) {
+  const rows = rankTeams(g.teams);
+  if (g.suddenWinner !== null)
+    rows.sort(
+      (a, b) =>
+        Number(b.index === g.suddenWinner) - Number(a.index === g.suddenWinner),
+    );
+  let place = 1;
+  return rows.map((row, i) => {
+    const same = (other: typeof row) =>
+      other.team.score === row.team.score &&
+      remainingCards(other.team) === remainingCards(row.team);
+    if (
+      i === 0 ||
+      row.index === g.suddenWinner ||
+      rows[i - 1].index === g.suddenWinner ||
+      !same(rows[i - 1])
+    )
+      place = i + 1;
+    const shared =
+      row.index !== g.suddenWinner &&
+      rows.some(
+        (other) =>
+          other.index !== row.index &&
+          other.index !== g.suddenWinner &&
+          same(other),
+      );
+    return { ...row, place, shared };
+  });
 }
 export function normalizeGame(value: unknown): Game {
   const base = initialGame();
@@ -127,6 +158,7 @@ export function normalizeGame(value: unknown): Game {
     questionHistoryStart:
       g.questionHistoryStart ?? Math.max(0, g.history.length - 1),
     answerRevealed: g.answerRevealed ?? g.phase === "result",
+    hintRead: g.hintRead ?? (g.phase !== "hint" || !!g.usedCard),
     stealDeadline:
       g.stealDeadline ??
       (g.phase === "steal-window"
@@ -158,9 +190,21 @@ export function chooseQuestion(g: Game, id: string): Game {
 }
 export function prepareHint(g: Game): Game {
   if (g.phase !== "setup" || !currentQuestion(g) || g.host === null) return g;
+  if (!g.rulesConfirmed)
+    return {
+      ...g,
+      notice: "Cần thống nhất 5 quy ước bổ sung trước khi bắt đầu trận.",
+    };
+  if (!currentQuestion(g)!.hint.trim())
+    return {
+      ...g,
+      notice:
+        "Câu này chưa có gợi ý. Hãy bổ sung gợi ý trong bộ câu hỏi trước khi chơi.",
+    };
   return {
     ...g,
     phase: "hint",
+    hintRead: false,
     usedCard: null,
     answering: null,
     challengeAt: null,
@@ -174,6 +218,13 @@ export function prepareHint(g: Game): Game {
     stealDeadline: null,
     notice: "",
   };
+}
+export function acknowledgeHint(g: Game): Game {
+  if (g.phase !== "hint" || !currentQuestion(g)?.hint.trim()) return g;
+  return { ...g, hintRead: true, notice: "" };
+}
+export function confirmRules(g: Game): Game {
+  return g.phase === "setup" ? { ...g, rulesConfirmed: true, notice: "" } : g;
 }
 export function selectHost(g: Game, index: number): Game {
   if (g.phase !== "setup" || index < 0 || index > 3) return g;
@@ -194,7 +245,7 @@ export function activateCard(g: Game, card: "double" | "safe"): Game {
 }
 export function openQuestion(g: Game, now = Date.now()): Game {
   const q = currentQuestion(g);
-  if (g.phase !== "hint" || !q || g.host === null) return g;
+  if (g.phase !== "hint" || !q || g.host === null || !g.hintRead) return g;
   return {
     ...g,
     phase: "question",
@@ -257,7 +308,13 @@ export function challengeTeam(g: Game, index: number, now = Date.now()): Game {
     notice: `${g.teams[index].name} bị Challenge.${burned}`,
   };
 }
-export function scoreAnswer(g: Game, correct: boolean, now = Date.now()): Game {
+export function scoreAnswer(
+  g: Game,
+  correct: boolean,
+  now = Date.now(),
+  expectedPhase?: Game["phase"],
+): Game {
+  if (expectedPhase && g.phase !== expectedPhase) return g;
   const kind =
     g.phase === "challenge"
       ? "challenge"
@@ -318,8 +375,14 @@ export function scoreAnswer(g: Game, correct: boolean, now = Date.now()): Game {
   }
   return next;
 }
-export function stealTeam(g: Game, index: number): Game {
-  const result = useCard(g, index, "steal");
+export function stealTeam(g: Game, index: number, now = Date.now()): Game {
+  if (
+    g.phase === "steal-window" &&
+    g.stealDeadline != null &&
+    now >= g.stealDeadline
+  )
+    return closeSteal(g);
+  const result = useCard(g, index, "steal", now);
   return result.ok
     ? { ...result.game, notice: `${g.teams[index].name} giành quyền Steal.` }
     : { ...g, notice: result.error ?? "" };
@@ -352,6 +415,7 @@ export function nextQuestion(g: Game): Game {
     questionIndex: index < 0 ? null : index,
     host: g.settings.hostMode === "manual" ? null : g.host,
     usedCard: null,
+    hintRead: false,
     answering: null,
     startedAt: null,
     remainingMs: null,
@@ -452,13 +516,14 @@ export function validateQuestions(value: unknown): Question[] {
       ![1, 2, 3].includes(q.round) ||
       !["easy", "medium", "hard"].includes(q.difficulty) ||
       typeof q.hint !== "string" ||
+      !q.hint.trim() ||
       typeof q.text !== "string" ||
       !q.text.trim() ||
       typeof q.answer !== "string" ||
       !q.answer.trim()
     )
       throw new Error(
-        `Câu ${i + 1} thiếu nội dung, đáp án hoặc sai vòng / độ khó.`,
+        `Câu ${i + 1} thiếu gợi ý, nội dung, đáp án hoặc sai vòng / độ khó.`,
       );
     const id =
       typeof q.id === "string" && !ids.has(q.id) ? q.id : crypto.randomUUID();

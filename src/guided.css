@@ -3117,3 +3117,108 @@
 .guideStep {
   animation: none;
 }
+
+.rulesSummary {
+  list-style: decimal;
+  padding-left: 21px;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.rulesSummary li {
+  padding-left: 5px;
+  color: #78699b;
+  font-size: 12px;
+}
+.rulesSummary b {
+  display: block;
+  font-size: 13px;
+  color: #526984;
+  font-weight: 600;
+  line-height: 1.6;
+}
+.rulesSummary span {
+  display: block;
+  font-size: 12px;
+  color: #7c8da6;
+  line-height: 1.7;
+  margin-top: 3px;
+}
+.guidedApp form label > small {
+  font-size: 11px;
+  font-weight: 400;
+  color: #889bb5;
+  line-height: 1.7;
+}
+.guideHeaderActions > .guideAccount {
+  font-size: 12px;
+  min-height: 43px;
+  padding: 10px 13px;
+}
+.localBankNotice {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 15px 18px;
+  border: 1px solid #e3dbee;
+  background: #f7f3fd;
+  border-radius: 10px;
+  margin-bottom: 24px;
+  color: #a18bb6;
+}
+.localBankNotice > div {
+  flex: 1;
+  min-width: 0;
+}
+.localBankNotice b {
+  font-size: 12px;
+  font-weight: 600;
+  color: #8b73a5;
+}
+.localBankNotice p {
+  font-size: 11px;
+  line-height: 1.8;
+  color: #ad99bf;
+  margin-top: 4px;
+}
+.localBankNotice > a {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  white-space: nowrap;
+  font-size: 11px;
+  color: #9b7cb6;
+}
+.accountBoot {
+  display: grid;
+  place-items: center;
+  min-height: 100dvh;
+  color: #a18bb8;
+  font-size: 14px;
+}
+@media (max-width: 750px) {
+  .guideHeaderActions > .guideAccount > span {
+    display: none;
+  }
+  .guideHeaderActions > .guideAccount {
+    padding: 8px;
+    min-height: 35px;
+    min-width: 35px;
+  }
+  .localBankNotice {
+    padding: 13px;
+    gap: 9px;
+    flex-wrap: wrap;
+  }
+  .localBankNotice b {
+    font-size: 11px;
+  }
+  .localBankNotice p {
+    font-size: 10px;
+  }
+  .localBankNotice > a {
+    font-size: 10px;
+    margin-left: 28px;
+  }
+}

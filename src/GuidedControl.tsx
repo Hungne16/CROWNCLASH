@@ -28,6 +28,7 @@ import {
   Target,
   Volume2,
   VolumeX,
+  UserRound,
   X,
   Zap,
 } from "lucide-react";
@@ -40,6 +41,8 @@ import {
 } from "./game";
 import {
   activateCard,
+  acknowledgeHint,
+  confirmRules,
   assignHost,
   buzz,
   challengeTeam,
@@ -53,6 +56,7 @@ import {
   openQuestion,
   prepareHint,
   questionTime,
+  rankingRows,
   remainingQuestions,
   scoreAnswer,
   scoreSudden,
@@ -71,7 +75,14 @@ import { useGame, useNow } from "./useGame";
 
 type Page = "play" | "questions" | "settings" | "history";
 type Dialog =
-  "questions" | "scores" | "help" | "reset" | "round" | "sudden" | null;
+  | "questions"
+  | "scores"
+  | "help"
+  | "reset"
+  | "round"
+  | "sudden"
+  | "rules"
+  | null;
 type Power = "none" | "double" | "safe";
 type Commit = (fn: (g: Game) => Game) => void;
 const INTRO = "dautri-guided-intro-v1";
@@ -149,11 +160,22 @@ export default function GuidedControl() {
       : 0;
   const hasNext = remainingQuestions(game).some((item) => item.id !== q?.id);
   const grade = (correct: boolean) =>
-    commit((g) =>
-      g.phase === "sudden-death"
+    commit((g) => {
+      const answering = ["challenge", "steal-answer", "sudden-death"].includes(
+        g.phase,
+      )
+        ? g.answering
+        : g.host;
+      if (
+        g.phase !== game.phase ||
+        g.questionIndex !== game.questionIndex ||
+        answering !== responder
+      )
+        return g;
+      return g.phase === "sudden-death"
         ? scoreSudden(g, correct)
-        : scoreAnswer(g, correct),
-    );
+        : scoreAnswer(g, correct, Date.now(), game.phase);
+    });
   useEffect(() => {
     setChoosingChallenge(false);
     if (game.phase === "hint")
@@ -249,7 +271,7 @@ export default function GuidedControl() {
     );
   const openWithPower = () =>
     commit((g) => {
-      if (g.phase !== "hint") return g;
+      if (g.phase !== "hint" || !g.hintRead) return g;
       let next = g;
       if (!g.usedCard && power !== "none") {
         next = activateCard(g, power);
@@ -314,6 +336,15 @@ export default function GuidedControl() {
           </b>
         </button>
         <div className="guideHeaderActions">
+          <a
+            className="guideOutline guideAccount"
+            href="/account"
+            aria-label="Tài khoản admin"
+            title="Soạn và lưu bộ đề trên tài khoản"
+          >
+            <UserRound size={17} />
+            <span>Tài khoản admin</span>
+          </a>
           <button className="guideOutline" onClick={openAudience}>
             <Monitor size={17} />
             <span>Màn hình người chơi</span>
@@ -562,7 +593,11 @@ export default function GuidedControl() {
                     <button
                       className="guidePrimary"
                       disabled={game.host === null}
-                      onClick={() => commit(prepareHint)}
+                      onClick={() =>
+                        game.rulesConfirmed
+                          ? commit(prepareHint)
+                          : setDialog("rules")
+                      }
                     >
                       {game.host === null
                         ? "Chọn một đội để tiếp tục"
@@ -610,87 +645,108 @@ export default function GuidedControl() {
           {game.phase === "hint" && q && (
             <Step
               number={2}
-              title={`Đọc gợi ý cho ${hostName}.`}
+              title={
+                game.hintRead
+                  ? `Chốt thẻ cho ${hostName}.`
+                  : `Đọc gợi ý cho ${hostName}.`
+              }
               instruction={
-                practice
-                  ? "Đọc gợi ý. Bạn có thể giữ “Không dùng thẻ”, rồi bấm “Mở câu hỏi”."
-                  : "Đọc phần gợi ý bên dưới. Sau đó hỏi đội có muốn dùng thẻ không."
+                game.hintRead
+                  ? "Đội đã nghe gợi ý nhưng chưa biết câu hỏi. Ghi nhận lựa chọn thẻ, rồi mới mở câu hỏi."
+                  : "Câu hỏi chính vẫn đang ẩn. Đọc gợi ý bên dưới cho đội nghe, rồi bấm “Đã đọc xong gợi ý”."
               }
             >
               <ReadAloud
-                label="BẠN ĐỌC GỢI Ý NÀY"
+                label={
+                  game.hintRead
+                    ? "GỢI Ý ĐÃ ĐỌC · CÂU HỎI VẪN ĐANG ẨN"
+                    : "BẠN ĐỌC GỢI Ý NÀY"
+                }
                 text={
                   q.hint ||
                   "Câu này chưa có gợi ý. MC có thể đọc gợi ý trực tiếp."
                 }
               />
-              <div className="powerQuestion">
-                <h3>{hostName} chọn cách chơi nào?</h3>
-                <span>
-                  Chọn một trong ba cách. Thẻ chỉ bị trừ khi bạn mở câu hỏi.
-                </span>
-              </div>
-              <div className="simplePowers">
-                {(
-                  [
-                    {
-                      id: "none",
-                      name: "Không dùng thẻ",
-                      correct: difficulty!.points,
-                      wrong: -difficulty!.points,
-                    },
-                    {
-                      id: "double",
-                      name: "Cược lớn",
-                      correct: difficulty!.points * 2,
-                      wrong: -difficulty!.points * 2,
-                    },
-                    {
-                      id: "safe",
-                      name: "An toàn",
-                      correct: difficulty!.points,
-                      wrong: 0,
-                    },
-                  ] as const
-                ).map((option) => {
-                  const unavailable =
-                    option.id !== "none" &&
-                    game.teams[game.host!].cards[option.id] === 0 &&
-                    game.usedCard !== option.id;
-                  const selected = power === option.id;
-                  return (
-                    <button
-                      key={option.id}
-                      className={selected ? "selected" : ""}
-                      disabled={unavailable || !!game.usedCard}
-                      onClick={() => setPower(option.id)}
-                      aria-pressed={selected}
-                    >
-                      <span className="powerRadio">
-                        {selected && <Check size={12} />}
-                      </span>
-                      <strong>{option.name}</strong>
-                      <span>
-                        {unavailable
-                          ? "Đã hết thẻ"
-                          : `Đúng ${signed(option.correct)} · Sai ${signed(option.wrong)}`}
-                      </span>
+              {game.hintRead ? (
+                <>
+                  <div className="powerQuestion">
+                    <h3>{hostName} chọn cách chơi nào?</h3>
+                    <span>
+                      Chọn một trong ba cách. Thẻ chỉ bị trừ khi bạn mở câu hỏi.
+                    </span>
+                  </div>
+                  <div className="simplePowers">
+                    {(
+                      [
+                        {
+                          id: "none",
+                          name: "Không dùng thẻ",
+                          correct: difficulty!.points,
+                          wrong: -difficulty!.points,
+                        },
+                        {
+                          id: "double",
+                          name: "Cược lớn",
+                          correct: difficulty!.points * 2,
+                          wrong: -difficulty!.points * 2,
+                        },
+                        {
+                          id: "safe",
+                          name: "An toàn",
+                          correct: difficulty!.points,
+                          wrong: 0,
+                        },
+                      ] as const
+                    ).map((option) => {
+                      const unavailable =
+                        option.id !== "none" &&
+                        game.teams[game.host!].cards[option.id] === 0 &&
+                        game.usedCard !== option.id;
+                      const selected = power === option.id;
+                      return (
+                        <button
+                          key={option.id}
+                          className={selected ? "selected" : ""}
+                          disabled={unavailable || !!game.usedCard}
+                          onClick={() => setPower(option.id)}
+                          aria-pressed={selected}
+                        >
+                          <span className="powerRadio">
+                            {selected && <Check size={12} />}
+                          </span>
+                          <strong>{option.name}</strong>
+                          <span>
+                            {unavailable
+                              ? "Đã hết thẻ"
+                              : `Đúng ${signed(option.correct)} · Sai ${signed(option.wrong)}`}
+                          </span>
+                        </button>
+                      );
+                    })}
+                  </div>
+                  {game.usedCard && (
+                    <p className="guideInlineNote">
+                      Thẻ đã được dùng ở lượt đang lưu. Bạn có thể tiếp tục mở
+                      câu hỏi.
+                    </p>
+                  )}
+                  <div className="guideNext">
+                    <button className="guidePrimary" onClick={openWithPower}>
+                      <Play size={18} />
+                      Mở câu hỏi · Bắt đầu {difficulty?.seconds} giây
                     </button>
-                  );
-                })}
-              </div>
-              {game.usedCard && (
-                <p className="guideInlineNote">
-                  Thẻ đã được dùng ở lượt đang lưu. Bạn có thể tiếp tục mở câu
-                  hỏi.
-                </p>
+                  </div>
+                </>
+              ) : (
+                <div className="guideNext">
+                  <button
+                    className="guidePrimary"
+                    onClick={() => commit(acknowledgeHint)}
+                  >
+                    Đã đọc xong gợi ý — chọn thẻ <ArrowRight size={18} />
+                  </button>
+                </div>
               )}
-              <div className="guideNext">
-                <button className="guidePrimary" onClick={openWithPower}>
-                  <Play size={18} />
-                  Mở câu hỏi · Bắt đầu {difficulty?.seconds} giây
-                </button>
-              </div>
               <button
                 className="guideBack"
                 disabled={!!game.usedCard}
@@ -1134,12 +1190,13 @@ export default function GuidedControl() {
             </Step>
           )}
 
-          {game.notice && game.phase === "question" && (
-            <div className="guideFeedback" role="status">
-              <Info size={15} />
-              {friendly(game.notice)}
-            </div>
-          )}
+          {game.notice &&
+            ["setup", "hint", "question"].includes(game.phase) && (
+              <div className="guideFeedback" role="status">
+                <Info size={15} />
+                {friendly(game.notice)}
+              </div>
+            )}
           <div className="guideUtilities">
             <button
               disabled={!undoCount}
@@ -1208,6 +1265,79 @@ export default function GuidedControl() {
         </main>
       )}
 
+      {dialog === "rules" && (
+        <Modal
+          title="Thống nhất quy ước trước trận"
+          description="File luật gốc chưa xác định 5 tình huống dưới đây. Đây là lựa chọn bổ sung của ban tổ chức, không phải luật mặc định chính thức."
+          onClose={() => setDialog(null)}
+        >
+          <ol className="rulesSummary">
+            <li>
+              <b>Chọn chủ nhà</b>
+              <span>
+                {game.settings.hostMode === "manual"
+                  ? "MC chọn từng câu"
+                  : game.settings.hostMode === "rotate"
+                    ? "Luân phiên theo số câu đã chơi"
+                    : "Bốc thăm ngẫu nhiên"}
+              </span>
+            </li>
+            <li>
+              <b>Đội bị Thách đố trả lời đúng</b>
+              <span>
+                {game.settings.challengeCorrect === "end"
+                  ? "Kết thúc câu hỏi"
+                  : "Chủ nhà tiếp tục, tính điểm gốc"}
+              </span>
+            </li>
+            <li>
+              <b>Thời gian chờ cướp điểm</b>
+              <span>
+                {game.settings.stealSeconds} giây
+                {game.settings.stealSeconds === 0
+                  ? " (không mở cửa cướp điểm)"
+                  : ""}
+              </span>
+            </li>
+            <li>
+              <b>Không đội nào cướp điểm</b>
+              <span>
+                {game.settings.noSteal === "end"
+                  ? "Kết thúc câu hỏi"
+                  : "Chủ nhà được trả lời lại"}
+              </span>
+            </li>
+            <li>
+              <b>Hơn hai đội hòa</b>
+              <span>
+                {game.settings.multiTie === "bracket"
+                  ? "Đối đầu lần lượt"
+                  : "Câu hỏi chung, tranh chuông"}
+              </span>
+            </li>
+          </ol>
+          <div className="modalFooter">
+            <button
+              className="guideOutline"
+              onClick={() => {
+                setDialog(null);
+                showPage("settings");
+              }}
+            >
+              Đổi quy ước
+            </button>
+            <button
+              className="guidePrimary"
+              onClick={() => {
+                commit((g) => prepareHint(confirmRules(g)));
+                setDialog(null);
+              }}
+            >
+              Đã thống nhất — đọc gợi ý <ArrowRight size={16} />
+            </button>
+          </div>
+        </Modal>
+      )}
       {dialog === "questions" && (
         <Modal
           title="Chọn câu hỏi cho lượt này"
@@ -1570,18 +1700,14 @@ function ResultChanges({ game }: { game: Game }) {
   );
 }
 function SimpleRanking({ game }: { game: Game }) {
-  const ranks = rankTeams(game.teams);
-  if (game.suddenWinner !== null)
-    ranks.sort(
-      (a, b) =>
-        Number(b.index === game.suddenWinner) -
-        Number(a.index === game.suddenWinner),
-    );
+  const ranks = rankingRows(game);
   return (
     <div className="simpleRanking">
-      {ranks.map(({ team, index }, i) => (
+      {ranks.map(({ team, index, place, shared }) => (
         <div key={index} style={teamStyle(index)}>
-          <span>{i + 1}</span>
+          <span title={shared ? `Đồng hạng ${place}` : `Hạng ${place}`}>
+            {shared ? `=${place}` : place}
+          </span>
           <b>
             <i />
             {team.name}
@@ -1590,6 +1716,11 @@ function SimpleRanking({ game }: { game: Game }) {
           <strong>{team.score} điểm</strong>
         </div>
       ))}
+      {ranks.some((row) => row.shared) && (
+        <p className="guideInlineNote">
+          Dấu = là đồng hạng: các đội đang bằng cả điểm và số thẻ còn lại.
+        </p>
+      )}
     </div>
   );
 }

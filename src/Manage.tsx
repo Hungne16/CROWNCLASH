@@ -10,6 +10,8 @@ import {
   Info,
   Save,
   Settings2,
+  Cloud,
+  ArrowRight,
 } from "lucide-react";
 import { DIFFICULTY, type Game, type Question, type Settings } from "./game";
 import { currentQuestion, isLive, validateQuestions } from "./controller";
@@ -18,13 +20,19 @@ type Props = {
   game: Game;
   commit: (fn: (g: Game) => Game) => void;
   notify: (message: string) => void;
+  cloudMode?: boolean;
 };
 function replaceQuestions(g: Game, questions: Question[]): Game {
   const id = currentQuestion(g)?.id;
   const index = id ? questions.findIndex((q) => q.id === id) : -1;
   return { ...g, questions, questionIndex: index < 0 ? null : index };
 }
-export function QuestionBank({ game, commit, notify }: Props) {
+export function QuestionBank({
+  game,
+  commit,
+  notify,
+  cloudMode = false,
+}: Props) {
   const [round, setRound] = useState<number>(game.round),
     [search, setSearch] = useState(""),
     [draft, setDraft] = useState<Question | null>(null),
@@ -63,6 +71,21 @@ export function QuestionBank({ game, commit, notify }: Props) {
   };
   return (
     <div className="managePage">
+      {!cloudMode && (
+        <div className="localBankNotice">
+          <Cloud size={19} />
+          <div>
+            <b>Bộ câu hỏi này đang lưu trên máy đang dùng.</b>
+            <p>
+              Muốn soạn ở nhà rồi mở trên máy tổ chức? Dùng bộ đề trên tài khoản
+              admin.
+            </p>
+          </div>
+          <a href="/account">
+            Tài khoản admin <ArrowRight size={14} />
+          </a>
+        </div>
+      )}
       <div className="pageTitle">
         <div>
           <span className="eyebrow">CHUẨN BỊ NỘI DUNG</span>
@@ -227,8 +250,14 @@ export function QuestionBank({ game, commit, notify }: Props) {
           <form
             onSubmit={(e) => {
               e.preventDefault();
-              if (!draft.text.trim() || !draft.answer.trim()) {
-                notify("Câu hỏi và đáp án không được để trống.");
+              if (
+                !draft.hint.trim() ||
+                !draft.text.trim() ||
+                !draft.answer.trim()
+              ) {
+                notify(
+                  "Gợi ý, câu hỏi và đáp án đều cần được soạn trước khi chơi.",
+                );
                 return;
               }
               const validated = validateQuestions([draft])[0];
@@ -285,15 +314,20 @@ export function QuestionBank({ game, commit, notify }: Props) {
               </label>
             </div>
             <label>
-              Gợi ý
+              1. Gợi ý — MC đọc trước, câu hỏi vẫn ẩn
               <textarea
+                required
                 value={draft.hint}
                 onChange={(e) => setDraft({ ...draft, hint: e.target.value })}
-                placeholder="MC đọc gợi ý này trước khi mở câu hỏi…"
+                placeholder="Một đầu mối / chủ đề để đội quyết định có dùng thẻ. Không ghi câu hỏi chính hoặc đáp án ở đây."
               />
+              <small>
+                Đội chỉ nghe phần này trước khi chọn Cược lớn, An toàn hoặc
+                không dùng thẻ.
+              </small>
             </label>
             <label>
-              Câu hỏi chính
+              2. Câu hỏi chính — mở sau khi chốt thẻ
               <textarea
                 required
                 value={draft.text}
@@ -303,7 +337,7 @@ export function QuestionBank({ game, commit, notify }: Props) {
               />
             </label>
             <label>
-              Đáp án dành cho MC
+              3. Đáp án — chỉ dành cho MC
               <textarea
                 required
                 value={draft.answer}
@@ -339,7 +373,11 @@ export function QuestionBank({ game, commit, notify }: Props) {
       {deleteId && (
         <Modal
           title="Xóa câu hỏi này?"
-          description="Câu hỏi sẽ được gỡ khỏi bộ đề. Có thể hoàn tác sau khi xóa."
+          description={
+            cloudMode
+              ? "Câu hỏi sẽ được gỡ và thay đổi sẽ tự động lưu vào bộ đề của tài khoản."
+              : "Câu hỏi sẽ được gỡ khỏi bộ đề. Có thể hoàn tác sau khi xóa."
+          }
           onClose={() => setDeleteId(null)}
         >
           <div className="modalFooter">
@@ -372,6 +410,7 @@ export function GameSettings({ game, commit }: Props) {
     commit((g) => ({
       ...g,
       settings: { ...g.settings, [key]: value },
+      rulesConfirmed: false,
       ...(key === "hostMode" ? { host: null } : {}),
     }));
   return (

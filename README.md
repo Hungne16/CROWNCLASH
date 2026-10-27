@@ -18,10 +18,14 @@ npm run build
 
 ## Cách quản trò thao tác
 
+Trước câu đầu, MC xác nhận 5 quy ước bổ sung đang chọn. Các quy ước này không phải luật gốc.
+
 1. **Đội nào trả lời trước?** Chọn một đội rồi bấm nút đọc gợi ý. Câu hỏi được chọn sẵn theo thứ tự; dùng Đổi câu hỏi khi cần chọn khác.
-2. **Đọc gợi ý.** Hỏi đội chọn Không dùng thẻ, Cược lớn hay An toàn. Thẻ chỉ tiêu hao khi bấm mở câu hỏi; việc thay đổi lựa chọn trước đó chưa tiêu hao thẻ.
+2. **Đọc gợi ý rồi chốt thẻ.** Bấm **Đã đọc xong gợi ý** sau khi đọc, rồi hỏi đội chọn Không dùng thẻ, Cược lớn hay An toàn. Thẻ chỉ tiêu hao khi bấm mở câu hỏi; việc thay đổi lựa chọn trước đó chưa tiêu hao thẻ.
 3. **Nghe câu trả lời.** Đáp án riêng nằm ngay trên hai nút Trả lời đúng / Trả lời sai. Website tự tính điểm. Đồng hồ hết giờ vẫn chờ MC chấm.
 4. **Công bố kết quả.** Xem điểm vừa thay đổi, bấm công bố đáp án, rồi sang câu tiếp theo. Chọn chủ nhà cho từng câu. Điểm và thẻ giữ xuyên các vòng.
+
+Gợi ý, câu hỏi chính và đáp án phải được admin soạn sẵn thành ba phần riêng. Đọc gợi ý không tạo ra câu hỏi mới. Trong lúc đọc gợi ý và chọn thẻ, người chơi chưa thấy câu hỏi chính và đồng hồ chưa chạy. Chỉ khi bấm Mở câu hỏi mới bắt đầu 30 / 45 / 60 giây.
 
 Chỉ khi phát sinh yêu cầu, màn hình mới hỏi thêm:
 
@@ -59,6 +63,14 @@ Năm tình huống luật gốc chưa xác định phải được MC/ban tổ c
 - `src/useGame.ts`: lưu trận, hoàn tác, đồng bộ tab; cách ly dữ liệu tập.
 - `src/game.test.ts`, `src/controller.test.ts`: kiểm thử luật và luồng điều hành.
 
+## Tài khoản admin và chuẩn bị ở nhà
+
+Mở `/account` để đăng nhập tài khoản được cấp và soạn bộ đề riêng. Câu hỏi, tên đội và quy ước tự lưu lên tài khoản; ở máy tổ chức, đăng nhập lại rồi bấm **Dùng bộ đề để tổ chức**. Dữ liệu đang chơi không tự bị thay thế.
+
+Cần kết nối Firebase Authentication + Firestore trước khi dùng thật. Xem [hướng dẫn kích hoạt và cấp tài khoản](docs/TAI_KHOAN_ADMIN.md), `.env.example` và `firestore.rules`. Khi chưa cấu hình, trang tài khoản báo chưa kết nối; chức năng lưu trên máy vẫn dùng được.
+
+Có kiểm thử đơn vị cho lưu bộ đề và chống ghi đè; cần kiểm tra đăng nhập, email và Firestore Rules trên project Firebase thật.
+
 ## Deploy lên Vercel
 
 Import GitHub repository `Hungne16/CROWNCLASH` vào Vercel, dùng nhánh `main` và Root Directory là thư mục gốc của repo.
@@ -67,6 +79,6 @@ Import GitHub repository `Hungne16/CROWNCLASH` vào Vercel, dùng nhánh `main` 
 - Node.js: 22.x (đã khai báo trong package.json).
 - Build Command: npm run build.
 - Output Directory: dist.
-- Không cần biến môi trường hoặc backend cho bản một máy điều khiển.
+- Chế độ lưu trên máy không cần backend. Chức năng tài khoản cần bốn biến `VITE_FIREBASE_*` trong `.env.example`, bật Email/Password và publish Firestore Rules.
 
 File vercel.json đã cấu hình SPA rewrite để có thể mở trực tiếp hoặc tải lại đường dẫn /presentation. Câu hỏi do admin soạn và trận đấu vẫn được lưu trong trình duyệt; dữ liệu từ localhost không tự chuyển sang tên miền Vercel. Có thể dùng Xuất JSON / Nhập JSON để chuyển bộ câu hỏi.
