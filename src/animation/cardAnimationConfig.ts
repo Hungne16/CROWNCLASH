@@ -11,5 +11,5 @@ export const cardAbility:Record<CardType,string> = {double:'ĐÚNG ×2 · SAI ×
 export const ANIMATION_MS = 4000;
 export function preloadCards() { return [CARD_BACK,...Object.values(cardAnimationConfig).map(c=>c.image)].map(src=>{const image=new Image();image.src=src;return image;}); }
 
-export const RESULT_MS = 10600;
+export const RESULT_MS = 3000;
 export const animationDuration = (event:import('../game').CardActivation) => event.result ? RESULT_MS : ANIMATION_MS;

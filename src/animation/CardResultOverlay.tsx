@@ -16,9 +16,9 @@ export function CardResultOverlay({event,onFinish,sound=false}:{event:CardActiva
    tl.fromTo(root.current,{opacity:0},{opacity:1,duration:.2})
     .fromTo('.resultArt',{y:reduced?0:50,scale:reduced?1:.85,opacity:0},{y:0,scale:1,opacity:1,duration:.45},0)
     .fromTo('.resultDelta',{scale:reduced?1:.4,opacity:0},{scale:1,opacity:1,duration:.65,ease:'back.out(2)'},.15);
-   if(!reduced)tl.to('.resultArt',{y:-8,rotation:result.delta<0?-1:1,duration:1.1,repeat:6,yoyo:true,ease:'sine.inOut'},.8);
+   if(!reduced)tl.to('.resultArt',{y:-8,rotation:result.delta<0?-1:1,duration:.8,repeat:1,yoyo:true,ease:'sine.inOut'},.8);
    if(result.delta>0&&!reduced)tl.call(()=>{burst?.({particleCount:75,spread:100,origin:{x:.7,y:.5},colors:[config.color,'#fff1cc'],disableForReducedMotion:true});},[],.4);
-   tl.to(root.current,{opacity:0,duration:.35},reduced?1.4:10.15);
+   tl.to(root.current,{opacity:0,duration:.35},RESULT_MS/1000-.35);
   },root);
   const watchdog=setTimeout(()=>onFinish(event.id),RESULT_MS);
   const hide=()=>{if(document.hidden)onFinish(event.id);};document.addEventListener('visibilitychange',hide);
