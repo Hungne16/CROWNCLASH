@@ -1,0 +1,21 @@
+.bannerHall{position:relative;width:100%;height:100dvh;overflow:hidden;background:#170d08;isolation:isolate}
+.bannerVideo{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 50%;pointer-events:none}
+.bannerCoordinatePlane{position:absolute;left:0;top:0;transform-origin:0 0;pointer-events:none}
+.bannerRegion{position:absolute;pointer-events:none}
+.bannerInk{width:100%;height:100%;display:flex;align-items:center;justify-content:center;overflow:hidden;color:#fff0bf;text-align:center;text-shadow:0 1px 1px #321204,0 0 2px #321204;font-family:Georgia,'Times New Roman',serif;-webkit-text-stroke:.15px #d6ad67}
+.bannerInkContent{flex:none;width:100%;transform-origin:center;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.06em}
+.bannerTeam{display:block;font-weight:700;overflow-wrap:anywhere;max-width:100%;font-variant:small-caps}
+.bannerScore{font-size:1.45em;line-height:1;font-weight:700;font-variant-numeric:tabular-nums;white-space:nowrap}
+.bannerPlace{font-size:.65em;letter-spacing:.09em;font-weight:700;white-space:nowrap}
+.bannerInkChampion{color:#fff2ba;text-shadow:0 1px 1px #321204,0 0 4px #edb64b66}
+.bannerEditing .bannerRegion{pointer-events:auto;cursor:move;touch-action:none;user-select:none}
+.bannerDebug{outline:1px dashed #fff4b9;outline-offset:2px}.bannerSelected.bannerDebug{outline:2px solid #76f1e6}
+.bannerDebugLabel{position:absolute;bottom:calc(100% + 5px);left:50%;transform:translateX(-50%);font:10px Inter,sans-serif;color:#fff;background:#111c;padding:2px 4px;white-space:nowrap}
+.bannerResize{position:absolute;bottom:-4px;right:-4px;width:9px;height:9px;background:#76f1e6;border:1px solid #111;cursor:nwse-resize;touch-action:none}
+.bannerEditorPanel{position:absolute;z-index:5;left:12px;right:12px;bottom:12px;background:#121419f2;border:1px solid #bfa66a77;border-radius:12px;padding:12px 16px;color:#faf0d5;font:13px 'Inter Variable',sans-serif;max-height:38vh;overflow:auto;box-shadow:0 8px 32px #0005}
+.bannerEditorHeading,.bannerEditorActions{display:flex;align-items:center;gap:10px;flex-wrap:wrap}.bannerEditorHeading>b{font-size:17px}.bannerEditorHeading>span{color:#c0b69f}.bannerEditorHeading>button{margin-left:auto}
+.bannerEditorFields{display:grid;grid-template-columns:1.7fr repeat(7,minmax(65px,1fr));gap:10px;margin:10px 0}.bannerEditorFields label{display:grid;gap:4px;color:#d6c9ac}
+.bannerEditorPanel button,.bannerEditorPanel select,.bannerEditorPanel input[type=number]{border:1px solid #bfa66a66;border-radius:6px;background:#27272c;color:#fff2d0;padding:6px 8px;font:inherit;min-width:0}
+.bannerEditorPanel button{cursor:pointer}.bannerEditorPanel button:hover{background:#49402c}.bannerEditorPanel input[type=range]{width:140px}.bannerEditorActions label{display:flex;align-items:center;gap:5px}.bannerEditorPanel p{margin:8px 0 0;color:#c5bba8;font-size:11px}
+@media(max-width:800px){.bannerEditorFields{grid-template-columns:repeat(4,minmax(0,1fr))}.bannerEditorPanel{max-height:40vh}}
+@media(prefers-reduced-motion:reduce){.bannerInk{transition:none}}

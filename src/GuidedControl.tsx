@@ -372,6 +372,8 @@ export default function GuidedControl() {
                   <BookOpen size={16} />
                   Soạn bộ câu hỏi
                 </button>
+                <a href={practice?"/leaderboard?practice=1":"/leaderboard"} target="_blank" rel="noreferrer">Bảng xếp hạng trực tiếp ↗</a>
+                <a href={practice?"/leaderboard?edit=1&practice=1":"/leaderboard?edit=1"} target="_blank" rel="noreferrer">Edit Overlay · Căn chữ trên cờ ↗</a>
                 <a href="/animation-preview" target="_blank" rel="noreferrer">Thử thẻ quyền năng ↗</a>
                 <button onClick={() => showPage("history")}>
                   <History size={16} />

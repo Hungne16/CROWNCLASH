@@ -1,3 +1,4 @@
+import { BannerLeaderboard } from './leaderboard/BannerLeaderboard';
 import { QuestionBoard } from './QuestionBoard';
 import { Crown, Expand, Check, Pause, Trophy, Zap, Swords, Shield, Sparkles, Volume2, VolumeX } from 'lucide-react';
 import type {CSSProperties} from 'react';
@@ -15,6 +16,7 @@ export function Presentation({game,now,onBuzz,sound=false,onToggleSound}:{game:G
  const text=game.phase==='hint'?q?.hint:q?.text;
  const progress=q?Math.max(0,Math.min(100,time.remaining/(questionSeconds(q)*1000)*100)):0;
  const phaseLabel=game.phase==='hint'?(game.hintRead?'CHỐT QUYỀN NĂNG':'GỢI Ý'):game.phase==='challenge'?'THÁCH ĐẤU':game.phase==='steal-answer'?'CƯỚP LƯỢT':game.phase==='steal-window'?'CƠ HỘI STEAL':game.phase==='result'?'KẾT QUẢ':'CÂU HỎI';
+ if(game.phase==='round-summary'||game.phase==='finished') return <BannerLeaderboard game={game}/>;
  return <main className={`presentation showPresentation show-${game.phase}`}>
   <div className="showScenery" aria-hidden="true"><div className="showSpotlight left"/><div className="showSpotlight right"/><div className="showOrbit"/><div className="showFloor"/></div>
   <header className="showHeader">
@@ -36,9 +38,7 @@ export function Presentation({game,now,onBuzz,sound=false,onToggleSound}:{game:G
     {game.phase==='question'&&<aside className={`audienceTimer showTimer ${time.seconds<=5?'urgent':''}`} style={{'--remaining':`${progress}%`} as CSSProperties} aria-label="Thời gian trả lời"><div className="showTimerDial"><span>{formatTime(time.seconds)}</span></div><b>{game.paused?<><Pause size={15}/>TẠM DỪNG</>:time.seconds===0?'HẾT GIỜ':'THỜI GIAN'}</b></aside>}
     {game.phase==='steal-window'&&<div className="showSteal"><CardArt card="steal" className="inlineCardArt"/><b>GIƠ THẺ STEAL</b><strong>{Math.max(0,Math.ceil(((game.stealDeadline??now)-now)/1000))}<small>s</small></strong></div>}
    </div>}
-   {game.phase==='round-summary'&&<div className="showRoundResult"><div className="showSectionLabel"><Trophy size={18}/>VÒNG {game.round} HOÀN TẤT</div><h1>Bảng xếp hạng</h1><div className="showStandings">{rankingRows(game).map(({team,index,place,shared})=><div key={index} style={teamStyle(index)}><span className="showStandingPlace">{place===1&&winner!==null?<Crown size={24}/>:shared?`=${place}`:String(place).padStart(2,'0')}</span><b>{team.name}</b><strong>{team.score}</strong></div>)}</div></div>}
    {game.phase==='sudden-death'&&<div className="showSudden"><div className="showSectionLabel"><Zap size={18}/>SUDDEN DEATH</div><h1>{game.suddenQuestion||'Câu hỏi quyết định'}</h1><div className="showBuzzers">{game.suddenTeams.map(i=><button key={i} style={teamStyle(i)} className={game.answering===i?'buzzed':''} disabled={game.answering!==null} onClick={()=>onBuzz(i)}><Zap size={26}/><b>{game.teams[i].name}</b><span>{game.answering===i?'ĐÃ GIÀNH CHUÔNG':'BẤM CHUÔNG'}</span></button>)}</div></div>}
-   {game.phase==='finished'&&<div className="showChampion"><div className="showTrophy"><Crown size={72}/></div><div className="showSectionLabel">{winner===null?'ĐỒNG HẠNG · CHỜ SUDDEN DEATH':'NHÀ VÔ ĐỊCH'}</div><h1>{winner===null?tiedLeaders(game).map(i=>game.teams[i].name).join(' · '):game.teams[winner].name}</h1>{winner!==null&&<div className="showWinnerPoints">{game.teams[winner].score}<span>ĐIỂM</span></div>}</div>}
    </div>
   </section>
   <section className="showPodiums" aria-label="Bảng điểm bốn đội">{game.teams.map((team,i)=>{

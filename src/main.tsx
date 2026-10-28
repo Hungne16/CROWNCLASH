@@ -5,13 +5,14 @@ import { createRoot } from "react-dom/client";
 import GuidedControl from "./GuidedControl";
 import "./shared.css";
 import "./guided.css";
+import { LeaderboardPage } from "./leaderboard/BannerLeaderboard";
 const AdminApp = React.lazy(() => import("./admin/AdminApp"));
 const recoveryLink = new URLSearchParams(location.search).get("mode") === "resetPassword";
 const accountRoute = location.pathname.startsWith("/account") || recoveryLink;
 
 createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
-    {location.pathname === "/animation-preview" ? <AnimationPreview/> : accountRoute ? (
+    {location.pathname === "/leaderboard" ? <React.Suspense fallback={<div>Đang tải đại sảnh…</div>}><LeaderboardPage/></React.Suspense> : location.pathname === "/animation-preview" ? <AnimationPreview/> : accountRoute ? (
       <React.Suspense
         fallback={
           <div className="guidedApp accountBoot">Đang mở tài khoản…</div>
