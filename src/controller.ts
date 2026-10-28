@@ -1,5 +1,7 @@
 import {
   applyOutcome,
+  gameRounds,
+  questionSeconds,
   DIFFICULTY,
   initialGame,
   rankTeams,
@@ -12,7 +14,7 @@ import {
 
 export const STORE = "dautri-game-v1";
 export const UNDO_STORE = "dautri-undo-v2";
-export function createPracticeGame(questions: Question[] = []): Game {
+export function createPracticeGame(questions: Question[] = [], settings?: Game["settings"]): Game {
   const game = initialGame();
   return {
     ...game,
@@ -21,7 +23,7 @@ export function createPracticeGame(questions: Question[] = []): Game {
       questions.findIndex((q) => q.round === 1) < 0
         ? null
         : questions.findIndex((q) => q.round === 1),
-    settings: { ...game.settings, stealSeconds: 60 },
+    settings: { ...game.settings, ...settings, stealSeconds: 60 },
     rulesConfirmed: true,
   };
 }
@@ -102,7 +104,7 @@ export function normalizeGame(value: unknown): Game {
   if (
     !Array.isArray(g.questions) ||
     !Array.isArray(g.history) ||
-    ![1, 2, 3].includes(g.round)
+    (!Number.isInteger(g.round) || g.round < 1 || g.round > 100)
   )
     return base;
   // One-time removal requested by the admin; later authored banks keep this version.
@@ -251,14 +253,14 @@ export function openQuestion(g: Game, now = Date.now()): Game {
     ...g,
     phase: "question",
     startedAt: now,
-    remainingMs: DIFFICULTY[q.difficulty].seconds * 1000,
+    remainingMs: questionSeconds(q) * 1000,
     paused: false,
     notice: "",
   };
 }
 export function questionTime(g: Game, now = Date.now()) {
   const q = currentQuestion(g),
-    duration = q ? DIFFICULTY[q.difficulty].seconds * 1000 : 0;
+    duration = q ? questionSeconds(q) * 1000 : 0;
   const remaining = g.paused
     ? Math.min(
         duration,
@@ -275,7 +277,7 @@ export function questionTime(g: Game, now = Date.now()) {
 export function toggleClock(g: Game, now = Date.now()): Game {
   if (g.phase !== "question" || questionTime(g, now).remaining <= 0) return g;
   if (g.paused) {
-    const duration = DIFFICULTY[currentQuestion(g)!.difficulty].seconds * 1000;
+    const duration = questionSeconds(currentQuestion(g)!) * 1000;
     return {
       ...g,
       paused: false,
@@ -439,9 +441,9 @@ export function nextQuestion(g: Game): Game {
 }
 export function finishRound(g: Game): Game {
   if (g.phase !== "setup" && g.phase !== "round-summary") return g;
-  if (g.round === 3)
+  if (g.round >= gameRounds(g).length)
     return { ...g, phase: "finished", questionIndex: null, answering: null };
-  const round = (g.round + 1) as 1 | 2 | 3,
+  const round = g.round + 1,
     index = g.questions.findIndex(
       (q) => q.round === round && !(g.playedQuestionIds ?? []).includes(q.id),
     );
@@ -523,7 +525,7 @@ export function validateQuestions(value: unknown): Question[] {
   return value.map((q, i) => {
     if (
       !q ||
-      ![1, 2, 3].includes(q.round) ||
+      (!Number.isInteger(q.round) || q.round < 1 || q.round > 100) ||
       !["easy", "medium", "hard"].includes(q.difficulty) ||
       typeof q.hint !== "string" ||
       !q.hint.trim() ||
@@ -535,6 +537,7 @@ export function validateQuestions(value: unknown): Question[] {
       throw new Error(
         `Câu ${i + 1} thiếu gợi ý, nội dung, đáp án hoặc sai vòng / độ khó.`,
       );
+    if (q.seconds !== undefined && (!Number.isInteger(q.seconds) || q.seconds < 5 || q.seconds > 600)) throw new Error(`Câu ${i + 1}: thời gian phải từ 5 đến 600 giây.`);
     const id =
       typeof q.id === "string" && !ids.has(q.id) ? q.id : crypto.randomUUID();
     ids.add(id);
@@ -545,6 +548,7 @@ export function validateQuestions(value: unknown): Question[] {
       hint: q.hint,
       text: q.text,
       answer: q.answer,
+      ...(q.seconds !== undefined ? { seconds: q.seconds } : {}),
       ...(typeof q.image === "string" ? { image: q.image } : {}),
     };
   });

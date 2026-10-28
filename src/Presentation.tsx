@@ -1,7 +1,7 @@
 import { QuestionBoard } from './QuestionBoard';
 import { Crown, Expand, Check, Pause, Trophy, Zap, Swords, Shield, Sparkles, Volume2, VolumeX } from 'lucide-react';
 import type {CSSProperties} from 'react';
-import { DIFFICULTY, rankTeams, type Game } from './game';
+import { DIFFICULTY, gameRounds, questionSeconds, rankTeams, type Game } from './game';
 import { currentQuestion, questionTime, tiedLeaders, rankingRows } from './controller';
 import { CardArt, Cards, formatTime, teamStyle } from './Common';
 import './presentation.css';
@@ -13,19 +13,19 @@ export function Presentation({game,now,onBuzz,sound=false,onToggleSound}:{game:G
  const winner=game.suddenWinner??(tiedLeaders(game).length===1?ranks[0].index:null);
  const isQuestion=q&&!['setup','round-summary','finished','sudden-death'].includes(game.phase);
  const text=game.phase==='hint'?q?.hint:q?.text;
- const progress=q?Math.max(0,Math.min(100,time.remaining/(DIFFICULTY[q.difficulty].seconds*1000)*100)):0;
+ const progress=q?Math.max(0,Math.min(100,time.remaining/(questionSeconds(q)*1000)*100)):0;
  const phaseLabel=game.phase==='hint'?(game.hintRead?'CHỐT QUYỀN NĂNG':'GỢI Ý'):game.phase==='challenge'?'THÁCH ĐẤU':game.phase==='steal-answer'?'CƯỚP LƯỢT':game.phase==='steal-window'?'CƠ HỘI STEAL':game.phase==='result'?'KẾT QUẢ':'CÂU HỎI';
  return <main className={`presentation showPresentation show-${game.phase}`}>
   <div className="showScenery" aria-hidden="true"><div className="showSpotlight left"/><div className="showSpotlight right"/><div className="showOrbit"/><div className="showFloor"/></div>
   <header className="showHeader">
    <div className="showBrand"><span><Crown size={28}/></span><b>CROWN<span>CLASH</span></b></div>
-   <div className="showRounds" aria-label={`Vòng ${game.round} trên 3`}>{[1,2,3].map(round=><span key={round} className={game.round===round?'active':game.round>round?'complete':''}>{game.round>round?<Check size={14}/>:null}VÒNG 0{round}</span>)}</div>
+   <div className="showRounds" aria-label={`Vòng ${game.round} trên ${gameRounds(game).length}`}>{gameRounds(game).map((name,i)=>{const round=i+1; return <span key={round} className={game.round===round?'active':game.round>round?'complete':''}>{game.round>round?<Check size={14}/>:null}{name}</span>})}</div>
    <div className="showHeaderActions">{onToggleSound&&<button className="showFullscreen" title={sound?"Tắt âm thanh":"Bật âm thanh"} aria-label={sound?"Tắt âm thanh":"Bật âm thanh"} onClick={onToggleSound}>{sound?<Volume2 size={19}/>:<VolumeX size={19}/>}</button>}<button className="showFullscreen" title="Toàn màn hình" aria-label="Toàn màn hình" onClick={()=>document.fullscreenElement?document.exitFullscreen():document.documentElement.requestFullscreen()}><Expand size={20}/></button></div>
   </header>
   <section className="showStage" aria-label="Sân khấu câu hỏi">
    <div className="showStageFrame"/>
    <div className="showStageContent" key={`${game.phase}-${q?.id??game.round}`}>
-   {game.phase==='setup'&&<div className="showBoard"><div className="showSectionLabel"><Sparkles size={16}/>VÒNG {game.round}</div><h1>Chọn câu hỏi</h1><div className="showBoardTurn">{game.host===null?'Sẵn sàng đón thử thách':game.teams[game.host].name}</div><QuestionBoard game={game} audience/></div>}
+   {game.phase==='setup'&&<div className="showBoard"><div className="showSectionLabel"><Sparkles size={16}/>{gameRounds(game)[game.round-1]}</div><h1>Chọn câu hỏi</h1><div className="showBoardTurn">{game.host===null?'Sẵn sàng đón thử thách':game.teams[game.host].name}</div><QuestionBoard game={game} audience/></div>}
    {isQuestion&&<div className={`showQuestionLayout ${game.phase==='question'?'hasTimer':''}`}>
     <div className="showQuestionPanel">
      <div className="showQuestionMeta"><span className="showQuestionIndex">{String(questionNumber).padStart(2,'0')}</span><span className="showPhaseLabel">{phaseLabel}</span><span className="showPoints">{DIFFICULTY[q.difficulty].points}<small>ĐIỂM</small></span></div>

@@ -17,7 +17,7 @@ export function useGame(presentation: boolean, practice = false) {
   const undoKey = practice ? `${UNDO_STORE}-practice` : UNDO_STORE;
   const [game, setGame] = useState<Game>(() =>
     practice && !localStorage.getItem(storageKey)
-      ? createPracticeGame(loadGame(STORE).questions)
+      ? createPracticeGame(loadGame(STORE).questions, loadGame(STORE).settings)
       : loadGame(storageKey),
   );
   const current = useRef(game),

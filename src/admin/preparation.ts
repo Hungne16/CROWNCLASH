@@ -36,6 +36,7 @@ export function parsePreparation(input: unknown): Preparation {
   )
     throw new Error("Bộ đề thiếu tên đội hoặc nội dung hợp lệ.");
   const s = p.settings;
+  if (s.roundNames !== undefined && (!Array.isArray(s.roundNames) || !s.roundNames.length || s.roundNames.length > 100 || !s.roundNames.every(n => typeof n === 'string' && n.trim().length > 0 && n.length <= 80) || p.questions.some(q => q.round > s.roundNames!.length))) throw new Error('Danh sách vòng thi không hợp lệ.');
   if (
     !["manual", "rotate", "random"].includes(s.hostMode) ||
     !["end", "host"].includes(s.challengeCorrect) ||
@@ -56,6 +57,7 @@ export function parsePreparation(input: unknown): Preparation {
     questions: p.questions.length ? validateQuestions(p.questions) : [],
     teamNames: p.teamNames.map((n) => n.trim()),
     settings: {
+      ...(s.roundNames ? {roundNames: s.roundNames.map(n => n.trim())} : {}),
       hostMode: s.hostMode,
       challengeCorrect: s.challengeCorrect,
       stealSeconds: s.stealSeconds,

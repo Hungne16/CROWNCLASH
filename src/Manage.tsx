@@ -1,3 +1,5 @@
+import { RoundEditor } from "./RoundEditor";
+import chapter8 from "./data/group7-chapter8.json";
 import { useRef, useState } from "react";
 import {
   Plus,
@@ -13,7 +15,7 @@ import {
   Cloud,
   ArrowRight,
 } from "lucide-react";
-import { DIFFICULTY, type Game, type Question, type Settings } from "./game";
+import { gameRounds, questionSeconds, DIFFICULTY, type Game, type Question, type Settings } from "./game";
 import { currentQuestion, isLive, validateQuestions } from "./controller";
 import { Modal, teamStyle } from "./Common";
 type Props = {
@@ -24,8 +26,8 @@ type Props = {
 };
 function replaceQuestions(g: Game, questions: Question[]): Game {
   const id = currentQuestion(g)?.id;
-  const index = id ? questions.findIndex((q) => q.id === id) : -1;
-  return { ...g, questions, questionIndex: index < 0 ? null : index };
+  const index = id ? questions.findIndex((q) => q.id === id && q.round === g.round) : -1;
+  return { ...g, questions, questionIndex: index < 0 ? null : index, boardSelectedId: index < 0 ? null : g.boardSelectedId };
 }
 export function QuestionBank({
   game,
@@ -48,7 +50,7 @@ export function QuestionBank({
   );
   const exportFile = () => {
     const url = URL.createObjectURL(
-      new Blob([JSON.stringify(game.questions, null, 2)], {
+      new Blob([JSON.stringify({questions:game.questions, roundNames:gameRounds(game)}, null, 2)], {
         type: "application/json",
       }),
     );
@@ -61,8 +63,13 @@ export function QuestionBank({
   const importFile = async (selected?: File) => {
     if (!selected) return;
     try {
-      const questions = validateQuestions(JSON.parse(await selected.text()));
-      commit((g) => replaceQuestions(g, questions));
+      const data = JSON.parse(await selected.text());
+      const raw = Array.isArray(data) ? data : data.questions;
+      const questions = Array.isArray(raw) && raw.length === 0 ? [] : validateQuestions(raw);
+      const names = Array.isArray(data) ? undefined : data.roundNames;
+      if(names !== undefined && (!Array.isArray(names) || !names.length || names.length > 100 || !names.every(n=>typeof n==='string' && n.trim() && n.length<=80) || questions.some(q=>q.round>names.length))) throw new Error('Danh sách vòng thi không hợp lệ.');
+      commit((g) => ({...replaceQuestions(g, questions), settings:{...g.settings,roundNames:names ?? Array.from({length:Math.max(1,...questions.map(q=>q.round))},(_,i)=>`Vòng ${i+1}`)}, round:1, boardSelectedId:null, playedQuestionIds:[]}));
+      setRound(1);
       notify(`Đã nhập ${questions.length} câu hỏi.`);
     } catch (e) {
       notify(e instanceof Error ? e.message : "Không đọc được file JSON.");
@@ -89,6 +96,11 @@ export function QuestionBank({
 
         </div>
         <div className="buttonRow">
+          <button className="btn secondary" disabled={live} onClick={() => {
+            if (game.questions.length && !window.confirm("Thay bộ câu hỏi hiện tại bằng 12 câu Group 7 – Chapter 8?")) return;
+            commit(g => isLive(g) ? g : ({ ...replaceQuestions(g, validateQuestions(chapter8)), settings:{...g.settings,roundNames:["Warm-up", "Identifying Types of Barriers", "Sơn Tùng M-TP Case Study"]}, round:1, boardSelectedId: null, playedQuestionIds: [] }));
+            notify("Đã nạp Group 7 – Chapter 8: 3 vòng, mỗi vòng 4 câu.");
+          }}>Nạp bộ Group 7 · Chapter 8</button>
           <button className="btn secondary" onClick={exportFile}>
             <Download size={16} />
             Xuất JSON
@@ -109,7 +121,7 @@ export function QuestionBank({
             onClick={() =>
               setDraft({
                 id: crypto.randomUUID(),
-                round: (round || game.round) as 1 | 2 | 3,
+                round: (round || game.round),
                 difficulty: "easy",
                 hint: "",
                 text: "",
@@ -138,15 +150,16 @@ export function QuestionBank({
           </span>
         </div>
       )}
+      <RoundEditor game={game} commit={commit} onSelect={setRound}/>
       <div className="bankToolbar">
         <div className="segments">
-          {[0, 1, 2, 3].map((n) => (
+          {[0, ...gameRounds(game).map((_,i)=>i+1)].map((n) => (
             <button
               className={round === n ? "selected" : ""}
               key={n}
               onClick={() => setRound(n)}
             >
-              {n === 0 ? "Tất cả" : `Vòng ${n}`}
+              {n === 0 ? "Tất cả" : `${n}. ${gameRounds(game)[n-1]}`}
               <span>
                 {game.questions.filter((q) => n === 0 || q.round === n).length}
               </span>
@@ -179,7 +192,7 @@ export function QuestionBank({
                   </span>
                   <span className="muted small">
                     Vòng {q.round} · Ô {game.questions.filter(item=>item.round===q.round).findIndex(item=>item.id===q.id)+1} · {DIFFICULTY[q.difficulty].points} điểm ·{" "}
-                    {DIFFICULTY[q.difficulty].seconds}s
+                    {questionSeconds(q)}s
                   </span>
                   {q.id.startsWith("demo") && (
                     <span className="demoTag">DEMO</span>
@@ -247,6 +260,7 @@ export function QuestionBank({
             onSubmit={(e) => {
               e.preventDefault();
               if (
+                (draft.seconds !== undefined && (!Number.isInteger(draft.seconds) || draft.seconds < 5 || draft.seconds > 600)) ||
                 !draft.hint.trim() ||
                 !draft.text.trim() ||
                 !draft.answer.trim()
@@ -279,11 +293,11 @@ export function QuestionBank({
                   onChange={(e) =>
                     setDraft({
                       ...draft,
-                      round: Number(e.target.value) as 1 | 2 | 3,
+                      round: Number(e.target.value),
                     })
                   }
                 >
-                  {[1, 2, 3].map((n) => (
+                  {gameRounds(game).map((_,i)=>i+1).map((n) => (
                     <option value={n} key={n}>
                       Vòng {n}
                     </option>
@@ -309,6 +323,10 @@ export function QuestionBank({
                 </select>
               </label>
             </div>
+            <label>
+              Thời gian trả lời (giây)
+              <input type="number" min={5} max={600} value={draft.seconds ?? ""} placeholder={String(DIFFICULTY[draft.difficulty].seconds)} onChange={e => setDraft({...draft, seconds: e.target.value ? Number(e.target.value) : undefined})}/>
+            </label>
             <label>
               1. Gợi ý trước khi chọn thẻ
               <textarea

@@ -1,0 +1,106 @@
+[
+  {
+    "id": "group7-ch8-r1-q1",
+    "round": 1,
+    "difficulty": "easy",
+    "hint": "Difficulty: Easy\nQuestion type: Multiple choice\nThinking time: 15 seconds",
+    "text": "Which of the following statements BEST describes the concept of Organizational Divisions in career planning?\nA. They are unique job titles that exist only in tech startups and modern flexible companies.\nB. They represent common functional areas (such as HR, Finance, and Marketing) that perform similar roles across different industries.\nC. They are rigid hierarchical steps that force employees to stay in the same position for life.\nD. They refer exclusively to foreign branches of multinational corporations.",
+    "answer": "B\nExplanation: Most industries share common functional areas (Administration, Finance, Marketing, HR) that perform similar essential tasks regardless of the specific business sector.",
+    "seconds": 15
+  },
+  {
+    "id": "group7-ch8-r1-q2",
+    "round": 1,
+    "difficulty": "medium",
+    "hint": "Difficulty: Medium\nQuestion type: Multiple choice\nThinking time: 30 seconds",
+    "text": "Trang has received two job offers. Job A offers a higher salary but requires longer working hours, while Job B offers a lower salary but gives her more time to study and develop her skills. What should Trang do before making her decision?\nA. Choose Job A because salary should always come first.\nB. Choose Job B because free time is always more important than money.\nC. Compare both offers based on her personal priorities and career goals.\nD. Ask her friends to choose for her.",
+    "answer": "C\nExplanation: Different jobs offer different benefits and trade-offs. Trang needs to consider what matters most to her instead of focusing on just one factor.",
+    "seconds": 30
+  },
+  {
+    "id": "group7-ch8-r1-q3",
+    "round": 1,
+    "difficulty": "hard",
+    "hint": "Difficulty: Hard\nQuestion type: Multiple choice\nThinking time: 60 seconds",
+    "text": "Minh has two job offers that both seem attractive. He has researched the companies and compared their salaries, working hours, and benefits. However, he is still afraid of making the wrong choice. What should he do next?\nA. Continue researching until he can guarantee that his decision will be perfect.\nB. Choose the job with the highest salary to minimize his uncertainty.\nC. Identify his priorities, address his concerns, and set clear steps to act on his decision.\nD. Delay his decision until one option becomes obviously better.",
+    "answer": "C\nExplanation: Research provides useful information, but making a career decision also requires weighing personal priorities, overcoming emotional barriers, and taking action.",
+    "seconds": 60
+  },
+  {
+    "id": "group7-ch8-r1-q4",
+    "round": 1,
+    "difficulty": "medium",
+    "hint": "Difficulty: Medium\nQuestion type: Multiple choice\nThinking time: 30 seconds",
+    "text": "Lan wants to become an English teacher after graduation, but she has also received an attractive offer to work as a translator. What should she consider when deciding between the two options?\nA. Which job is more popular among her classmates.\nB. Which job offers the highest starting salary, regardless of her interests.\nC. Which job best matches her long-term career goals, personal interests, and current priorities.\nD. Which job allows her to avoid challenges and responsibilities.",
+    "answer": "C\nExplanation: A good career decision should reflect a person's long-term goals, interests, and priorities rather than relying on salary or other people's opinions alone.",
+    "seconds": 30
+  },
+  {
+    "id": "group7-ch8-r2-q1",
+    "round": 2,
+    "difficulty": "easy",
+    "hint": "Difficulty: Easy\nQuestion type: Short answer\nThinking time: 15 seconds",
+    "text": "Scenario: Mai wants to join an English-speaking club, but she thinks, “My English is bad. Everyone will laugh at me.” She decides not to join.\nIdentify the type of barrier (external or internal) and explain why.",
+    "answer": "Internal barrier – Mai lacks confidence and fears being laughed at.",
+    "seconds": 15
+  },
+  {
+    "id": "group7-ch8-r2-q2",
+    "round": 2,
+    "difficulty": "medium",
+    "hint": "Difficulty: Medium\nQuestion type: Short answer\nThinking time: 30 seconds",
+    "text": "Scenario: Nam wants to apply for a part-time job at a bookshop. He meets all the requirements, but he keeps comparing himself to other applicants. He thinks, “They probably have more experience. I’m sure I won’t be chosen.” Although his friends encourage him, he decides not to submit his application.\nIdentify the type of barrier (external or internal) and explain why.",
+    "answer": "Internal barrier – Nam’s self-doubt and fear of rejection stop him from applying.",
+    "seconds": 30
+  },
+  {
+    "id": "group7-ch8-r2-q3",
+    "round": 2,
+    "difficulty": "medium",
+    "hint": "Difficulty: Medium\nQuestion type: Matching\nThinking time: 60 seconds",
+    "text": "Match each scenario with the corresponding barrier.\n\n1. Hoa is accepted into a dream course in another city, but she has to decline because she cannot afford the rent and travel tickets.\n2. Minh delays launching his startup, despite having the money, because he keeps thinking: \"What if I fail and my friends laugh at me?\"\n3. Lan wants to study Design, but she enrolls in Medicine because her parents threatened to stop paying her tuition if she disobeys.\n4. Khoa wants to change his major from IT to Design, but he thinks, “I’m not creative or talented enough to succeed in Design.” He stays in IT because he doubts his abilities.\n\nA. Family expectations (External)\nB. Lack of self-confidence (Internal)\nC. Fear of making the wrong decision (Internal)\nD. Survival needs (External)\nE. Fear of ridicule (Internal)",
+    "answer": "1- D \t2- E\t\t3-A\t\t4-B",
+    "seconds": 60
+  },
+  {
+    "id": "group7-ch8-r2-q4",
+    "round": 2,
+    "difficulty": "hard",
+    "hint": "Difficulty: Hard\nQuestion type: Short answer with bonus questions\nThinking time: 120 seconds",
+    "text": "Scenario:\nTrang, a final-year ULIS student who wants to become a conference interpreter, is offered a six-week unpaid internship in Ho Chi Minh City. She must cover travel and accommodation, but her family has limited finances, and her parents expect her to teach near home. Her lecturer suggests a university travel grant, but Trang feels unprepared, compares herself negatively with classmates, and fears making mistakes and disappointing others. She avoids asking for a recommendation, checking the grant, or discussing arrangements with her parents. Calling the internship “financially unrealistic,” she lets the deadline pass.\n\nIdentify the external and internal barriers and explain how they interact.\n\nBonus questions:\nWhat is one practical step she can take immediately to overcome these barriers?\nWhat remains outside her direct control, even if she takes that step?",
+    "answer": "External barriers: The unpaid internship, travel and accommodation costs, limited family finances, and parental expectations.\nInternal barriers: Self-doubt, negative comparisons with classmates, fear of making mistakes and disappointing others, and reluctance to seek support.\nHow they interact: The financial and family pressures strengthen Trang’s doubts. Her fears then prevent her from exploring support that could reduce those external barriers.\nOne immediate action: Contact the university’s grant office to check eligibility, funding coverage, and application deadlines. This would help her assess whether the internship is financially feasible.\nOutside her direct control: Whether she receives the grant, how much funding is available, and whether her parents support her choice.\n⇒ KEY TAKEAWAY: Trang cannot control every outcome, but she can gather information and seek support before deciding.",
+    "seconds": 120
+  },
+  {
+    "id": "group7-ch8-r3-q1",
+    "round": 3,
+    "difficulty": "easy",
+    "hint": "Difficulty: Easy\nQuestion type: Multiple choice",
+    "text": "Which decision-making style did Sơn Tùng M-TP demonstrate when he developed his career step by step, from the underground music scene to professional music?\nA. Fatalistic style\nB. Compliant style\nC. Planning style\nD. Avoidant style",
+    "answer": "C. Planning style\nSuggested answer inferred from the case study in the source document."
+  },
+  {
+    "id": "group7-ch8-r3-q2",
+    "round": 3,
+    "difficulty": "medium",
+    "hint": "Difficulty: Medium\nQuestion type: Open-ended discussion",
+    "text": "If you were Sơn Tùng when he founded M-TP Entertainment, what information would you need, and which strategies would you choose to minimize the risk of failure? Why?",
+    "answer": "Suggested marking guide (the source leaves this answer blank):\nInformation: start-up and operating costs, available funding, audience demand, business responsibilities, and the skills needed in the team.\nStrategies: learn from previous companies, set clear goals, recruit specialists for business functions, and focus on musical expertise.\nWhy: these steps support informed decisions, distribute responsibilities, and help manage financial and managerial risks. Accept other well-supported answers consistent with the case study."
+  },
+  {
+    "id": "group7-ch8-r3-q3",
+    "round": 3,
+    "difficulty": "medium",
+    "hint": "Difficulty: Medium\nQuestion type: Fill in the blank — no more than two words",
+    "text": "Fill in the blank with NO MORE THAN TWO WORDS to complete the sentence.\nSơn Tùng’s decision to establish M-TP Entertainment was a calculated risk because he had to accept ______________ to pursue his long-term goals.",
+    "answer": "Financial uncertainty"
+  },
+  {
+    "id": "group7-ch8-r3-q4",
+    "round": 3,
+    "difficulty": "hard",
+    "hint": "Difficulty: Hard\nQuestion type: Matching",
+    "text": "Match the statements about Sơn Tùng (1-3) with the correct corresponding details (A-D) based on the text. There is ONE extra detail you do not need to use.\n\n1. An external barrier to his career\n2. A false assumption about M-TP Entertainment\n3. The reason his decision was a \"calculated risk\"\n\nA. He accepted financial uncertainty to pursue a long-term goal of producing music and developing artists.\nB. He established the company because he needed money to meet his basic survival needs.\nC. His parents preferred that he pursue a more conventional career.\nD. He chose the safest option and avoided taking on new responsibilities.",
+    "answer": "1-C, 2-B, 3 -A"
+  }
+]

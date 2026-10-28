@@ -36,6 +36,8 @@ import {
 } from "lucide-react";
 import {
   DIFFICULTY,
+  gameRounds,
+  questionSeconds,
   initialGame,
   rankTeams,
   remainingCards,
@@ -246,7 +248,7 @@ export default function GuidedControl() {
   const practiceStart = () => {
     localStorage.setItem(
       `${STORE}-practice`,
-      JSON.stringify(createPracticeGame(game.questions)),
+      JSON.stringify(createPracticeGame(game.questions, game.settings)),
     );
     localStorage.removeItem(`${UNDO_STORE}-practice`);
     location.assign("/?practice=1");
@@ -509,7 +511,7 @@ export default function GuidedControl() {
           </div>
           <div className="guideRoundLine">
             <span>
-              Vòng <b>{game.round}</b> / 3
+              Vòng <b>{game.round}</b> / {gameRounds(game).length} · {gameRounds(game)[game.round - 1]}
               {q && (game.phase !== "setup" || game.boardSelectedId === q.id) && (
                 <>
                   <i />
@@ -531,12 +533,12 @@ export default function GuidedControl() {
               <QuestionBoard game={game} disabled={game.host===null} onChoose={id=>commit(g=>chooseQuestion(g,id))}/>
               {game.host===null && <div className="boardNoHost">Chọn đội đến lượt trước.</div>}
               {q && game.boardSelectedId===q.id && <>
-                <div className="boardSelectedMeta"><b>Câu {questionNumber}</b><span>{difficulty?.label} · {difficulty?.points} điểm · {difficulty?.seconds} giây</span></div>
+                <div className="boardSelectedMeta"><b>Câu {questionNumber}</b><span>{difficulty?.label} · {difficulty?.points} điểm · {q ? questionSeconds(q) : 0} giây</span></div>
                 <div className="guideNext"><button className="guidePrimary" disabled={game.host===null} onClick={()=>game.rulesConfirmed?commit(prepareHint):setDialog("rules")}>Mở gợi ý · Câu {questionNumber}<ArrowRight size={19}/></button></div>
                 <details className="simplePreview questionBoardHelp"><summary>Xem trước (MC)<ChevronDown size={13}/></summary><p>{q.text}</p><span>Đáp án: {q.answer}</span></details>
               </>}
               {!roundQuestions.length && <div className="guideEmpty"><BookOpen size={30}/><h3>Vòng này chưa có câu hỏi</h3><button className="guidePrimary" onClick={()=>showPage("questions")}>Soạn câu hỏi<ArrowRight size={17}/></button></div>}
-              {roundQuestions.length>0 && remainingQuestions(game).length===0 && <button className="guidePrimary" onClick={()=>setDialog("round")}>Tổng kết vòng</button>}
+              {remainingQuestions(game).length===0 && <button className="guidePrimary" onClick={()=>setDialog("round")}>Tổng kết vòng</button>}
             </Step>
           )}
 
@@ -632,7 +634,7 @@ export default function GuidedControl() {
                   <div className="guideNext">
                     <button className="guidePrimary" onClick={openWithPower}>
                       <Play size={18} />
-                      Mở câu hỏi lên màn chiếu · {difficulty?.seconds} giây
+                      Mở câu hỏi lên màn chiếu · {q ? questionSeconds(q) : 0} giây
                     </button>
                   </div>
                 </>
@@ -963,7 +965,7 @@ export default function GuidedControl() {
                   className="guidePrimary"
                   onClick={() => commit(finishRound)}
                 >
-                  {game.round === 3
+                  {game.round >= gameRounds(game).length
                     ? "Xem kết quả chung cuộc"
                     : `Bắt đầu vòng ${game.round + 1}`}
                   <ArrowRight size={19} />

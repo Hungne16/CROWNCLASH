@@ -31,3 +31,7 @@
  .showStandings{gap:8px;margin-top:16px}.showStandings>div{padding:8px 16px}.showStandings strong{font-size:clamp(20px,3vh,34px)}
 }
 @media(max-height:600px) and (min-width:641px){.showBrand>span{width:32px;height:32px}.showBrand svg{width:22px}.showRounds>span{padding:7px 10px}.showRounds{padding:3px}.showFullscreen{width:32px;height:32px}.showSectionLabel{font-size:10px}.showPodium .cardInventory>span{font-size:10px}.showTeamNumber{display:none}.showBoard .questionBoardAudience .questionTile span{font-size:11px}.showQuestionIndex{font-size:24px}.showQuestionBottom{gap:10px}.showHintState{font-size:9px}}
+
+.showQuestionBody h1 { white-space: pre-line; }
+
+.showRounds{max-width:48vw;overflow-x:auto}.showRounds>span{white-space:nowrap;flex-shrink:0}.showHeader{min-width:0}.showStage{align-items:safe center}

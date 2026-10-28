@@ -14,12 +14,13 @@ export type Phase =
 export type CardType = "double" | "safe" | "challenge" | "steal";
 export type Question = {
   id: string;
-  round: 1 | 2 | 3;
+  round: number;
   difficulty: Difficulty;
   hint: string;
   text: string;
   answer: string;
   image?: string;
+  seconds?: number;
 };
 export type Team = {
   name: string;
@@ -27,6 +28,7 @@ export type Team = {
   cards: { double: number; safe: number; challenge: number; steal: number };
 };
 export type Settings = {
+  roundNames?: string[];
   hostMode: "manual" | "rotate" | "random";
   challengeCorrect: "end" | "host";
   stealSeconds: number;
@@ -43,7 +45,7 @@ export type Game = {
   boardSelectedId?: string | null;
   hintRead?: boolean;
   rulesConfirmed?: boolean;
-  round: 1 | 2 | 3;
+  round: number;
   phase: Phase;
   questionIndex: number | null;
   host: number | null;
@@ -227,4 +229,12 @@ export function useCard(
       notice: "",
     },
   };
+}
+
+export const questionSeconds = (q: Question) => q.seconds ?? DIFFICULTY[q.difficulty].seconds;
+
+export function gameRounds(g: Pick<Game, 'questions' | 'settings'>): string[] {
+  const names = g.settings.roundNames ?? (g.questions.length === 12 && g.questions.every(q=>q.id.startsWith('group7-ch8-')) ? ['Warm-up','Identifying Types of Barriers','Sơn Tùng M-TP Case Study'] : undefined);
+  const count = Math.max(names?.length ?? 3, ...g.questions.map(q => q.round));
+  return Array.from({length: count}, (_, i) => names?.[i] || `Vòng ${i + 1}`);
 }

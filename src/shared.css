@@ -1485,3 +1485,10 @@ form > label {
 .cardArt{display:block;object-fit:contain;flex-shrink:0;aspect-ratio:2/3}.cardInventory>span>.cardArt{width:22px;height:33px;max-width:none;border-radius:3px}.cardInventory>span{gap:6px}.cardArt.inlineCardArt{display:inline-block;width:24px;height:36px;vertical-align:middle;margin-right:4px}.cardArt.detailCardArt{width:32px;height:48px;display:inline-block;vertical-align:middle;margin-right:10px}.guideDetailedScores dt{display:flex;align-items:center}.simplePowers>button>.powerChoiceArt{height:84px;width:56px;align-self:center;margin:0 auto 8px;filter:drop-shadow(0 3px 4px #0002)}.simplePowers>button:has(.powerChoiceArt){padding-top:12px}.showPodium .cardInventory>span{min-width:0}.showPodium .cardInventory>span>.cardArt{width:clamp(16px,1.5vw,26px);height:clamp(24px,2.25vw,39px)}
 @media(max-height:600px) and (min-width:641px){.showPodium .cardInventory>span>.cardArt{width:16px;height:24px}.showPodium .cardInventory>span{padding:2px 4px;gap:3px}}
 @media(max-width:560px){.showPodium .cardInventory>span>.cardArt{width:16px;height:24px}}
+
+.bankContent h3, .bankContent p, .bankAnswer { white-space: pre-line; }
+
+.roundEditor { padding:20px; border:1px solid #d9d3e5; border-radius:16px; margin:20px 0; }
+.roundEditor h2 {font-size:18px; margin-right:auto}.roundEditor p{font-size:13px;color:#768096;margin-top:12px}
+.roundEditorList{display:grid;gap:10px;margin-top:16px}.roundEditorRow{display:flex;align-items:center;gap:12px}.roundEditorRow input{flex:1;min-width:0;padding:10px;border:1px solid #d9d3e5;border-radius:8px;background:transparent;color:inherit}.bankToolbar .segments{flex-wrap:wrap}
+@media(max-width:600px){.roundEditorRow{flex-wrap:wrap}.roundEditorRow input{flex-basis:70%}}

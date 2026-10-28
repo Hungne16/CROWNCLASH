@@ -19,7 +19,8 @@ service cloud.firestore {
         && p.teamNames[1] is string && p.teamNames[1].size() > 0 && p.teamNames[1].size() <= 35
         && p.teamNames[2] is string && p.teamNames[2].size() > 0 && p.teamNames[2].size() <= 35
         && p.teamNames[3] is string && p.teamNames[3].size() > 0 && p.teamNames[3].size() <= 35
-        && s.keys().hasOnly(['hostMode','challengeCorrect','stealSeconds','noSteal','multiTie'])
+        && s.keys().hasOnly(['hostMode','challengeCorrect','stealSeconds','noSteal','multiTie','roundNames'])
+        && (!('roundNames' in s) || (s.roundNames is list && s.roundNames.size() > 0 && s.roundNames.size() <= 100))
         && s.hostMode in ['manual','rotate','random'] && s.challengeCorrect in ['end','host']
         && s.noSteal in ['end','host'] && s.multiTie in ['bracket','shared']
         && s.stealSeconds is int && s.stealSeconds >= 0 && s.stealSeconds <= 120;
