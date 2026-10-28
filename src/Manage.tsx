@@ -75,11 +75,8 @@ export function QuestionBank({
         <div className="localBankNotice">
           <Cloud size={19} />
           <div>
-            <b>Bộ câu hỏi này đang lưu trên máy đang dùng.</b>
-            <p>
-              Muốn soạn ở nhà rồi mở trên máy tổ chức? Dùng bộ đề trên tài khoản
-              admin.
-            </p>
+            <b>Lưu trên máy này</b>
+
           </div>
           <a href="/account">
             Tài khoản admin <ArrowRight size={14} />
@@ -88,9 +85,8 @@ export function QuestionBank({
       )}
       <div className="pageTitle">
         <div>
-          <span className="eyebrow">CHUẨN BỊ NỘI DUNG</span>
           <h1>Ngân hàng câu hỏi</h1>
-          <p>Chuẩn bị trước sự kiện. Đáp án ở đây chỉ dành cho quản trò.</p>
+
         </div>
         <div className="buttonRow">
           <button className="btn secondary" onClick={exportFile}>
@@ -314,20 +310,17 @@ export function QuestionBank({
               </label>
             </div>
             <label>
-              1. Gợi ý — MC đọc trước, câu hỏi vẫn ẩn
+              1. Gợi ý trước khi chọn thẻ
               <textarea
                 required
                 value={draft.hint}
                 onChange={(e) => setDraft({ ...draft, hint: e.target.value })}
-                placeholder="Một đầu mối / chủ đề để đội quyết định có dùng thẻ. Không ghi câu hỏi chính hoặc đáp án ở đây."
+                placeholder="Nhập gợi ý, không kèm đáp án."
               />
-              <small>
-                Đội chỉ nghe phần này trước khi chọn Cược lớn, An toàn hoặc
-                không dùng thẻ.
-              </small>
+
             </label>
             <label>
-              2. Câu hỏi chính — mở sau khi chốt thẻ
+              2. Câu hỏi
               <textarea
                 required
                 value={draft.text}
@@ -337,7 +330,7 @@ export function QuestionBank({
               />
             </label>
             <label>
-              3. Đáp án — chỉ dành cho MC
+              3. Đáp án (MC)
               <textarea
                 required
                 value={draft.answer}
@@ -417,9 +410,8 @@ export function GameSettings({ game, commit }: Props) {
     <div className="managePage">
       <div className="pageTitle">
         <div>
-          <span className="eyebrow">CHUẨN BỊ TRẬN ĐẤU</span>
           <h1>Đội thi & quy ước</h1>
-          <p>Thống nhất với các đội trước trận để quản trò xử lý nhất quán.</p>
+
         </div>
         <Settings2 className="pageDecoration" size={34} />
       </div>
@@ -427,7 +419,7 @@ export function GameSettings({ game, commit }: Props) {
         <div className="sectionHeading">
           <div>
             <h2>Bốn đội tham gia</h2>
-            <p>Điểm và 5 thẻ mỗi đội được giữ xuyên suốt ba vòng.</p>
+
           </div>
         </div>
         <div className="teamNameGrid">
@@ -462,7 +454,7 @@ export function GameSettings({ game, commit }: Props) {
           <div className="sectionHeading">
             <div>
               <h2>Năm quy ước bổ sung</h2>
-              <p>Luật gốc chưa xác định các tình huống này.</p>
+
             </div>
             <span className="demoTag">MC CẦN THỐNG NHẤT</span>
           </div>
@@ -571,7 +563,7 @@ export function GameSettings({ game, commit }: Props) {
           <div className="sectionHeading">
             <div>
               <h2>Luật cố định</h2>
-              <p>Luôn áp dụng trong suốt trận đấu.</p>
+
             </div>
           </div>
           <div className="difficultyTable">

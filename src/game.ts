@@ -33,7 +33,10 @@ export type Settings = {
   noSteal: "end" | "host";
   multiTie: "bracket" | "shared";
 };
+export type CardActivation = { id: string; card: CardType; team: number; teamName: string; targetName?: string; result?: {delta:number; total:number; correct:boolean; sourceName:string}; at: number };
 export type Game = {
+  cardActivation?: CardActivation;
+  cardOutcome?: CardActivation;
   teams: Team[];
   questions: Question[];
   questionBankVersion?: number;
@@ -214,6 +217,7 @@ export function useCard(
     game: {
       ...g,
       teams,
+      cardActivation: {id: crypto.randomUUID(), card, team, teamName:g.teams[team].name, at:now},
       usedCard: card === "double" || card === "safe" ? card : g.usedCard,
       phase: card === "steal" ? "steal-answer" : g.phase,
       answering: card === "steal" ? team : g.answering,

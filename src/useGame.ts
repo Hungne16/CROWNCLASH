@@ -1,3 +1,4 @@
+import { useCardAnimation } from "./animation/useCardAnimation";
 import { useCallback, useEffect, useRef, useState } from "react";
 import {
   buzz,
@@ -11,6 +12,7 @@ import {
 import type { Game } from "./game";
 
 export function useGame(presentation: boolean, practice = false) {
+  const animation = useCardAnimation(presentation,practice);
   const storageKey = practice ? `${STORE}-practice` : STORE;
   const undoKey = practice ? `${UNDO_STORE}-practice` : UNDO_STORE;
   const [game, setGame] = useState<Game>(() =>
@@ -40,6 +42,12 @@ export function useGame(presentation: boolean, practice = false) {
       const previous = current.current,
         next = action(previous);
       if (next === previous) return;
+      if(next.questionIndex !== previous.questionIndex || next.round !== previous.round || (next.phase === "setup" && previous.phase !== "setup")) animation.skip();
+      if (next.cardActivation && next.cardActivation.id !== previous.cardActivation?.id) {
+        if(animation.active.current && !animation.active.current.result) return;
+        animation.play(next.cardActivation);
+      }
+      if(next.cardOutcome && next.cardOutcome.id !== previous.cardOutcome?.id) animation.play(next.cardOutcome);
       undoRef.current = [...undoRef.current.slice(-29), previous];
       setUndoCount(undoRef.current.length);
       current.current = next;
@@ -48,12 +56,13 @@ export function useGame(presentation: boolean, practice = false) {
         localStorage.setItem(undoKey, JSON.stringify(undoRef.current));
       } catch {}
     },
-    [presentation, undoKey],
+    [presentation, undoKey, animation.play, animation.skip],
   );
   const undo = useCallback(() => {
     if (presentation) return;
     const checkpoint = undoRef.current.pop();
     if (!checkpoint) return;
+    animation.skip();
     const previous = normalizeGame(checkpoint);
     current.current = previous;
     setGame(previous);
@@ -133,7 +142,7 @@ export function useGame(presentation: boolean, practice = false) {
   }, [presentation, game.phase, game.stealDeadline, commit]);
   const sendBuzz = (team: number) =>
     channel.current?.postMessage({ type: "buzz", team });
-  return { game, commit, undo, undoCount, sendBuzz, storageError };
+  return { game, commit, undo, undoCount, sendBuzz, storageError, animation };
 }
 export function useNow() {
   const [now, setNow] = useState(Date.now);

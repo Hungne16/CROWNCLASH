@@ -1,3 +1,4 @@
+import { CardAnimationPlayer } from "./animation/CardActivationOverlay";
 import {
   useCallback,
   useEffect,
@@ -94,7 +95,7 @@ const friendly = (s: string) =>
 export default function GuidedControl() {
   const presentation = location.pathname === "/presentation",
     practice = new URLSearchParams(location.search).get("practice") === "1";
-  const { game, commit, undo, undoCount, sendBuzz, storageError } = useGame(
+  const { game, commit, undo, undoCount, sendBuzz, storageError, animation } = useGame(
       presentation,
       practice,
     ),
@@ -236,7 +237,7 @@ export default function GuidedControl() {
     [],
   );
   if (presentation)
-    return <Presentation game={game} now={now} onBuzz={sendBuzz} />;
+    return <><Presentation game={game} now={now} onBuzz={sendBuzz} /><button className="presentationSound" onClick={()=>setSound(v=>!v)}>{sound ? "Tắt" : "Bật"} âm thanh thẻ</button>{animation.event && <CardAnimationPlayer key={animation.event.id} event={animation.event} onFinish={animation.complete} sound={sound}/>}</>;
 
   const begin = () => {
     localStorage.setItem(INTRO, "done");
@@ -308,12 +309,13 @@ export default function GuidedControl() {
         }
       }}
     >
+      {animation.event && <div className="animationStatus"><b>{animation.event.result ? "Kết quả" : "Đang phát"} · {animation.event.teamName}</b><button onClick={animation.skip}>Bỏ qua hoạt ảnh</button></div>}
       {practice && (
         <div className="practiceBanner">
           <span>
             <Zap size={16} />
             <b>Đang tập điều khiển</b>
-            <span>Điểm và thẻ ở đây không tính vào trận thật.</span>
+
           </span>
           <button onClick={returnToReal}>
             Về trận thật <ArrowRight size={15} />
@@ -332,7 +334,7 @@ export default function GuidedControl() {
             <Gamepad2 size={24} />
           </span>
           <b>
-            ĐẤU TRÍ<small>Dành cho quản trò</small>
+            ĐẤU TRÍ
           </b>
         </button>
         <div className="guideHeaderActions">
@@ -373,6 +375,7 @@ export default function GuidedControl() {
                   <BookOpen size={16} />
                   Soạn bộ câu hỏi
                 </button>
+                <a href="/animation-preview" target="_blank" rel="noreferrer">Thử thẻ quyền năng ↗</a>
                 <button onClick={() => showPage("history")}>
                   <History size={16} />
                   Xem lịch sử điểm
@@ -424,24 +427,14 @@ export default function GuidedControl() {
 
       {welcome ? (
         <main className="guideWelcome">
-          <div className="welcomeTag">BẠN KHÔNG CẦN TỰ NHỚ THỨ TỰ</div>
-          <h1>
-            Điều khiển trò chơi,
-            <br />
-            từng bước một.
-          </h1>
-          <p className="welcomeIntro">
-            Màn hình sẽ chỉ cho bạn việc cần làm ngay lúc đó.
-            <br />
-            Website tự tính điểm, giữ thẻ và chuyển lượt.
-          </p>
+          <h1>Sẵn sàng chơi?</h1>
           <div className="welcomeSteps">
             <div>
               <span>
                 <Target size={24} />
               </span>
               <b>1. Chọn đội</b>
-              <p>Ai được trả lời trước?</p>
+
             </div>
             <ChevronRight size={19} />
             <div>
@@ -449,7 +442,7 @@ export default function GuidedControl() {
                 <BookOpen size={24} />
               </span>
               <b>2. Mở câu hỏi</b>
-              <p>Đọc gợi ý, rồi bắt đầu.</p>
+
             </div>
             <ChevronRight size={19} />
             <div>
@@ -457,7 +450,7 @@ export default function GuidedControl() {
                 <Check size={25} />
               </span>
               <b>3. Chấm câu trả lời</b>
-              <p>Bấm Đúng hoặc Sai.</p>
+
             </div>
           </div>
           <div className="welcomeActions">
@@ -1220,7 +1213,7 @@ export default function GuidedControl() {
               <button onClick={() => setDialog("round")}>
                 Kết thúc vòng sớm
               </button>
-              <span>Trận đang được lưu tự động trên máy này.</span>
+
             </div>
           )}
         </main>
@@ -1693,9 +1686,6 @@ function ResultChanges({ game }: { game: Game }) {
           </div>
         );
       })}
-      {!entries.length && (
-        <p>Điểm đã được cập nhật trên bảng điểm phía trên.</p>
-      )}
     </div>
   );
 }
@@ -1728,7 +1718,7 @@ function SimpleHistory({ game }: { game: Game }) {
   return (
     <div className="simpleHistory">
       <h1>Lịch sử điểm</h1>
-      <p>Những lần bạn đã chấm đúng hoặc sai trong trận này.</p>
+
       {game.history
         .slice()
         .reverse()

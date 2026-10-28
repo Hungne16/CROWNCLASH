@@ -301,6 +301,7 @@ export function challengeTeam(g: Game, index: number, now = Date.now()): Game {
     : "";
   return {
     ...result.game,
+    cardActivation: result.game.cardActivation ? {...result.game.cardActivation, targetName:g.teams[index].name} : undefined,
     phase: "challenge",
     answering: index,
     usedCard: null,
@@ -330,6 +331,12 @@ export function scoreAnswer(
   const index = kind === "host" ? g.host : g.answering;
   if (!allowed || index === null || !currentQuestion(g)) return g;
   let next = applyOutcome(g, index, correct, kind).game;
+  const resultCard = kind === "host" ? g.usedCard : kind;
+  if (resultCard) next = {...next, cardOutcome:{
+    id:crypto.randomUUID(),at:now,card:resultCard,team:index,teamName:g.teams[index].name,
+    result:{delta:next.lastDelta![index],total:next.teams[index].score,correct,sourceName:g.teams[g.host!].name},
+  }};
+
   next = {
     ...next,
     phase: "result",

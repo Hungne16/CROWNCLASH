@@ -12,7 +12,6 @@ import {
   LogOut,
   Mail,
   RefreshCw,
-  ShieldCheck,
   UserRound,
 } from "lucide-react";
 import { Modal } from "../Common";
@@ -120,7 +119,7 @@ export default function AdminApp({
             <Gamepad2 size={24} />
           </span>
           <b>
-            CROWNCLASH<small>Không gian chuẩn bị của admin</small>
+            CROWNCLASH
           </b>
         </a>
         <a className="guideOutline" href="/">
@@ -133,27 +132,8 @@ export default function AdminApp({
           <span className="accountIcon">
             <Cloud size={28} />
           </span>
-          <h1>
-            Soạn ở nhà.
-            <br />
-            Sẵn sàng tại sự kiện.
-          </h1>
-          <p>
-            Đăng nhập để lưu bộ câu hỏi, tên đội và quy ước. Trên máy tổ chức,
-            mở lại cùng tài khoản rồi dùng bộ đề đã chuẩn bị.
-          </p>
-          <div>
-            <ShieldCheck size={18} />
-            <span>Mỗi admin có bộ đề riêng.</span>
-          </div>
-          <div>
-            <Check size={18} />
-            <span>Tự động lưu khi có kết nối mạng.</span>
-          </div>
-          <div>
-            <Gamepad2 size={18} />
-            <span>Tải bộ đề về máy để điều hành trận đấu.</span>
-          </div>
+          <h1>Bộ câu hỏi của bạn</h1>
+          <p>Đăng nhập để đồng bộ.</p>
         </div>
         <section className="accountCard">
           {!firebaseAuth ? (
@@ -206,13 +186,13 @@ export default function AdminApp({
                     ? "Quên mật khẩu?"
                     : "Đăng nhập admin"}
               </h2>
-              <p>
+              {(auth.recovery || mode === "forgot") && <p>
                 {auth.recovery
                   ? "Đặt mật khẩu để đăng nhập tài khoản trên các thiết bị của bạn."
                   : mode === "forgot"
                     ? "Nhập email đã được cấp tài khoản."
-                    : "Sử dụng email và mật khẩu được chủ website cấp."}
-              </p>
+                    : ""}
+              </p>}
               {(error || auth.error) && (
                 <div className="accountError" role="alert">
                   {error || auth.error}
@@ -305,10 +285,7 @@ export default function AdminApp({
                   {mode === "login" ? "Quên mật khẩu?" : "Quay lại đăng nhập"}
                 </button>
               )}
-              <div className="accountFootnote">
-                Tài khoản do chủ website cấp. Người chơi không cần đăng nhập để
-                xem màn hình trình chiếu.
-              </div>
+
             </>
           )}
         </section>
@@ -395,7 +372,7 @@ function CloudWorkspace({
             <Gamepad2 size={24} />
           </span>
           <b>
-            CROWNCLASH<small>Chuẩn bị trước sự kiện</small>
+            CROWNCLASH
           </b>
         </a>
         <div className="accountHeaderRight">
@@ -420,9 +397,8 @@ function CloudWorkspace({
       <main className="cloudWorkspace">
         <div className="cloudHeading">
           <div>
-            <span className="eyebrow">BỘ ĐỀ RIÊNG CỦA BẠN</span>
-            <h1>Chuẩn bị sẵn cho ngày chơi.</h1>
-            <p>Soạn ở đây để mở lại trên máy khác bằng cùng tài khoản.</p>
+            <h1>Bộ đề của bạn</h1>
+
           </div>
           <button
             className="guidePrimary"

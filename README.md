@@ -82,3 +82,23 @@ Import GitHub repository `Hungne16/CROWNCLASH` vào Vercel, dùng nhánh `main` 
 - Chế độ lưu trên máy không cần backend. Chức năng tài khoản cần bốn biến `VITE_FIREBASE_*` trong `.env.example`, bật Email/Password và publish Firestore Rules.
 
 File vercel.json đã cấu hình SPA rewrite để có thể mở trực tiếp hoặc tải lại đường dẫn /presentation. Câu hỏi do admin soạn và trận đấu vẫn được lưu trong trình duyệt; dữ liệu từ localhost không tự chuyển sang tên miền Vercel. Có thể dùng Xuất JSON / Nhập JSON để chuyển bộ câu hỏi.
+
+## Hoạt ảnh thẻ quyền năng
+
+- Mở `/animation-preview` (hoặc nút Thử hoạt ảnh thẻ trên dashboard) để thử bốn thẻ; không thay đổi trận thật.
+- Mở màn hình `/presentation` trước khi kích hoạt thẻ. Hai tab phải cùng trình duyệt và cùng origin; chế độ tập dùng kênh riêng.
+- Dùng thẻ hợp lệ trong dashboard: engine tạo eventId, dashboard hiện trạng thái, Presentation phát timeline GSAP khoảng 3,8 giây. Skip Animation dừng cả hai tab. Không dừng/reset đồng hồ và không tự cộng điểm.
+- Trên Presentation có nút bật/tắt âm thanh thẻ. Trình duyệt có thể yêu cầu bấm vào trang trước khi cho phát âm thanh. Whoosh/impact được tổng hợp bằng Web Audio, không tải file âm thanh ngoài.
+- Ảnh gốc của người dùng được chuyển WebP đúng tỷ lệ 1024×1536, không cắt. Cả bốn thẻ dùng mặt sau Crown Clash do người dùng cung cấp. Không có video nên hiện chỉ dùng GSAP.
+- Reload, request-state và undo không phát lại sự kiện cũ. Hỗ trợ reduced motion, watchdog kết thúc và cleanup GSAP/canvas/audio khi Skip hoặc unmount.
+
+Giao diện dùng Inter Variable tự host (hỗ trợ tiếng Việt). Chữ phụ mang tính giới thiệu được lược bỏ; nhãn thao tác, thông báo lưu, luật và cảnh báo được giữ.
+
+
+### GIF kết quả thẻ
+
+Sau khi MC chấm đáp án, engine tạo `cardOutcome` từ điểm đã ghi nhận. Presentation phát hoạt ảnh do người dùng cung cấp kèm đội được chấm, delta thật và tổng điểm. Safe sai hiển thị 0 điểm; Challenge ghi điểm cho đội trả lời và ghi riêng đội thách đấu. Câu không dùng thẻ không phát GIF.
+
+Bốn GIF được mã hóa thành animated WebP, giữ nguyên toàn bộ khung hình và thời lượng khoảng 10 giây. Chỉ tải tài nguyên tương ứng khi xem kết quả; trong lúc tải hoặc khi ảnh lỗi dùng mặt thẻ tĩnh. Reduced motion dùng ảnh tĩnh và kết thúc sớm. MC có thể Skip, tiếp tục điều khiển hoặc dùng Steal trong thời hạn engine; hoạt ảnh kết quả không chặn lượt dùng thẻ tiếp theo. Undo/chuyển câu hủy hiệu ứng cũ, reload không phát lại.
+
+Trong `/animation-preview`, chọn Triệu hồi / Trả lời đúng / Trả lời sai rồi bấm thẻ để thử. Điểm ở Preview chỉ là ví dụ, không tác động trận thật.

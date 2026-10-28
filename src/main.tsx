@@ -1,3 +1,5 @@
+import "@fontsource-variable/inter";
+import { AnimationPreview } from "./animation/CardActivationOverlay";
 import React from "react";
 import { createRoot } from "react-dom/client";
 import GuidedControl from "./GuidedControl";
@@ -9,7 +11,7 @@ const accountRoute = location.pathname.startsWith("/account") || recoveryLink;
 
 createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
-    {accountRoute ? (
+    {location.pathname === "/animation-preview" ? <AnimationPreview/> : accountRoute ? (
       <React.Suspense
         fallback={
           <div className="guidedApp accountBoot">Đang mở tài khoản…</div>

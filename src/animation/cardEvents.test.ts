@@ -1,0 +1,11 @@
+import {describe,it,expect} from 'vitest';
+import {initialGame,useCard} from '../game';
+import {activateCard,challengeTeam,openQuestion,questionTime,stealTeam} from '../controller';
+const ready=()=>({...initialGame(),phase:'hint' as const,host:0,questionIndex:0,hintRead:true,questions:[{id:'anim',round:1 as const,difficulty:'easy' as const,hint:'hint',text:'question',answer:'answer'}]});
+describe('card animation events follow engine decisions',()=>{
+ it('emits once for a legal activation, without points or time changes',()=>{const g=ready();const a=activateCard(g,'double');expect(a.cardActivation?.card).toBe('double');expect(a.teams.map(t=>t.score)).toEqual([0,0,0,0]);expect(a.startedAt).toBe(g.startedAt);const again=activateCard(a,'double');expect(again.cardActivation?.id).toBe(a.cardActivation?.id);expect(again.teams[0].cards.double).toBe(0);});
+ it('rejects an empty or wrong-time card without emitting',()=>{const g=ready();g.teams[0].cards.safe=0;expect(activateCard(g,'safe').cardActivation).toBeUndefined();expect(activateCard({...g,phase:'question'},'double').cardActivation).toBeUndefined();});
+ it('records the challenge target and burns protection without changing the timer',()=>{const g=openQuestion(activateCard(ready(),'safe'),1000);const a=challengeTeam(g,2,2000);expect(a.cardActivation?.targetName).toBe('Đội 3');expect(a.cardActivation?.card).toBe('challenge');expect(a.teams[0].cards.safe).toBe(0);expect(a.startedAt).toBe(1000);expect(questionTime(a,3000)).toEqual(questionTime(g,3000));expect(challengeTeam(g,2,17000).cardActivation?.card).toBe('safe');});
+ it('steal emits for the eligible team without awarding points',()=>{const g={...ready(),phase:'steal-window' as const,stealDeadline:5000};const a=stealTeam(g,1,2000);expect(a.cardActivation?.team).toBe(1);expect(a.cardActivation?.card).toBe('steal');expect(a.teams[1].score).toBe(0);expect(stealTeam(a,2,2100).cardActivation?.id).toBe(a.cardActivation?.id);});
+ it('no event is emitted for an expired steal or paused challenge',()=>{expect(useCard({...ready(),phase:'steal-window',stealDeadline:1000},1,'steal',2000).game.cardActivation).toBeUndefined();expect(challengeTeam({...openQuestion(ready(),1000),paused:true},2,2000).cardActivation).toBeUndefined();});
+});

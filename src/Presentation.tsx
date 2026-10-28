@@ -33,7 +33,7 @@ export function Presentation({
             <Gamepad2 size={24} />
           </span>
           <b>
-            ĐẤU TRÍ<span>KIẾN THỨC & CHIẾN THUẬT</span>
+            ĐẤU TRÍ
           </b>
         </div>
         <span className="presentationRound">
@@ -153,7 +153,7 @@ export function Presentation({
             <Medal size={56} />
             <span className="eyebrow">KẾT THÚC VÒNG {game.round}</span>
             <h1>Cuộc đua vẫn tiếp diễn.</h1>
-            <p>Điểm và thẻ được giữ nguyên cho vòng tiếp theo.</p>
+
           </div>
         )}
         {game.phase === "sudden-death" && (
@@ -225,9 +225,7 @@ export function Presentation({
           </div>
         ))}
       </div>
-      <footer className="presentationFooter">
-        ĐẤU TRÍ <i /> 4 ĐỘI · 3 VÒNG · MỘT NHÀ VÔ ĐỊCH
-      </footer>
+
     </main>
   );
 }

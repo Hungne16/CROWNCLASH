@@ -2,7 +2,7 @@
   min-height: 100dvh;
   background: #f5f6fa;
   color: #243047;
-  font-family: "DM Sans", sans-serif;
+  font-family: "Inter Variable", sans-serif;
   --guide-purple: #6f4ce6;
   --guide-ink: #243047;
   --guide-muted: #748096;
@@ -12,7 +12,7 @@
 .guidedApp h1,
 .guidedApp h2,
 .guidedApp h3 {
-  font-family: Manrope, "DM Sans", sans-serif;
+  font-family: "Inter Variable", sans-serif;
 }
 .guidedApp button:focus-visible,
 .guidedApp input:focus-visible,
@@ -63,13 +63,13 @@
 }
 .guideBrand > b {
   font:
-    800 18px Manrope,
+    800 18px "Inter Variable",
     sans-serif;
   letter-spacing: 1px;
 }
 .guideBrand small {
   font:
-    12px "DM Sans",
+    12px "Inter Variable",
     sans-serif;
   display: block;
   letter-spacing: 0;
@@ -396,14 +396,14 @@
   align-items: baseline;
   color: #3a465d;
   font:
-    750 22px Manrope,
+    750 22px "Inter Variable",
     sans-serif;
   letter-spacing: -0.5px;
   white-space: nowrap;
 }
 .simpleScoreStrip small {
   font:
-    10px "DM Sans",
+    10px "Inter Variable",
     sans-serif;
   color: #a0a9b8;
   letter-spacing: 0;
@@ -836,8 +836,8 @@
   align-items: center;
   gap: 8px;
   font:
-    600 26px "DM Mono",
-    monospace;
+    600 26px "Inter Variable",
+    sans-serif;
   color: #a898b8;
   letter-spacing: -1px;
 }
