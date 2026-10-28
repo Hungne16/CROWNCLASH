@@ -1,3 +1,4 @@
+import { CARD_ASSETS } from "./cardAssets";
 import { useEffect, useRef, type CSSProperties, type ReactNode } from "react";
 import { X, Zap, Shield, Swords, Hand } from "lucide-react";
 import type { CardType } from "./game";
@@ -30,18 +31,21 @@ export const CARD_INFO = {
     icon: Hand,
   },
 };
+export function CardArt({card,className=""}:{card:CardType;className?:string}) {
+ return <img className={`cardArt ${className}`} src={CARD_ASSETS[card]} alt="" aria-hidden="true" draggable={false}/>;
+}
 export function Cards({ cards }: { cards: Record<CardType, number> }) {
   return (
     <div className="cardInventory">
       {(Object.keys(CARD_INFO) as CardType[]).map((key) => {
-        const Icon = CARD_INFO[key].icon;
         return (
           <span
             key={key}
             className={cards[key] ? "" : "empty"}
             title={`${CARD_INFO[key].english}: ${cards[key]} thẻ`}
+            aria-label={`${CARD_INFO[key].name}: ${cards[key]} thẻ`}
           >
-            <Icon size={12} />
+            <CardArt card={key} />
             <b>{cards[key]}</b>
           </span>
         );

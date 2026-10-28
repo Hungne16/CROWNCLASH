@@ -115,3 +115,10 @@ Bảng ở Presentation chỉ hiển thị số, đội đang chọn và trạng
 ## Màn hình sân khấu
 
 Presentation dùng bố cục gameshow tím–vàng, bảng chọn số có trạng thái, bục điểm bốn đội và đồng hồ vòng tròn. Khung câu hỏi, gợi ý, tổng kết và nhà vô địch có bố cục riêng. Phông Inter tự host; nút âm thanh/toàn màn hình nằm ở góc trên. Đồng hồ lấy trực tiếp từ engine, không tạo đồng hồ phụ. Đáp án vẫn chỉ công bố khi MC xác nhận; thẻ và GIF kết quả dùng lớp hiệu ứng sẵn có.
+
+
+## Bộ thẻ Royal v2
+
+Mặt trước Double/Safe/Challenge/Steal và mặt sau mới được cấu hình tập trung ở `src/cardAssets.ts`, dùng ở dashboard, thẻ còn lại, Presentation, Preview, triệu hồi và kết quả. Ảnh screenshot được mã hóa WebP lossless, giữ tỷ lệ và toàn bộ nội dung; URL `royal-v2` tách khỏi cache bộ cũ.
+
+Bộ GIF trước có in khung bài cũ, nên phần kết quả của bộ Royal v2 dùng ảnh mới cùng chuyển động GSAP, không phủ GIF cũ lên mặt mới. Tài nguyên GIF cũ vẫn được giữ trong repo để có thể sử dụng lại khi cần. Nội dung chữ in trên artwork không được dùng để sửa luật hay cách tính điểm của engine.

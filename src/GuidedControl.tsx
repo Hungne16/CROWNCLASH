@@ -69,7 +69,7 @@ import {
   toggleClock,
   UNDO_STORE,
 } from "./controller";
-import { formatTime, Modal, teamStyle } from "./Common";
+import { CardArt, formatTime, Modal, teamStyle } from "./Common";
 import { GameSettings, QuestionBank } from "./Manage";
 import { Presentation } from "./Presentation";
 import { useGame, useNow } from "./useGame";
@@ -573,7 +573,7 @@ export default function GuidedControl() {
                       Chọn một trong ba cách. Thẻ chỉ bị trừ khi bạn mở câu hỏi.
                     </span>
                   </div>
-                  <div className="simplePowers">
+                  <div className="simplePowers cardHand">
                     {(
                       [
                         {
@@ -604,11 +604,12 @@ export default function GuidedControl() {
                       return (
                         <button
                           key={option.id}
-                          className={selected ? "selected" : ""}
+                          className={`cardHandOption ${selected ? "selected" : ""} ${option.id === "none" ? "noPowerOption" : ""}`}
                           disabled={unavailable || !!game.usedCard}
                           onClick={() => setPower(option.id)}
                           aria-pressed={selected}
                         >
+                          {option.id !== "none" && <><CardArt card={option.id} className="powerChoiceArt"/><span className="cardHandCount">{game.teams[game.host!].cards[option.id]} thẻ</span></>}
                           <span className="powerRadio">
                             {selected && <Check size={12} />}
                           </span>
@@ -631,7 +632,7 @@ export default function GuidedControl() {
                   <div className="guideNext">
                     <button className="guidePrimary" onClick={openWithPower}>
                       <Play size={18} />
-                      Mở câu hỏi · Bắt đầu {difficulty?.seconds} giây
+                      Mở câu hỏi lên màn chiếu · {difficulty?.seconds} giây
                     </button>
                   </div>
                 </>
@@ -699,11 +700,7 @@ export default function GuidedControl() {
               <Answer text={q.answer} />
               {game.usedCard && (
                 <div className="guideActivePower">
-                  {game.usedCard === "double" ? (
-                    <Zap size={16} />
-                  ) : (
-                    <Shield size={16} />
-                  )}
+                  <CardArt card={game.usedCard} className="inlineCardArt"/>
                   Đội đã chọn{" "}
                   <b>{game.usedCard === "double" ? "Cược lớn" : "An toàn"}</b>.
                   Điểm trên hai nút đã được tính sẵn.
@@ -724,11 +721,12 @@ export default function GuidedControl() {
                       </small>
                     </span>
                     <button
+                      className="challengeCardButton"
                       disabled={!challengeAvailable}
                       onClick={() => setChoosingChallenge(true)}
                     >
-                      <Swords size={17} />
-                      Dùng Thách đố
+                      <CardArt card="challenge" className="challengeChoiceArt"/>
+                      <b>Dùng Thách đố</b>
                     </button>
                   </div>
                 )}
@@ -856,7 +854,7 @@ export default function GuidedControl() {
                 </span>
               }
             >
-              <div className="guideTargetList">
+              <div className="stealChoicePanel"><CardArt card="steal" className="stealChoiceArt"/><div className="stealChoiceTeams"><div className="guideTargetList">
                 {game.teams.map(
                   (team, i) =>
                     i !== game.host && (
@@ -868,7 +866,7 @@ export default function GuidedControl() {
                       >
                         <span className="simpleTeamInitial">{i + 1}</span>
                         <span>
-                          <b>{team.name} giơ nhanh nhất</b>
+                          <b><CardArt card="steal" className="inlineCardArt"/>{team.name} giơ nhanh nhất</b>
                           <small>
                             {team.cards.steal
                               ? `Còn ${team.cards.steal} thẻ cướp điểm · chọn sẽ dùng 1 thẻ`
@@ -880,6 +878,7 @@ export default function GuidedControl() {
                     ),
                 )}
               </div>
+              </div></div>
               <div className="guideNext">
                 <button
                   className="guideOutline full"
@@ -1266,7 +1265,7 @@ export default function GuidedControl() {
                       key={card.key}
                       className={!team.cards[card.key] ? "exhausted" : ""}
                     >
-                      <dt>{card.name}</dt>
+                      <dt><CardArt card={card.key} className="detailCardArt"/>{card.name}</dt>
                       <dd>{team.cards[card.key]} thẻ</dd>
                     </div>
                   ))}
