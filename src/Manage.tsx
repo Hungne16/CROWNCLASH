@@ -178,7 +178,7 @@ export function QuestionBank({
                     {DIFFICULTY[q.difficulty].label}
                   </span>
                   <span className="muted small">
-                    Vòng {q.round} · {DIFFICULTY[q.difficulty].points} điểm ·{" "}
+                    Vòng {q.round} · Ô {game.questions.filter(item=>item.round===q.round).findIndex(item=>item.id===q.id)+1} · {DIFFICULTY[q.difficulty].points} điểm ·{" "}
                     {DIFFICULTY[q.difficulty].seconds}s
                   </span>
                   {q.id.startsWith("demo") && (

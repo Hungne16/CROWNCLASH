@@ -40,6 +40,7 @@ export type Game = {
   teams: Team[];
   questions: Question[];
   questionBankVersion?: number;
+  boardSelectedId?: string | null;
   hintRead?: boolean;
   rulesConfirmed?: boolean;
   round: 1 | 2 | 3;
@@ -83,6 +84,7 @@ export const initialGame = (): Game => ({
   })),
   questions: [],
   questionBankVersion: 2,
+  boardSelectedId: null,
   hintRead: false,
   rulesConfirmed: false,
   round: 1,

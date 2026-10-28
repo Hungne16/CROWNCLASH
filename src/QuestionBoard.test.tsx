@@ -1,0 +1,17 @@
+import { describe,it,expect } from 'vitest';
+import {renderToStaticMarkup} from 'react-dom/server';
+import {initialGame} from './game';
+import {chooseQuestion,selectHost,prepareHint,acknowledgeHint,openQuestion,scoreAnswer,nextQuestion,finishRound} from './controller';
+import {QuestionBoard,questionSlots} from './QuestionBoard';
+import {Presentation} from './Presentation';
+const qs=Array.from({length:8},(_,i)=>({id:`q-${i}`,round:(i<4?1:2) as 1|2,difficulty:'easy' as const,hint:`HINT_${i}`,text:`SECRET_QUESTION_${i}`,answer:`SECRET_ANSWER_${i}`}));
+const ready=()=>({...initialGame(),questions:qs,questionIndex:0,rulesConfirmed:true});
+describe('numbered question board',()=>{
+ it('starts with four unselected slots, even with a preloaded question index',()=>{const g=selectHost(ready(),0);expect(questionSlots(g).map(s=>[s.number,s.selected])).toEqual([[1,false],[2,false],[3,false],[4,false]]);expect(prepareHint(g)).toBe(g);});
+ it('number 3 opens its own hint and question rather than the first one',()=>{const g=chooseQuestion(selectHost(ready(),1),'q-2');expect(g.questionIndex).toBe(2);const hint=prepareHint(g);expect(hint.phase).toBe('hint');expect(hint.startedAt).toBeNull();const html=renderToStaticMarkup(<Presentation game={hint} now={0} onBuzz={()=>{}}/>);expect(html).toContain('HINT_2');expect(html).not.toContain('SECRET_QUESTION_2');expect(html).not.toContain('SECRET_ANSWER_2');const opened=openQuestion(acknowledgeHint(hint),1000);expect(opened.startedAt).toBe(1000);expect(renderToStaticMarkup(<Presentation game={opened} now={1000} onBuzz={()=>{}}/>)).toContain('SECRET_QUESTION_2');});
+ it('returning to the board locks the played slot without renumbering remaining slots',()=>{let g=chooseQuestion(selectHost(ready(),0),'q-2');g=nextQuestion(scoreAnswer(openQuestion(acknowledgeHint(prepareHint(g)),1000),true,2000));expect(g.phase).toBe('setup');expect(g.boardSelectedId).toBeNull();expect(questionSlots(g).map(s=>[s.number,s.used])).toEqual([[1,false],[2,false],[3,true],[4,false]]);expect(chooseQuestion(g,'q-2')).toBe(g);expect(prepareHint(selectHost(g,1)).phase).toBe('setup');expect(chooseQuestion(g,'q-3').boardSelectedId).toBe('q-3');});
+ it('does not reveal any content on the public board',()=>{const html=renderToStaticMarkup(<QuestionBoard game={chooseQuestion(selectHost(ready(),0),'q-1')} audience/>);for(const q of qs){expect(html).not.toContain(q.hint);expect(html).not.toContain(q.text);expect(html).not.toContain(q.answer);}expect(html).toContain('Đã chọn');expect(html).not.toContain('<button');});
+ it('rejects a different-round question and a choice after the hint opened',()=>{const g=ready();expect(chooseQuestion(g,'q-4')).toBe(g);const hint=prepareHint(chooseQuestion(selectHost(g,0),'q-1'));expect(chooseQuestion(hint,'q-2')).toBe(hint);});
+ it('starts a fresh unselected board on the next round without refilling cards or points',()=>{const g={...ready(),phase:'round-summary' as const,playedQuestionIds:['q-0','q-1','q-2','q-3'],boardSelectedId:'q-3'};g.teams[0].score=20;g.teams[0].cards.double=0;const next=finishRound(g);expect(next.round).toBe(2);expect(next.boardSelectedId).toBeNull();expect(questionSlots(next).every(s=>!s.used&&!s.selected)).toBe(true);expect(next.teams[0]).toEqual(g.teams[0]);});
+ it('shows missing slots without fabricating questions and keeps authored extra questions',()=>{expect(questionSlots({...ready(),questions:qs.slice(0,2)}).filter(s=>!s.question)).toHaveLength(2);expect(questionSlots({...ready(),questions:qs.map(q=>({...q,round:1}))})).toHaveLength(8);});
+});

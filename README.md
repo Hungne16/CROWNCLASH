@@ -102,3 +102,16 @@ Sau khi MC chấm đáp án, engine tạo `cardOutcome` từ điểm đã ghi nh
 Bốn GIF được mã hóa thành animated WebP, giữ nguyên toàn bộ khung hình và thời lượng khoảng 10 giây. Chỉ tải tài nguyên tương ứng khi xem kết quả; trong lúc tải hoặc khi ảnh lỗi dùng mặt thẻ tĩnh. Reduced motion dùng ảnh tĩnh và kết thúc sớm. MC có thể Skip, tiếp tục điều khiển hoặc dùng Steal trong thời hạn engine; hoạt ảnh kết quả không chặn lượt dùng thẻ tiếp theo. Undo/chuyển câu hủy hiệu ứng cũ, reload không phát lại.
 
 Trong `/animation-preview`, chọn Triệu hồi / Trả lời đúng / Trả lời sai rồi bấm thẻ để thử. Điểm ở Preview chỉ là ví dụ, không tác động trận thật.
+
+
+## Bảng chọn câu hỏi theo số
+
+Mỗi vòng dùng chung bảng ô 1–4. MC chọn đội đến lượt, chọn ô theo lựa chọn của đội rồi bấm Mở gợi ý. Đọc gợi ý xong mới chốt thẻ, mở câu hỏi và bắt đầu đồng hồ. Chấm và công bố đáp án xong bấm Về bảng chọn câu; ô đã chơi bị khóa, không tự chọn ô kế tiếp. Sang vòng mới bắt đầu lại số 1, điểm và thẻ giữ nguyên.
+
+Số ô là thứ tự câu trong từng vòng của bộ đề, cùng một mapping cho dashboard, Presentation và màn soạn câu hỏi. Soạn 4 câu/vòng để có đúng 4 ô dùng chung. Vòng thiếu câu hiển thị ô chưa soạn bị khóa; bộ đề có nhiều hơn 4 câu vẫn giữ và hiển thị đầy đủ các ô, không xóa câu dư. MC quyết định thứ tự đội đến lượt; bảng không áp đặt mỗi đội chỉ một lần chọn. Không tự tạo câu mẫu.
+
+Bảng ở Presentation chỉ hiển thị số, đội đang chọn và trạng thái ô; câu hỏi/đáp án không hiển thị ở bước chọn. Reload giữ ô đang chọn, Undo dùng checkpoint hiện có. Các trận đang ở bước gợi ý/trả lời không bị đưa về bảng giữa chừng.
+
+## Màn hình sân khấu
+
+Presentation dùng bố cục gameshow tím–vàng, bảng chọn số có trạng thái, bục điểm bốn đội và đồng hồ vòng tròn. Khung câu hỏi, gợi ý, tổng kết và nhà vô địch có bố cục riêng. Phông Inter tự host; nút âm thanh/toàn màn hình nằm ở góc trên. Đồng hồ lấy trực tiếp từ engine, không tạo đồng hồ phụ. Đáp án vẫn chỉ công bố khi MC xác nhận; thẻ và GIF kết quả dùng lớp hiệu ứng sẵn có.

@@ -1,3 +1,4 @@
+import { QuestionBoard } from "./QuestionBoard";
 import { CardAnimationPlayer } from "./animation/CardActivationOverlay";
 import {
   useCallback,
@@ -44,7 +45,6 @@ import {
   activateCard,
   acknowledgeHint,
   confirmRules,
-  assignHost,
   buzz,
   challengeTeam,
   chooseQuestion,
@@ -76,7 +76,6 @@ import { useGame, useNow } from "./useGame";
 
 type Page = "play" | "questions" | "settings" | "history";
 type Dialog =
-  | "questions"
   | "scores"
   | "help"
   | "reset"
@@ -237,7 +236,7 @@ export default function GuidedControl() {
     [],
   );
   if (presentation)
-    return <><Presentation game={game} now={now} onBuzz={sendBuzz} /><button className="presentationSound" onClick={()=>setSound(v=>!v)}>{sound ? "Tắt" : "Bật"} âm thanh thẻ</button>{animation.event && <CardAnimationPlayer key={animation.event.id} event={animation.event} onFinish={animation.complete} sound={sound}/>}</>;
+    return <><Presentation game={game} now={now} onBuzz={sendBuzz} sound={sound} onToggleSound={()=>setSound(v=>!v)} />{animation.event && <CardAnimationPlayer key={animation.event.id} event={animation.event} onFinish={animation.complete} sound={sound}/>}</>;
 
   const begin = () => {
     localStorage.setItem(INTRO, "done");
@@ -293,11 +292,7 @@ export default function GuidedControl() {
     setWelcome(true);
     setPage("play");
   };
-  const chooseFirst = () =>
-    commit((g) => {
-      const first = remainingQuestions(g)[0];
-      return first ? chooseQuestion(g, first.id) : g;
-    });
+
 
   return (
     <div
@@ -515,7 +510,7 @@ export default function GuidedControl() {
           <div className="guideRoundLine">
             <span>
               Vòng <b>{game.round}</b> / 3
-              {q && (
+              {q && (game.phase !== "setup" || game.boardSelectedId === q.id) && (
                 <>
                   <i />
                   Câu <b>{questionNumber}</b> / {roundQuestions.length}
@@ -529,109 +524,19 @@ export default function GuidedControl() {
           </div>
 
           {game.phase === "setup" && (
-            <Step
-              number={1}
-              title={q ? "Đội nào trả lời trước?" : "Soạn bộ câu hỏi của bạn."}
-              instruction={
-                !q
-                  ? "Bộ đề đang trống. Admin có thể thêm câu hỏi hoặc nhập bộ đề JSON."
-                  : practice
-                    ? "Để tập, chọn Đội 1 rồi bấm “Đọc gợi ý cho Đội 1”."
-                    : "Bấm vào đội sẽ trả lời câu này đầu tiên. Đội được chọn là “chủ nhà”."
-              }
-            >
-              {q ? (
-                <>
-                  <div className="simpleQuestionChoice">
-                    <div>
-                      <BookOpen size={18} />
-                      <span>
-                        {difficulty?.label} · {difficulty?.points} điểm ·{" "}
-                        {difficulty?.seconds} giây
-                      </span>
-                    </div>
-                    <button onClick={() => setDialog("questions")}>
-                      Đổi câu hỏi <ChevronDown size={14} />
-                    </button>
-                  </div>
-                  <div className="simpleTeamGrid">
-                    {game.teams.map((team, i) => (
-                      <button
-                        key={i}
-                        style={teamStyle(i)}
-                        className={game.host === i ? "selected" : ""}
-                        onClick={() => commit((g) => selectHost(g, i))}
-                      >
-                        <span className="simpleTeamInitial">{i + 1}</span>
-                        <b>{team.name}</b>
-                        <span className="simpleTeamCheck">
-                          {game.host === i ? <Check size={17} /> : null}
-                        </span>
-                      </button>
-                    ))}
-                  </div>
-                  {game.settings.hostMode !== "manual" && (
-                    <div className="guideSubline">
-                      {game.settings.hostMode === "rotate"
-                        ? "Đội được gợi ý theo lượt luân phiên. Bạn vẫn có thể chọn đội khác."
-                        : "Đội được chọn theo bốc thăm. Bạn vẫn có thể đổi."}
-                      <button onClick={() => commit(assignHost)}>
-                        {game.settings.hostMode === "random"
-                          ? "Bốc thăm lại"
-                          : "Chọn theo lượt"}
-                      </button>
-                    </div>
-                  )}
-                  <div className="guideNext">
-                    <button
-                      className="guidePrimary"
-                      disabled={game.host === null}
-                      onClick={() =>
-                        game.rulesConfirmed
-                          ? commit(prepareHint)
-                          : setDialog("rules")
-                      }
-                    >
-                      {game.host === null
-                        ? "Chọn một đội để tiếp tục"
-                        : `Đọc gợi ý cho ${hostName}`}
-                      <ArrowRight size={19} />
-                    </button>
-                  </div>
-                  <details className="simplePreview">
-                    <summary>
-                      Xem trước câu hỏi và đáp án <ChevronDown size={13} />
-                    </summary>
-                    <p>{q.text}</p>
-                    <span>Đáp án: {q.answer}</span>
-                  </details>
-                </>
-              ) : (
-                <div className="guideEmpty">
-                  <BookOpen size={30} />
-                  <h3>Vòng này chưa có câu hỏi để chơi.</h3>
-                  <p>Thêm câu hỏi vào bộ đề, hoặc chuyển tới tổng kết vòng.</p>
-                  <button
-                    className="guidePrimary"
-                    onClick={() => showPage("questions")}
-                  >
-                    Thêm câu hỏi <ArrowRight size={17} />
-                  </button>
-                  {remainingQuestions(game).length > 0 && (
-                    <button className="guideOutline" onClick={chooseFirst}>
-                      Chọn câu chưa chơi đầu tiên
-                    </button>
-                  )}
-                  {remainingQuestions(game).length === 0 && (
-                    <button
-                      className="guideOutline"
-                      onClick={() => setDialog("round")}
-                    >
-                      Tổng kết vòng này
-                    </button>
-                  )}
-                </div>
-              )}
+            <Step number={1} title="Chọn đội và ô câu hỏi" instruction="Đội chọn số, MC bấm ô tương ứng rồi mở gợi ý.">
+              <div className="simpleTeamGrid boardTeamGrid">
+                {game.teams.map((team,i)=><button key={i} style={teamStyle(i)} className={game.host===i?"selected":""} onClick={()=>commit(g=>selectHost(g,i))}><span className="simpleTeamInitial">{i+1}</span><b>{team.name}</b><span className="simpleTeamCheck">{game.host===i&&<Check size={17}/>}</span></button>)}
+              </div>
+              <QuestionBoard game={game} disabled={game.host===null} onChoose={id=>commit(g=>chooseQuestion(g,id))}/>
+              {game.host===null && <div className="boardNoHost">Chọn đội đến lượt trước.</div>}
+              {q && game.boardSelectedId===q.id && <>
+                <div className="boardSelectedMeta"><b>Câu {questionNumber}</b><span>{difficulty?.label} · {difficulty?.points} điểm · {difficulty?.seconds} giây</span></div>
+                <div className="guideNext"><button className="guidePrimary" disabled={game.host===null} onClick={()=>game.rulesConfirmed?commit(prepareHint):setDialog("rules")}>Mở gợi ý · Câu {questionNumber}<ArrowRight size={19}/></button></div>
+                <details className="simplePreview questionBoardHelp"><summary>Xem trước (MC)<ChevronDown size={13}/></summary><p>{q.text}</p><span>Đáp án: {q.answer}</span></details>
+              </>}
+              {!roundQuestions.length && <div className="guideEmpty"><BookOpen size={30}/><h3>Vòng này chưa có câu hỏi</h3><button className="guidePrimary" onClick={()=>showPage("questions")}>Soạn câu hỏi<ArrowRight size={17}/></button></div>}
+              {roundQuestions.length>0 && remainingQuestions(game).length===0 && <button className="guidePrimary" onClick={()=>setDialog("round")}>Tổng kết vòng</button>}
             </Step>
           )}
 
@@ -1035,7 +940,7 @@ export default function GuidedControl() {
                     : practice
                       ? "Tôi hiểu rồi — vào trận thật"
                       : hasNext
-                        ? "Sang câu tiếp theo"
+                        ? "Về bảng chọn câu"
                         : `Tổng kết vòng ${game.round}`}
                   <ArrowRight size={19} />
                 </button>
@@ -1328,39 +1233,6 @@ export default function GuidedControl() {
             >
               Đã thống nhất — đọc gợi ý <ArrowRight size={16} />
             </button>
-          </div>
-        </Modal>
-      )}
-      {dialog === "questions" && (
-        <Modal
-          title="Chọn câu hỏi cho lượt này"
-          description="Các câu đã chơi sẽ không được chọn lại. Độ khó quyết định điểm và thời gian."
-          onClose={() => setDialog(null)}
-        >
-          <div className="guideQuestionList">
-            {roundQuestions.map((item) => {
-              const used = game.playedQuestionIds?.includes(item.id),
-                selected = q?.id === item.id,
-                d = DIFFICULTY[item.difficulty];
-              return (
-                <button
-                  key={item.id}
-                  disabled={used}
-                  className={selected ? "selected" : ""}
-                  onClick={() => {
-                    commit((g) => chooseQuestion(g, item.id));
-                    setDialog(null);
-                  }}
-                >
-                  <span>
-                    {d.label} · {d.points} điểm · {d.seconds} giây
-                    {used ? " · Đã chơi" : ""}
-                  </span>
-                  <b>{item.text}</b>
-                  {selected && <Check size={16} />}
-                </button>
-              );
-            })}
           </div>
         </Modal>
       )}

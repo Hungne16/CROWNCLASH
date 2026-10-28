@@ -173,7 +173,7 @@ export function loadGame(storageKey = STORE): Game {
     );
     if (g.phase === "setup" && !currentQuestion(g)) {
       const first = remainingQuestions(g)[0];
-      if (first) g = chooseQuestion(g, first.id);
+      if (first) g = {...g, questionIndex:g.questions.findIndex(q=>q.id===first.id)};
     }
     return g.phase === "setup" && g.host === null ? assignHost(g) : g;
   } catch {
@@ -186,10 +186,11 @@ export function chooseQuestion(g: Game, id: string): Game {
     (q) => q.id === id && q.round === g.round,
   );
   if (index < 0 || (g.playedQuestionIds ?? []).includes(id)) return g;
-  return { ...g, questionIndex: index, notice: "" };
+  return { ...g, questionIndex: index, boardSelectedId:id, notice: "" };
 }
 export function prepareHint(g: Game): Game {
   if (g.phase !== "setup" || !currentQuestion(g) || g.host === null) return g;
+  if (g.boardSelectedId !== currentQuestion(g)!.id || (g.playedQuestionIds ?? []).includes(currentQuestion(g)!.id)) return g;
   if (!g.rulesConfirmed)
     return {
       ...g,
@@ -419,6 +420,7 @@ export function nextQuestion(g: Game): Game {
     ...g,
     phase: index < 0 ? "round-summary" : "setup",
     playedQuestionIds: played,
+    boardSelectedId:null,
     questionIndex: index < 0 ? null : index,
     host: g.settings.hostMode === "manual" ? null : g.host,
     usedCard: null,
@@ -446,6 +448,7 @@ export function finishRound(g: Game): Game {
   return assignHost({
     ...g,
     round,
+    boardSelectedId:null,
     phase: "setup",
     questionIndex: index < 0 ? null : index,
     host: null,
