@@ -38,6 +38,7 @@ export type Settings = {
 export type CardActivation = { id: string; card: CardType; team: number; teamName: string; targetName?: string; result?: {delta:number; total:number; correct:boolean; sourceName:string}; at: number };
 export type Game = {
   introSlide?: number | null;
+  hostTurns?: {round:number;team:number;questionId:string}[];
   cardActivation?: CardActivation;
   cardOutcome?: CardActivation;
   teams: Team[];
@@ -80,6 +81,7 @@ export const DIFFICULTY: Record<
   hard: { points: 30, seconds: 60, challenge: 30, label: "Khó" },
 };
 export const initialGame = (): Game => ({
+  hostTurns: [],
   teams: ["Đội 1", "Đội 2", "Đội 3", "Đội 4"].map((name) => ({
     name,
     score: 0,

@@ -126,6 +126,7 @@ export function normalizeGame(value: unknown): Game {
       stealUsed: false,
       lastDelta: null,
       playedQuestionIds: [],
+      hostTurns: [],
       answerRevealed: false,
       stealDeadline: null,
       suddenTeams: [],
@@ -191,7 +192,7 @@ export function chooseQuestion(g: Game, id: string): Game {
   return { ...g, questionIndex: index, boardSelectedId:id, notice: "" };
 }
 export function prepareHint(g: Game): Game {
-  if (g.phase !== "setup" || !currentQuestion(g) || g.host === null) return g;
+  if (g.phase !== "setup" || !currentQuestion(g) || g.host === null || hasHostedRound(g,g.host)) return g;
   if (g.boardSelectedId !== currentQuestion(g)!.id || (g.playedQuestionIds ?? []).includes(currentQuestion(g)!.id)) return g;
   if (!g.rulesConfirmed)
     return {
@@ -229,16 +230,20 @@ export function acknowledgeHint(g: Game): Game {
 export function confirmRules(g: Game): Game {
   return g.phase === "setup" ? { ...g, rulesConfirmed: true, notice: "" } : g;
 }
+export function hasHostedRound(g:Game,index:number){
+ return (g.hostTurns??[]).some(turn=>turn.round===g.round&&turn.team===index);
+}
 export function selectHost(g: Game, index: number): Game {
-  if (g.phase !== "setup" || index < 0 || index > 3) return g;
+  if (g.phase !== "setup" || index < 0 || index > 3 || hasHostedRound(g,index)) return g;
   return { ...g, host: index, notice: "" };
 }
 export function assignHost(g: Game): Game {
   if (g.phase !== "setup") return g;
-  if (g.settings.hostMode === "random")
-    return { ...g, host: Math.floor(Math.random() * 4) };
-  if (g.settings.hostMode === "rotate")
-    return { ...g, host: (g.playedQuestionIds?.length ?? 0) % 4 };
+  const eligible=g.teams.map((_,i)=>i).filter(i=>!hasHostedRound(g,i));
+  if (!eligible.length) return {...g,host:null};
+  if (g.settings.hostMode === "random") return {...g,host:eligible[Math.floor(Math.random()*eligible.length)]};
+  if (g.settings.hostMode === "rotate") return {...g,host:eligible[0]};
+  if (g.host!==null && hasHostedRound(g,g.host))return {...g,host:null};
   return g;
 }
 export function activateCard(g: Game, card: "double" | "safe"): Game {
@@ -423,9 +428,13 @@ export function nextQuestion(g: Game): Game {
   const index = g.questions.findIndex(
     (x) => x.round === g.round && !played.includes(x.id),
   );
+  const hostTurns=[...(g.hostTurns??[])];
+  if(q && g.host!==null && !hostTurns.some(t=>t.questionId===q.id&&t.round===g.round))hostTurns.push({round:g.round,team:g.host,questionId:q.id});
+  const allHosted=g.teams.every((_,i)=>hostTurns.some(t=>t.round===g.round&&t.team===i));
   let next: Game = {
     ...g,
-    phase: index < 0 ? "round-summary" : "setup",
+    hostTurns,
+    phase: index < 0 || allHosted ? "round-summary" : "setup",
     playedQuestionIds: played,
     boardSelectedId:null,
     questionIndex: index < 0 ? null : index,

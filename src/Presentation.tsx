@@ -5,7 +5,7 @@ import { QuestionBoard } from './QuestionBoard';
 import { Crown, Expand, Check, Pause, Trophy, Zap, Swords, Shield, Sparkles, Volume2, VolumeX } from 'lucide-react';
 import {useLayoutEffect, useRef, type CSSProperties} from 'react';
 import { DIFFICULTY, gameRounds, questionSeconds, rankTeams, type Game } from './game';
-import { currentQuestion, questionTime, tiedLeaders, rankingRows } from './controller';
+import { currentQuestion, questionTime, tiedLeaders, rankingRows, hasHostedRound } from './controller';
 import { CardArt, Cards, formatTime, teamStyle } from './Common';
 import './presentation.css';
 export function Presentation({game,now,onBuzz,sound=false,onToggleSound}:{game:Game;now:number;onBuzz:(index:number)=>void;sound?:boolean;onToggleSound?:()=>void}){
@@ -46,7 +46,7 @@ export function Presentation({game,now,onBuzz,sound=false,onToggleSound}:{game:G
   </section>
   <section className="showPodiums" aria-label="Bảng điểm bốn đội">{game.teams.map((team,i)=>{
    const active=response===i&&(game.phase==='setup'||!!isQuestion&&game.phase!=='result');
-   return <div key={i} style={teamStyle(i)} className={`showPodium ${active?'responding':''} ${winner===i&&game.phase==='finished'?'champion':''}`}><div className="showPodiumTop"><span className="showTeamCrest" aria-hidden="true"><Crown size={20}/></span><b>{team.name}</b>{active&&<span className="showOnAir" aria-label="Đội đang chơi"/>}</div><strong className="showTeamScore" key={team.score}>{team.score}</strong><Cards cards={team.cards}/><div className="showPodiumBase"/></div>;
+   return <div key={i} style={teamStyle(i)} className={`showPodium ${active?'responding':''} ${hasHostedRound(game,i)?'turnComplete':''} ${winner===i&&game.phase==='finished'?'champion':''}`}><div className="showPodiumTop"><span className="showTeamCrest" aria-hidden="true"><span>{String(i+1).padStart(2,'0')}</span></span><b>{team.name}</b>{active&&<span className="showOnAir" aria-label="Đội đang chơi"/>}</div><strong className="showTeamScore" key={team.score}>{team.score}</strong><Cards cards={team.cards}/><div className="showPodiumBase"/></div>;
   })}</section>
  </main>;
 }

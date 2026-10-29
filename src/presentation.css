@@ -99,3 +99,26 @@
 .presentation .showTeamScore{grid-row:1}
 .presentation .showPodium .cardInventory{grid-column:1/-1}
 @media(max-width:700px){.presentation .showTeamScore{grid-row:2}}
+
+/* Tournament arena: midnight blue, brass trim and centered team standards. */
+.presentation.showPresentation{--show-cream:#fff7e5;--show-gold:#e9ca87;background:radial-gradient(ellipse at 50% -20%,#26404d 0%,#111f2d 45%,#080f1a 100%)}
+.showScenery .showOrbit{opacity:.25}.showFloor{opacity:.35}.showSpotlight{opacity:.08}
+.presentation .showStage{border:1px solid #e8c98126;border-radius:12px;background:linear-gradient(145deg,#152839aa,#0b152288);box-shadow:inset 0 1px #ffe8b20a,0 20px 60px #0002}
+.presentation .showBrand>span{border-radius:50%;background:#e9ca8712;border-color:#e9ca8755}.presentation .showRounds{background:transparent;border:0}.presentation .showRounds>span.active{background:transparent;color:#e9ca87;border-radius:0;border-bottom:2px solid #e9ca87;box-shadow:none}
+.presentation .showPodiums{gap:clamp(12px,2vw,32px);padding:8px 0 0}
+.presentation .showPodium{overflow:visible;grid-template-columns:1fr;grid-template-rows:auto auto auto;justify-items:center;gap:5px;padding:16px 18px 12px;border-radius:6px 6px 20px 20px;border:1px solid #ffffff1c;border-top:3px solid var(--team);background:linear-gradient(180deg,color-mix(in srgb,var(--team) 10%,#122131),#0c1724);box-shadow:0 12px 26px #0005}
+.presentation .showPodium:before{left:0;right:0;top:0;height:100%;border-radius:inherit;background:linear-gradient(90deg,var(--team),transparent 20%,transparent 80%,var(--team));opacity:.035;box-shadow:none;pointer-events:none}
+.presentation .showPodium:after{inset:5px;border-color:#e9ca8712;border-radius:3px 3px 15px 15px}
+.presentation .showPodiumTop{grid-column:1;grid-row:1;width:100%;justify-content:center;gap:10px;padding:0 22px}
+.presentation .showTeamCrest{position:absolute;top:-1px;left:14px;width:28px;height:37px;border-radius:0 0 12px 12px;background:var(--team);border:0;color:#0d1825;box-shadow:0 4px 12px #0004;font-size:11px;font-weight:900}
+.presentation .showPodiumTop>b{font-size:clamp(14px,1.45vw,26px);text-align:center;letter-spacing:.01em;font-weight:650}
+.presentation .showTeamScore{grid-column:1;grid-row:2;padding:0;font-size:clamp(32px,6.2vh,76px);line-height:1.05;letter-spacing:-.045em;color:#fff7e5;margin:1px 0 4px}
+.presentation .showPodium .cardInventory{grid-column:1;grid-row:3;justify-content:center;gap:10px;border-top:1px solid #ffffff0d;width:100%;padding-top:7px}
+.presentation .showPodium .cardInventory img{height:clamp(22px,3.3vh,34px)}
+.presentation .showPodium.responding,.show-setup .showPodium.responding{border:1px solid var(--team);border-top:3px solid var(--team);background:linear-gradient(180deg,color-mix(in srgb,var(--team) 24%,#142839),#102234);box-shadow:0 0 0 3px color-mix(in srgb,var(--team) 8%,transparent),0 10px 32px #0005}
+.presentation .showPodium.responding:before{opacity:.06;box-shadow:none;height:100%}.presentation .showPodium.responding .showTeamCrest{color:#10202d;box-shadow:0 4px 15px #0004}.presentation .showOnAir{top:14px;right:16px;width:6px;height:6px}
+.presentation .showPodium.turnComplete:not(.responding){border-top-color:color-mix(in srgb,var(--team) 50%,#183042)}
+.presentation .selectionStage .showBoardTurn{border-radius:8px;border-color:color-mix(in srgb,var(--team) 50%,transparent);background:linear-gradient(90deg,transparent,color-mix(in srgb,var(--team) 12%,#0e1c29),transparent);box-shadow:none;border-width:0 0 1px;padding:10px 36px}
+.showBoard.selectionStage .questionBoardAudience .questionTile{border-radius:10px;background:linear-gradient(150deg,#20384a,#101d2b);border-color:#dab87550}.showBoard.selectionStage .questionBoardAudience .questionTile:before{border-radius:5px}.showBoard.selectionStage .questionBoardAudience .questionTile.chosen{background:linear-gradient(145deg,#ffeac0,#d1a867)}
+@media(max-height:650px){.presentation .showPodium{padding:10px 12px 8px;gap:3px}.presentation .showTeamScore{font-size:32px}.presentation .showPodium .cardInventory{padding-top:4px}.presentation .showTeamCrest{width:23px;height:29px;left:8px}.presentation .showPodiumTop{padding:0 18px}}
+@media(max-width:700px){.presentation .showPodium{padding:10px 6px;gap:5px}.presentation .showTeamCrest{display:none}.presentation .showPodiumTop{padding:0}.presentation .showPodiumTop>b{font-size:12px}.presentation .showPodium .cardInventory{display:none}}
