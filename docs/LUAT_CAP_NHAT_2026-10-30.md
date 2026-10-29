@@ -11,3 +11,7 @@
 - Tài liệu vẫn chưa xác định kết quả sau Challenge đúng, thời gian chờ Steal, không ai Steal và hòa nhiều đội; giữ các quy ước bổ sung hiện có và hiển thị chúng trong intro.
 - Trận cũ chưa có lịch sử và vẫn ở điểm 0 được chuyển sang 10. Trận đã có lịch sử giữ nguyên điểm. Lượt chủ nhà của phiên bản cũ không được tự suy đoán từ lịch sử chấm điểm vì Challenge/Steal có thể do đội khác trả lời.
 - Tài liệu mới chỉ chứa luật, không thay bộ câu hỏi hiện có.
+
+## Điều chỉnh theo xác nhận của quản trò
+
+Quản trò tự chọn bất kỳ đội nào chưa dùng lượt trong vòng. Không bắt buộc theo thứ tự bốc thăm trên web. Đội đã dùng lượt chủ nhà bị khóa đến hết vòng; Steal/Challenge không tiêu lượt chủ nhà riêng. Các trận từ bản bốc thăm bắt buộc được chuyển lại chế độ thủ công, giữ nguyên điểm và lượt đã dùng.

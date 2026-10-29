@@ -4,9 +4,9 @@ import {assignHost,selectHost,normalizeGame} from './controller';
 describe('updated document rules',()=>{
  it('starts all four teams at ten points',()=>{expect(initialGame().teams.map(t=>t.score)).toEqual([10,10,10,10]);});
  it('draws a permutation once per round and preserves it while advancing',()=>{
-  const drawn=assignHost(initialGame()),order=drawn.drawOrders![1];expect([...order].sort()).toEqual([0,1,2,3]);
+  const base=initialGame();const drawn=assignHost({...base,settings:{...base.settings,hostMode:"random"}}),order=drawn.drawOrders![1];expect([...order].sort()).toEqual([0,1,2,3]);
   expect(assignHost(drawn).drawOrders![1]).toEqual(order);
-  expect(selectHost(drawn,order[1]).host).toBe(order[0]);
+  expect(selectHost(drawn,order[1]).host).toBe(order[1]);
   const next=assignHost({...drawn,hostTurns:[{round:1,team:order[0],questionId:'first'}]});expect(next.host).toBe(order[1]);expect(next.drawOrders![1]).toEqual(order);
   const round2=assignHost({...next,round:2});expect(round2.drawOrders![1]).toEqual(order);expect([...round2.drawOrders![2]].sort()).toEqual([0,1,2,3]);
  });
@@ -14,4 +14,10 @@ describe('updated document rules',()=>{
   const old={...initialGame(),rulesVersion:undefined,teams:initialGame().teams.map(t=>({...t,score:0}))};expect(normalizeGame(old).teams.map(t=>t.score)).toEqual([10,10,10,10]);
   const live={...old,history:[{label:'played',delta:[-10,0,0,0],time:1}]};expect(normalizeGame(live).teams[0].score).toBe(0);
  });
+});
+
+it('migrates the prior forced draw to manual selection without losing turns or points',()=>{
+ const g={...initialGame(),rulesVersion:3,settings:{...initialGame().settings,hostMode:'random' as const},hostTurns:[{round:1,team:0,questionId:'first'}]};
+ const next=normalizeGame(g);expect(next.settings.hostMode).toBe('manual');expect(next.hostTurns).toEqual(g.hostTurns);expect(next.teams).toEqual(g.teams);
+ expect(selectHost(next,0)).toBe(next);expect(selectHost(next,2).host).toBe(2);expect(selectHost(next,3).host).toBe(3);
 });

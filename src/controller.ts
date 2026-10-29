@@ -155,10 +155,10 @@ export function normalizeGame(value: unknown): Game {
   return {
     ...base,
     ...g,
-    rulesVersion:3,
-    teams:g.rulesVersion===3 || g.history.length || g.playedQuestionIds?.length ? g.teams : g.teams.map(t=>({...t,score:t.score===0?10:t.score})),
+    rulesVersion:4,
+    teams:(g.rulesVersion??0)>=3 || g.history.length || g.playedQuestionIds?.length ? g.teams : g.teams.map(t=>({...t,score:t.score===0?10:t.score})),
     phase: phases.includes(g.phase) ? g.phase : "setup",
-    settings: { ...base.settings, ...g.settings, ...(g.rulesVersion===3?{}:{hostMode:"random" as const}) },
+    settings: { ...base.settings, ...g.settings, ...(g.rulesVersion===4?{}:{hostMode:"manual" as const}) },
     playedQuestionIds: g.playedQuestionIds ?? [],
     questionHistoryStart:
       g.questionHistoryStart ?? Math.max(0, g.history.length - 1),
@@ -238,7 +238,6 @@ export function hasHostedRound(g:Game,index:number){
 }
 export function selectHost(g: Game, index: number): Game {
   if (g.phase !== "setup" || index < 0 || index > 3 || hasHostedRound(g,index)) return g;
-  if(g.settings.hostMode === "random")return assignHost(g);
   return { ...g, host: index, notice: "" };
 }
 export function assignHost(g: Game): Game {
