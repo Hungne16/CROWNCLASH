@@ -1,3 +1,4 @@
+import {GameIntro} from './GameIntro';
 import { BannerLeaderboard } from './leaderboard/BannerLeaderboard';
 import { QuestionBoard } from './QuestionBoard';
 import { Crown, Expand, Check, Pause, Trophy, Zap, Swords, Shield, Sparkles, Volume2, VolumeX } from 'lucide-react';
@@ -16,6 +17,7 @@ export function Presentation({game,now,onBuzz,sound=false,onToggleSound}:{game:G
  const text=game.phase==='hint'?q?.hint:q?.text;
  const progress=q?Math.max(0,Math.min(100,time.remaining/(questionSeconds(q)*1000)*100)):0;
  const phaseLabel=game.phase==='hint'?(game.hintRead?'CHỐT QUYỀN NĂNG':'GỢI Ý'):game.phase==='challenge'?'THÁCH ĐẤU':game.phase==='steal-answer'?'CƯỚP LƯỢT':game.phase==='steal-window'?'CƠ HỘI STEAL':game.phase==='result'?'KẾT QUẢ':'CÂU HỎI';
+ if(game.introSlide!=null) return <GameIntro game={game}/>;
  if(game.phase==='round-summary'||game.phase==='finished') return <BannerLeaderboard game={game}/>;
  return <main className={`presentation showPresentation show-${game.phase}`}>
   <div className="showScenery" aria-hidden="true"><div className="showSpotlight left"/><div className="showSpotlight right"/><div className="showOrbit"/><div className="showFloor"/></div>

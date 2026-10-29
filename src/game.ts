@@ -37,6 +37,7 @@ export type Settings = {
 };
 export type CardActivation = { id: string; card: CardType; team: number; teamName: string; targetName?: string; result?: {delta:number; total:number; correct:boolean; sourceName:string}; at: number };
 export type Game = {
+  introSlide?: number | null;
   cardActivation?: CardActivation;
   cardOutcome?: CardActivation;
   teams: Team[];

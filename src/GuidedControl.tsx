@@ -1,3 +1,4 @@
+import {IntroControl} from './GameIntro';
 import { QuestionBoard } from "./QuestionBoard";
 import { CardAnimationPlayer } from "./animation/CardActivationOverlay";
 import {
@@ -245,6 +246,7 @@ export default function GuidedControl() {
     localStorage.setItem(INTRO, "done");
     setWelcome(false);
     setPage("play");
+    if(game.phase === "setup" && !(game.playedQuestionIds?.length)) commit(g=>({...g,introSlide:0}));
   };
   const practiceStart = () => {
     localStorage.setItem(
@@ -336,6 +338,7 @@ export default function GuidedControl() {
           </b>
         </button>
         <div className="guideHeaderActions">
+          {game.phase === "setup" && <button className="guideOutline" onClick={()=>{localStorage.setItem(INTRO,"done");setWelcome(false);setPage("play");commit(g=>({...g,introSlide:0}));}}>Giới thiệu luật</button>}
           <a
             className="guideOutline guideAccount"
             href="/account"
@@ -496,7 +499,7 @@ export default function GuidedControl() {
             </span>
           </button>
         </main>
-      ) : page === "play" ? (
+      ) : page === "play" ? game.introSlide != null ? (<IntroControl game={game} commit={commit} onAudience={openAudience}/>) : (
         <main className={`guideShell operatorDesk operator-${game.phase}`}>
           <div className="simpleScoreStrip" aria-label="Điểm hiện tại">
             {game.teams.map((team, i) => (
