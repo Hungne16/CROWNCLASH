@@ -53,3 +53,24 @@
 .showTimer{align-self:center}.showSudden{width:100%;height:100%;min-height:0;display:flex;flex-direction:column;gap:12px}.showSudden>.showFitBox{flex:1}.showSudden>.showBuzzers{flex:none}
 .guideClock{flex-wrap:wrap}.showRounds{overflow:hidden}.showRounds>span:not(.active){display:none}
 @media(max-width:640px){.presentation.showPresentation{padding:8px;gap:8px}.showPodiums{grid-template-columns:repeat(4,minmax(0,1fr))}.showPodium{min-height:0;padding:6px}.showPodium .cardInventory{display:none}.showPodiumTop>b{font-size:10px}.showTeamScore{font-size:24px}.showStage{padding:12px}.showQuestionLayout.hasTimer{grid-template-columns:minmax(0,1fr) 80px}.showTimerDial{width:75px}.showTimerDial>span{font-size:22px}.showQuestionBody.withImage{grid-template-columns:minmax(0,1fr) 25%}.showQuestionMeta{margin-bottom:6px}.showQuestionIndex{font-size:22px}.showPoints{font-size:22px}.showQuestionBottom{margin-top:6px}}
+
+/* Center the selection scene in the actual stage, independently of its content width. */
+.show-setup .showStageContent{justify-content:center;align-items:center;width:100%}
+.showBoard.selectionStage{--team:#bca0f6;width:100%;height:100%;min-width:0;min-height:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:clamp(10px,2vh,24px);padding:6px 0}
+.selectionStage .selectionHeading{flex:none}.selectionStage .showSectionLabel{font-size:clamp(10px,1vw,18px)}
+.selectionStage h1{font-size:clamp(26px,4.5vh,58px);margin:6px 0 0}
+.selectionStage .showBoardTurn{flex:none;max-width:min(90%,700px);display:flex;align-items:center;justify-content:center;gap:clamp(12px,2vw,24px);margin:0;padding:clamp(10px,1.7vh,20px) clamp(20px,3vw,48px);border:1px solid color-mix(in srgb,var(--team) 65%,transparent);border-radius:18px;color:#fff5df;background:linear-gradient(120deg,color-mix(in srgb,var(--team) 22%,#171526),#171526);box-shadow:0 0 40px color-mix(in srgb,var(--team) 10%,transparent),inset 0 1px #fff1;text-align:left}
+.selectionTurnLabel{display:block;color:var(--team);font-size:clamp(9px,.8vw,14px);font-weight:800;letter-spacing:.2em;margin-bottom:4px}
+.showBoardTurn strong{display:block;font-size:clamp(21px,2.4vw,42px);font-weight:800;line-height:1.1;overflow-wrap:anywhere}
+.selectionTeamNumber{display:grid;place-items:center;font-size:clamp(20px,2vw,36px);font-weight:850;color:var(--team);border-right:1px solid #ffffff26;padding-right:20px}
+.selectionCrown{color:var(--team);flex:none}.selectionStage .showBoardTurn.waiting{text-align:center;opacity:.75}
+.showBoard.selectionStage .questionBoardAudience{width:min(100%,1100px);max-width:1100px;min-height:0;flex:0 1 48%;display:grid;grid-template-columns:repeat(var(--board-columns),minmax(0,1fr));grid-template-rows:repeat(var(--board-rows),minmax(0,1fr));gap:clamp(12px,2.3vw,34px);margin:0 auto;padding:6px 0 10px}
+.showBoard.selectionStage .questionBoardAudience .questionTile{min-height:0;height:100%;border-radius:20px;transform:none;border-color:#e2c78e66;background:linear-gradient(145deg,#332d46,#1d1b2e);box-shadow:0 7px 0 #0c0b15,0 15px 25px #0004,inset 0 1px #fff2;gap:8px}
+.showBoard.selectionStage .questionBoardAudience .questionTile strong{font-size:clamp(34px,min(7vw,13vh),130px);line-height:1;font-weight:800}
+.showBoard.selectionStage .questionBoardAudience .questionTile span{font-size:clamp(10px,1.2vw,20px)}
+.showBoard.selectionStage .questionBoardAudience .questionTile.chosen{background:linear-gradient(145deg,#fff0c7,#d6b16b);border-color:#fff3cd;color:#35251c;box-shadow:0 7px 0 #846338,0 0 45px #f0cd7040,inset 0 1px #fff9}
+.showBoard.selectionStage .questionBoardAudience .questionTile.played{background:#191824;color:#706879;box-shadow:0 4px #0c0b15;opacity:.45!important}
+.selectionPodiumLabel{margin-left:auto;color:var(--team);font-size:clamp(8px,.7vw,13px);letter-spacing:.08em;font-weight:800;white-space:nowrap}
+.show-setup .showPodium.responding{border:2px solid var(--team);background:linear-gradient(145deg,color-mix(in srgb,var(--team) 20%,#191827),#161521);box-shadow:0 0 30px color-mix(in srgb,var(--team) 14%,transparent)}
+@media(max-height:620px){.selectionStage .showBoardTurn{padding:8px 22px}.selectionStage h1{font-size:25px}.selectionStage .showBoardTurn strong{font-size:22px}.selectionStage .questionBoardAudience .questionTile strong{font-size:52px}}
+@media(max-width:700px){.selectionPodiumLabel{display:none}.showBoard.selectionStage .questionBoardAudience{gap:10px}.selectionTeamNumber{padding-right:10px}.selectionStage .showBoardTurn{padding:8px 18px}.selectionStage .showBoardTurn strong{font-size:22px}}

@@ -1,3 +1,4 @@
+import {SelectionStage} from './SelectionStage';
 import {GameIntro} from './GameIntro';
 import { BannerLeaderboard } from './leaderboard/BannerLeaderboard';
 import { QuestionBoard } from './QuestionBoard';
@@ -29,7 +30,7 @@ export function Presentation({game,now,onBuzz,sound=false,onToggleSound}:{game:G
   <section className="showStage" aria-label="Sân khấu câu hỏi">
    <div className="showStageFrame"/>
    <div className="showStageContent" key={`${game.phase}-${q?.id??game.round}`}>
-   {game.phase==='setup'&&<div className="showBoard"><div className="showSectionLabel"><Sparkles size={16}/>{gameRounds(game)[game.round-1]}</div><h1>Chọn câu hỏi</h1><div className="showBoardTurn">{game.host===null?'Sẵn sàng đón thử thách':game.teams[game.host].name}</div><QuestionBoard game={game} audience/></div>}
+   {game.phase==='setup'&&<SelectionStage game={game}/>}
    {isQuestion&&<div className={`showQuestionLayout ${game.phase==='question'?'hasTimer':''}`}>
     <div className="showQuestionPanel">
      <div className="showQuestionMeta"><span className="showQuestionIndex">{String(questionNumber).padStart(2,'0')}</span><span className="showPhaseLabel">{phaseLabel}</span><span className="showPoints">{DIFFICULTY[q.difficulty].points}<small>ĐIỂM</small></span></div>
@@ -45,7 +46,7 @@ export function Presentation({game,now,onBuzz,sound=false,onToggleSound}:{game:G
   </section>
   <section className="showPodiums" aria-label="Bảng điểm bốn đội">{game.teams.map((team,i)=>{
    const active=response===i&&(game.phase==='setup'||!!isQuestion&&game.phase!=='result');
-   return <div key={i} style={teamStyle(i)} className={`showPodium ${active?'responding':''} ${winner===i&&game.phase==='finished'?'champion':''}`}><div className="showPodiumTop"><span className="showTeamNumber">0{i+1}</span><b>{team.name}</b>{active&&<span className="showOnAir" aria-label="Đội đang chơi"/>}</div><strong className="showTeamScore" key={team.score}>{team.score}</strong><Cards cards={team.cards}/><div className="showPodiumBase"/></div>;
+   return <div key={i} style={teamStyle(i)} className={`showPodium ${active?'responding':''} ${winner===i&&game.phase==='finished'?'champion':''}`}><div className="showPodiumTop"><span className="showTeamNumber">0{i+1}</span><b>{team.name}</b>{active&&game.phase==='setup'&&<span className="selectionPodiumLabel">ĐANG CHỌN</span>}{active&&<span className="showOnAir" aria-label="Đội đang chơi"/>}</div><strong className="showTeamScore" key={team.score}>{team.score}</strong><Cards cards={team.cards}/><div className="showPodiumBase"/></div>;
   })}</section>
  </main>;
 }
