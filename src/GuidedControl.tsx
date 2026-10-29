@@ -534,8 +534,9 @@ export default function GuidedControl() {
 
           {game.phase === "setup" && (
             <Step number={1} title="Chọn đội và ô câu hỏi" instruction="Đội chọn số, MC bấm ô tương ứng rồi mở gợi ý.">
+              {game.settings.hostMode==="random"&&<div className="drawOrderStrip"><b>Thứ tự bốc thăm</b>{(game.drawOrders?.[game.round]??[]).map((team,index)=><span key={team} className={hasHostedRound(game,team)?"done":game.host===team?"current":""}>{index+1}. {game.teams[team].name}</span>)}</div>}
               <div className="simpleTeamGrid boardTeamGrid">
-                {game.teams.map((team,i)=><button key={i} style={teamStyle(i)} disabled={hasHostedRound(game,i)} className={game.host===i?"selected":""} onClick={()=>commit(g=>selectHost(g,i))}><span className="simpleTeamInitial">{i+1}</span><b>{team.name}</b><span className="simpleTeamCheck">{hasHostedRound(game,i)?"Đã chọn":game.host===i&&<Check size={17}/>}</span></button>)}
+                {game.teams.map((team,i)=><button key={i} style={teamStyle(i)} disabled={hasHostedRound(game,i)||(game.settings.hostMode==="random"&&game.host!==i)} className={game.host===i?"selected":""} onClick={()=>commit(g=>selectHost(g,i))}><span className="simpleTeamInitial">{i+1}</span><b>{team.name}</b><span className="simpleTeamCheck">{hasHostedRound(game,i)?"Đã chọn":game.host===i&&<Check size={17}/>}</span></button>)}
               </div>
               <QuestionBoard game={game} disabled={game.host===null} onChoose={id=>commit(g=>chooseQuestion(g,id))}/>
               {game.host===null && <div className="boardNoHost">Chọn đội đến lượt trước.</div>}
@@ -1188,7 +1189,7 @@ export default function GuidedControl() {
                   ? "MC chọn từng câu"
                   : game.settings.hostMode === "rotate"
                     ? "Luân phiên theo số câu đã chơi"
-                    : "Bốc thăm ngẫu nhiên"}
+                    : "Bốc thăm thứ tự một lần cho mỗi vòng"}
               </span>
             </li>
             <li>

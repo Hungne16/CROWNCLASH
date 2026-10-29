@@ -1,7 +1,7 @@
 import {describe,it,expect} from 'vitest';
 import {initialGame} from '../game';
 import {activateCard,challengeTeam,openQuestion,scoreAnswer,stealTeam} from '../controller';
-const ready=()=>({...initialGame(),phase:'hint' as const,host:0,questionIndex:0,hintRead:true,questions:[{id:'result',round:1 as const,difficulty:'easy' as const,hint:'hint',text:'question',answer:'private answer'}]});
+const ready=()=>({...initialGame(),teams:initialGame().teams.map(t=>({...t,score:0})),phase:'hint' as const,host:0,questionIndex:0,hintRead:true,questions:[{id:'result',round:1 as const,difficulty:'easy' as const,hint:'hint',text:'question',answer:'private answer'}]});
 describe('card outcome animations use committed points',()=>{
  it.each([true,false])('Double reports the actual doubled delta, correct=%s',correct=>{const g=openQuestion(activateCard(ready(),'double'),1000);expect(g.cardOutcome).toBeUndefined();const scored=scoreAnswer(g,correct,2000);expect(scored.cardOutcome?.card).toBe('double');expect(scored.cardOutcome?.result?.delta).toBe(correct?20:-20);expect(scored.cardOutcome?.result?.total).toBe(scored.teams[0].score);expect(JSON.stringify(scored.cardOutcome)).not.toContain('private answer');});
  it('Safe wrong shows protection and 0 rather than claiming a gain',()=>{const g=scoreAnswer(openQuestion(activateCard(ready(),'safe'),1000),false,2000);expect(g.cardOutcome?.result).toMatchObject({delta:0,total:0,correct:false});});

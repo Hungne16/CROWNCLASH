@@ -155,8 +155,10 @@ export function normalizeGame(value: unknown): Game {
   return {
     ...base,
     ...g,
+    rulesVersion:3,
+    teams:g.rulesVersion===3 || g.history.length || g.playedQuestionIds?.length ? g.teams : g.teams.map(t=>({...t,score:t.score===0?10:t.score})),
     phase: phases.includes(g.phase) ? g.phase : "setup",
-    settings: { ...base.settings, ...g.settings },
+    settings: { ...base.settings, ...g.settings, ...(g.rulesVersion===3?{}:{hostMode:"random" as const}) },
     playedQuestionIds: g.playedQuestionIds ?? [],
     questionHistoryStart:
       g.questionHistoryStart ?? Math.max(0, g.history.length - 1),
@@ -178,7 +180,7 @@ export function loadGame(storageKey = STORE): Game {
       const first = remainingQuestions(g)[0];
       if (first) g = {...g, questionIndex:g.questions.findIndex(q=>q.id===first.id)};
     }
-    return g.phase === "setup" && g.host === null ? assignHost(g) : g;
+    return g.phase === "setup" && (g.host === null || g.settings.hostMode === "random") ? assignHost(g) : g;
   } catch {
     return initialGame();
   }
@@ -235,13 +237,20 @@ export function hasHostedRound(g:Game,index:number){
 }
 export function selectHost(g: Game, index: number): Game {
   if (g.phase !== "setup" || index < 0 || index > 3 || hasHostedRound(g,index)) return g;
+  if(g.settings.hostMode === "random")return assignHost(g);
   return { ...g, host: index, notice: "" };
 }
 export function assignHost(g: Game): Game {
   if (g.phase !== "setup") return g;
   const eligible=g.teams.map((_,i)=>i).filter(i=>!hasHostedRound(g,i));
   if (!eligible.length) return {...g,host:null};
-  if (g.settings.hostMode === "random") return {...g,host:eligible[Math.floor(Math.random()*eligible.length)]};
+  if (g.settings.hostMode === "random") {
+    let order=g.drawOrders?.[g.round];
+    if(!order || order.length!==4 || new Set(order).size!==4 || order.some(i=>!Number.isInteger(i)||i<0||i>3)){
+      order=[0,1,2,3];for(let i=3;i>0;i--){const j=Math.floor(Math.random()*(i+1));[order[i],order[j]]=[order[j],order[i]];}
+    }
+    return {...g,drawOrders:{...g.drawOrders,[g.round]:order},host:order.find(i=>eligible.includes(i))??null};
+  }
   if (g.settings.hostMode === "rotate") return {...g,host:eligible[0]};
   if (g.host!==null && hasHostedRound(g,g.host))return {...g,host:null};
   return g;

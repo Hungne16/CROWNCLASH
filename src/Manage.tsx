@@ -496,7 +496,7 @@ export function GameSettings({ game, commit }: Props) {
             >
               <option value="manual">MC chọn thủ công</option>
               <option value="rotate">Luân phiên theo câu đã chơi</option>
-              <option value="random">Bốc thăm ngẫu nhiên</option>
+              <option value="random">Bốc thăm thứ tự cả vòng (luật mới)</option>
             </select>
           </Setting>
           <Setting

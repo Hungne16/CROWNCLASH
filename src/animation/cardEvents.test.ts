@@ -1,7 +1,7 @@
 import {describe,it,expect} from 'vitest';
 import {initialGame,useCard} from '../game';
 import {activateCard,challengeTeam,openQuestion,questionTime,stealTeam} from '../controller';
-const ready=()=>({...initialGame(),phase:'hint' as const,host:0,questionIndex:0,hintRead:true,questions:[{id:'anim',round:1 as const,difficulty:'easy' as const,hint:'hint',text:'question',answer:'answer'}]});
+const ready=()=>({...initialGame(),teams:initialGame().teams.map(t=>({...t,score:0})),phase:'hint' as const,host:0,questionIndex:0,hintRead:true,questions:[{id:'anim',round:1 as const,difficulty:'easy' as const,hint:'hint',text:'question',answer:'answer'}]});
 describe('card animation events follow engine decisions',()=>{
  it('emits once for a legal activation, without points or time changes',()=>{const g=ready();const a=activateCard(g,'double');expect(a.cardActivation?.card).toBe('double');expect(a.teams.map(t=>t.score)).toEqual([0,0,0,0]);expect(a.startedAt).toBe(g.startedAt);const again=activateCard(a,'double');expect(again.cardActivation?.id).toBe(a.cardActivation?.id);expect(again.teams[0].cards.double).toBe(0);});
  it('rejects an empty or wrong-time card without emitting',()=>{const g=ready();g.teams[0].cards.safe=0;expect(activateCard(g,'safe').cardActivation).toBeUndefined();expect(activateCard({...g,phase:'question'},'double').cardActivation).toBeUndefined();});

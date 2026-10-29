@@ -32,7 +32,7 @@ describe("account preparation data", () => {
     expect(p).not.toHaveProperty("history");
     expect(p).not.toHaveProperty("teams");
     const loaded = preparationGame(p);
-    expect(loaded.teams[0].score).toBe(0);
+    expect(loaded.teams[0].score).toBe(10);
     expect(loaded.teams[0].cards.double).toBe(1);
     expect(loaded.rulesConfirmed).toBe(false);
   });
@@ -84,7 +84,7 @@ describe("account preparation data", () => {
     installPreparation(p);
     const match = JSON.parse(localStorage.getItem(STORE)!);
     expect(match.teams[0].name).toBe("A");
-    expect(match.teams[0].score).toBe(0);
+    expect(match.teams[0].score).toBe(10);
     expect(match.questionIndex).toBe(0);
     expect(
       JSON.parse(localStorage.getItem(UNDO_STORE)!)[0].teams[0].score,

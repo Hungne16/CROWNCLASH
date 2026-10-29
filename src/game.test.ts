@@ -8,7 +8,7 @@ import {
   DIFFICULTY,
 } from "./game";
 import { testQuestions } from "./testQuestions";
-const initialGame = () => ({ ...emptyGame(), questions: testQuestions });
+const initialGame = () => ({ ...emptyGame(), teams:emptyGame().teams.map(t=>({...t,score:0})), settings:{...emptyGame().settings,hostMode:"manual" as const}, questions: testQuestions });
 const game = (phase: any = "hint") => {
   const g = initialGame();
   return {

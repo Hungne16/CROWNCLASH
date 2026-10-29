@@ -1,7 +1,7 @@
 import {describe,it,expect} from 'vitest';
 import {initialGame,type Game} from './game';
 import {nextQuestion,selectHost,hasHostedRound,assignHost,finishRound,prepareHint} from './controller';
-const result=():Game=>({...initialGame(),questions:Array.from({length:6},(_,i)=>({id:'q'+i,round:1,difficulty:'easy',hint:'Hint',text:'Question',answer:'Answer'})),phase:'result',host:0,answering:1,questionIndex:0});
+const result=():Game=>({...initialGame(),settings:{...initialGame().settings,hostMode:"manual"},questions:Array.from({length:6},(_,i)=>({id:'q'+i,round:1,difficulty:'easy',hint:'Hint',text:'Question',answer:'Answer'})),phase:'result',host:0,answering:1,questionIndex:0});
 describe('one host selection per round',()=>{
  it('records original host, preserving the Steal or Challenge responder own turn',()=>{
   const next=nextQuestion(result());expect(hasHostedRound(next,0)).toBe(true);expect(hasHostedRound(next,1)).toBe(false);

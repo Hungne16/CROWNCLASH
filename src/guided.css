@@ -3292,3 +3292,5 @@
  .guidedApp .operator-hint .cardHand .powerChoiceArt{height:clamp(60px,20vh,180px);margin:0}
  .operator-hint .guideNext,.operator-hint .guideBack,.operator-hint .guideInlineNote{grid-column:1/-1;margin:0}
 }
+
+.drawOrderStrip{display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap;font-size:12px}.drawOrderStrip>b{color:#7c7291}.drawOrderStrip>span{padding:7px 12px;border:1px solid #e4deef;border-radius:8px}.drawOrderStrip .current{background:#7353d2;color:white;border-color:#7353d2}.drawOrderStrip .done{opacity:.4;text-decoration:line-through}
