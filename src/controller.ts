@@ -246,15 +246,15 @@ export function activateCard(g: Game, card: "double" | "safe"): Game {
   const result = useCard(g, g.host, card);
   return result.ok ? result.game : { ...g, notice: result.error ?? "" };
 }
-export function openQuestion(g: Game, now = Date.now()): Game {
+export function openQuestion(g: Game, now = Date.now(), autoStart = true): Game {
   const q = currentQuestion(g);
   if (g.phase !== "hint" || !q || g.host === null || !g.hintRead) return g;
   return {
     ...g,
     phase: "question",
-    startedAt: now,
+    startedAt: autoStart ? now : null,
     remainingMs: questionSeconds(q) * 1000,
-    paused: false,
+    paused: !autoStart,
     notice: "",
   };
 }
@@ -291,6 +291,11 @@ export function toggleClock(g: Game, now = Date.now()): Game {
     remainingMs: questionTime(g, now).remaining,
     notice: "",
   };
+}
+export function setQuestionClock(g: Game, seconds: number): Game {
+ const q = currentQuestion(g);
+ if (!q || g.phase !== "question" || !Number.isInteger(seconds) || seconds < 1 || seconds > 3600) return g;
+ return {...g, questions:g.questions.map(item => item.id === q.id ? {...item, seconds} : item), startedAt:null, remainingMs:seconds*1000, paused:true, notice:""};
 }
 export function challengeTeam(g: Game, index: number, now = Date.now()): Game {
   if (g.host === null || index === g.host || index < 0 || index > 3) return g;

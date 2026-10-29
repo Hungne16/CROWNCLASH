@@ -69,6 +69,7 @@ import {
   STORE,
   tiedLeaders,
   toggleClock,
+  setQuestionClock,
   UNDO_STORE,
 } from "./controller";
 import { CardArt, formatTime, Modal, teamStyle } from "./Common";
@@ -279,7 +280,7 @@ export default function GuidedControl() {
         next = activateCard(g, power);
         if (next.usedCard !== power) return next;
       }
-      return openQuestion(next);
+      return openQuestion(next, Date.now(), false);
     });
   const finishQuestion = () => commit(nextQuestion);
   const reset = () => {
@@ -680,6 +681,9 @@ export default function GuidedControl() {
                 <GuideClock
                   seconds={time.seconds}
                   paused={game.paused}
+                  waiting={game.startedAt === null}
+                  duration={questionSeconds(q)}
+                  onSet={seconds => commit(g => setQuestionClock(g, seconds))}
                   onToggle={() => commit(toggleClock)}
                 />
               }
@@ -1473,12 +1477,17 @@ function Answer({ text }: { text: string }) {
 function GuideClock({
   seconds,
   paused,
-  onToggle,
+  onToggle, waiting, duration, onSet,
 }: {
+  waiting: boolean;
+  duration: number;
+  onSet: (seconds:number) => void;
   seconds: number;
   paused: boolean;
   onToggle: () => void;
 }) {
+  const [draft,setDraft] = useState(String(duration));
+  useEffect(()=>setDraft(String(duration)),[duration]);
   return (
     <div className={`guideClock ${seconds === 0 ? "timeUp" : ""}`}>
       <span>
@@ -1487,8 +1496,12 @@ function GuideClock({
       </span>
       <button disabled={seconds === 0} onClick={onToggle}>
         {paused ? <Play size={13} /> : <Pause size={13} />}{" "}
-        {paused ? "Tiếp tục" : "Tạm dừng"}
+        {paused ? (waiting ? "Bắt đầu bấm giờ" : "Tiếp tục") : "Tạm dừng"}
       </button>
+      <form onSubmit={e=>{e.preventDefault();onSet(Number(draft));}} style={{display:"flex",gap:6,alignItems:"center"}}>
+        <input aria-label="Thời gian câu hỏi (giây)" type="number" min="1" max="3600" required value={draft} onChange={e=>setDraft(e.target.value)} style={{width:78,padding:8}}/> giây
+        <button type="submit">Đặt giờ</button>
+      </form>
     </div>
   );
 }

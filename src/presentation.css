@@ -35,3 +35,21 @@
 .showQuestionBody h1 { white-space: pre-line; }
 
 .showRounds{max-width:48vw;overflow-x:auto}.showRounds>span{white-space:nowrap;flex-shrink:0}.showHeader{min-width:0}.showStage{align-items:safe center}
+
+/* The question and revealed answer share a bounded stage and fit their actual text. */
+.presentation.showPresentation{height:100dvh;min-height:0;grid-template-rows:auto minmax(0,1fr) auto;overflow:hidden}
+.showStage{overflow:hidden;min-height:0}
+.showStageContent{height:100%;min-height:0;margin:0;display:flex;align-items:center}
+.showQuestionLayout{height:100%;width:100%;min-height:0;align-items:stretch}
+.showQuestionPanel{display:flex;flex-direction:column;height:100%;min-height:0;overflow:hidden}
+.showQuestionMeta,.showQuestionBottom{flex:none}
+.showQuestionMeta{margin-bottom:12px}.showQuestionBottom{margin-top:12px}
+.showQuestionBody{flex:1;min-height:0;overflow:hidden;align-items:stretch}
+.showQuestionBody img{height:100%;max-height:100%;min-height:0;align-self:center}
+.showFitBox{min-height:0;min-width:0;height:100%;width:100%;overflow:hidden;display:flex;align-items:center}
+.showFitText{width:100%;white-space:pre-wrap;overflow-wrap:anywhere;line-height:1.28;font-weight:600;letter-spacing:-.02em}
+.showAnswer{flex:0 1 35%;min-height:0;overflow:hidden;margin-top:12px;display:flex;align-items:center}
+.showAnswer .showFitBox{flex:1}.showAnswer>svg{flex:none}
+.showTimer{align-self:center}.showSudden{width:100%;height:100%;min-height:0;display:flex;flex-direction:column;gap:12px}.showSudden>.showFitBox{flex:1}.showSudden>.showBuzzers{flex:none}
+.guideClock{flex-wrap:wrap}.showRounds{overflow:hidden}.showRounds>span:not(.active){display:none}
+@media(max-width:640px){.presentation.showPresentation{padding:8px;gap:8px}.showPodiums{grid-template-columns:repeat(4,minmax(0,1fr))}.showPodium{min-height:0;padding:6px}.showPodium .cardInventory{display:none}.showPodiumTop>b{font-size:10px}.showTeamScore{font-size:24px}.showStage{padding:12px}.showQuestionLayout.hasTimer{grid-template-columns:minmax(0,1fr) 80px}.showTimerDial{width:75px}.showTimerDial>span{font-size:22px}.showQuestionBody.withImage{grid-template-columns:minmax(0,1fr) 25%}.showQuestionMeta{margin-bottom:6px}.showQuestionIndex{font-size:22px}.showPoints{font-size:22px}.showQuestionBottom{margin-top:6px}}

@@ -1,7 +1,7 @@
 import { BannerLeaderboard } from './leaderboard/BannerLeaderboard';
 import { QuestionBoard } from './QuestionBoard';
 import { Crown, Expand, Check, Pause, Trophy, Zap, Swords, Shield, Sparkles, Volume2, VolumeX } from 'lucide-react';
-import type {CSSProperties} from 'react';
+import {useLayoutEffect, useRef, type CSSProperties} from 'react';
 import { DIFFICULTY, gameRounds, questionSeconds, rankTeams, type Game } from './game';
 import { currentQuestion, questionTime, tiedLeaders, rankingRows } from './controller';
 import { CardArt, Cards, formatTime, teamStyle } from './Common';
@@ -31,14 +31,14 @@ export function Presentation({game,now,onBuzz,sound=false,onToggleSound}:{game:G
    {isQuestion&&<div className={`showQuestionLayout ${game.phase==='question'?'hasTimer':''}`}>
     <div className="showQuestionPanel">
      <div className="showQuestionMeta"><span className="showQuestionIndex">{String(questionNumber).padStart(2,'0')}</span><span className="showPhaseLabel">{phaseLabel}</span><span className="showPoints">{DIFFICULTY[q.difficulty].points}<small>ĐIỂM</small></span></div>
-     <div className={`showQuestionBody ${q.image&&game.phase!=='hint'?'withImage':''}`}><h1 className={(text?.length??0)>220?'longQuestion':''}>{text||(game.phase==='hint'?'Lắng nghe gợi ý từ MC.':'')}</h1>{q.image&&game.phase!=='hint'&&<img src={q.image} alt="Hình minh họa câu hỏi"/>}</div>
-     {game.phase==='result'&&game.answerRevealed&&<div className="showAnswer"><Check size={24}/><span>{q.answer}</span></div>}
+     <div className={`showQuestionBody ${q.image&&game.phase!=='hint'?'withImage':''}`}><FitText text={text||(game.phase==='hint'?'Lắng nghe gợi ý từ MC.':'')} />{q.image&&game.phase!=='hint'&&<img src={q.image} alt="Hình minh họa câu hỏi"/>}</div>
+     {game.phase==='result'&&game.answerRevealed&&<div className="showAnswer"><Check size={24}/><FitText text={q.answer}/></div>}
      <div className="showQuestionBottom">{response!==null&&game.phase!=='result'&&<div className="showTurn" style={teamStyle(response)}><i/>{game.teams[response].name}{game.phase==='challenge'&&<CardArt card="challenge" className="inlineCardArt"/>}</div>}{game.usedCard&&<div className="showPower">{game.usedCard==='double'?<><CardArt card="double" className="inlineCardArt"/>CƯỢC LỚN ×2</>:<><CardArt card="safe" className="inlineCardArt"/>AN TOÀN</>}</div>}{game.phase==='hint'&&<span className="showHintState">{game.hintRead?'CHỌN THẺ TRƯỚC KHI MỞ CÂU HỎI':'CÂU HỎI CHƯA MỞ'}</span>}</div>
     </div>
-    {game.phase==='question'&&<aside className={`audienceTimer showTimer ${time.seconds<=5?'urgent':''}`} style={{'--remaining':`${progress}%`} as CSSProperties} aria-label="Thời gian trả lời"><div className="showTimerDial"><span>{formatTime(time.seconds)}</span></div><b>{game.paused?<><Pause size={15}/>TẠM DỪNG</>:time.seconds===0?'HẾT GIỜ':'THỜI GIAN'}</b></aside>}
+    {game.phase==='question'&&<aside className={`audienceTimer showTimer ${time.seconds<=5?'urgent':''}`} style={{'--remaining':`${progress}%`} as CSSProperties} aria-label="Thời gian trả lời"><div className="showTimerDial"><span>{formatTime(time.seconds)}</span></div><b>{game.paused?<><Pause size={15}/>{game.startedAt===null?'CHỜ BẮT ĐẦU':'TẠM DỪNG'}</>:time.seconds===0?'HẾT GIỜ':'THỜI GIAN'}</b></aside>}
     {game.phase==='steal-window'&&<div className="showSteal"><CardArt card="steal" className="inlineCardArt"/><b>GIƠ THẺ STEAL</b><strong>{Math.max(0,Math.ceil(((game.stealDeadline??now)-now)/1000))}<small>s</small></strong></div>}
    </div>}
-   {game.phase==='sudden-death'&&<div className="showSudden"><div className="showSectionLabel"><Zap size={18}/>SUDDEN DEATH</div><h1>{game.suddenQuestion||'Câu hỏi quyết định'}</h1><div className="showBuzzers">{game.suddenTeams.map(i=><button key={i} style={teamStyle(i)} className={game.answering===i?'buzzed':''} disabled={game.answering!==null} onClick={()=>onBuzz(i)}><Zap size={26}/><b>{game.teams[i].name}</b><span>{game.answering===i?'ĐÃ GIÀNH CHUÔNG':'BẤM CHUÔNG'}</span></button>)}</div></div>}
+   {game.phase==='sudden-death'&&<div className="showSudden"><div className="showSectionLabel"><Zap size={18}/>SUDDEN DEATH</div><FitText text={game.suddenQuestion||'Câu hỏi quyết định'}/><div className="showBuzzers">{game.suddenTeams.map(i=><button key={i} style={teamStyle(i)} className={game.answering===i?'buzzed':''} disabled={game.answering!==null} onClick={()=>onBuzz(i)}><Zap size={26}/><b>{game.teams[i].name}</b><span>{game.answering===i?'ĐÃ GIÀNH CHUÔNG':'BẤM CHUÔNG'}</span></button>)}</div></div>}
    </div>
   </section>
   <section className="showPodiums" aria-label="Bảng điểm bốn đội">{game.teams.map((team,i)=>{
@@ -46,4 +46,24 @@ export function Presentation({game,now,onBuzz,sound=false,onToggleSound}:{game:G
    return <div key={i} style={teamStyle(i)} className={`showPodium ${active?'responding':''} ${winner===i&&game.phase==='finished'?'champion':''}`}><div className="showPodiumTop"><span className="showTeamNumber">0{i+1}</span><b>{team.name}</b>{active&&<span className="showOnAir" aria-label="Đội đang chơi"/>}</div><strong className="showTeamScore" key={team.score}>{team.score}</strong><Cards cards={team.cards}/><div className="showPodiumBase"/></div>;
   })}</section>
  </main>;
+}
+
+function FitText({text}:{text:string}) {
+ const box=useRef<HTMLDivElement>(null), content=useRef<HTMLDivElement>(null);
+ useLayoutEffect(()=>{
+  const fit=()=>{
+   if(!box.current||!content.current)return;
+   const el=content.current,host=box.current;
+   let low=1,high=Math.min(62,window.innerHeight*.06);
+   for(let i=0;i<12;i++){
+    const mid=(low+high)/2;el.style.fontSize=mid+'px';
+    if(el.scrollHeight<=host.clientHeight && el.scrollWidth<=host.clientWidth)low=mid;else high=mid;
+   }
+   el.style.fontSize=low+'px';
+  };
+  const observer=new ResizeObserver(fit);if(box.current)observer.observe(box.current);
+  fit();void document.fonts.ready.then(fit);
+  return ()=>observer.disconnect();
+ },[text]);
+ return <div ref={box} className="showFitBox"><div ref={content} className="showFitText">{text}</div></div>;
 }
