@@ -497,7 +497,7 @@ export default function GuidedControl() {
           </button>
         </main>
       ) : page === "play" ? (
-        <main className="guideShell">
+        <main className={`guideShell operatorDesk operator-${game.phase}`}>
           <div className="simpleScoreStrip" aria-label="Điểm hiện tại">
             {game.teams.map((team, i) => (
               <div key={i} style={teamStyle(i)}>
@@ -1459,9 +1459,27 @@ function ReadAloud({ label, text }: { label: string; text: string }) {
   return (
     <div className="guideRead">
       <span>{label}</span>
-      <p>{text}</p>
+      <OperatorText text={text}/>
     </div>
   );
+}
+function OperatorText({text}:{text:string}) {
+ const ref=useRef<HTMLParagraphElement>(null);
+ useEffect(()=>{
+  const fit=()=>{
+   const el=ref.current;if(!el)return;
+   if(!el.closest('.operatorDesk'))return;
+   let low=1,high=22;
+   for(let i=0;i<12;i++){
+    const mid=(low+high)/2;el.style.fontSize=mid+'px';
+    if(el.scrollHeight<=el.clientHeight+1&&el.scrollWidth<=el.clientWidth+1)low=mid;else high=mid;
+   }
+   el.style.fontSize=low+'px';
+  };
+  const observer=new ResizeObserver(fit);if(ref.current)observer.observe(ref.current);
+  fit();void document.fonts.ready.then(fit);return ()=>observer.disconnect();
+ },[text]);
+ return <p ref={ref}>{text}</p>;
 }
 function Answer({ text }: { text: string }) {
   return (
@@ -1470,7 +1488,7 @@ function Answer({ text }: { text: string }) {
         <Shield size={14} />
         ĐÁP ÁN · CHỈ BẠN THẤY
       </span>
-      <p>{text}</p>
+      <OperatorText text={text}/>
     </div>
   );
 }

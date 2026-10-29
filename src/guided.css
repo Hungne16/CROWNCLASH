@@ -3242,3 +3242,53 @@
 .guidedApp .simpleChallenge .challengeCardButton b{font-size:13px;font-weight:700;color:#7054ae}
 .stealChoicePanel{display:flex;align-items:flex-start;gap:24px;margin:20px 0}.stealChoiceArt{width:140px;height:auto;aspect-ratio:auto;flex-shrink:0;border-radius:8px;filter:drop-shadow(0 4px 8px #26324a18)}.stealChoiceTeams{min-width:0;flex:1}.stealChoiceTeams .guideTargetList{margin:0}
 @media(max-width:600px){.guidedApp .cardHand{gap:10px}.guidedApp .cardHand .powerChoiceArt{height:200px}.guidedApp .cardHand>.cardHandOption{padding:12px 6px}.guidedApp .cardHand strong{font-size:14px}.guidedApp .cardHand>button>span:last-child{font-size:10px}.stealChoicePanel{gap:12px}.stealChoiceArt{width:88px}.guidedApp .simpleChallenge .challengeChoiceArt{height:120px}.guidedApp .simpleChallenge .challengeCardButton{min-width:110px}}
+
+/* Operator workspace: reserve the viewport for content and keep actions visible. */
+@media(min-width:700px){
+ .guidedApp:has(.operatorDesk){height:100dvh;min-height:0;display:flex;flex-direction:column;overflow:hidden}
+ .guidedApp:has(.operatorDesk) .guideHeader{height:56px;min-height:56px;flex:none;padding-top:0;padding-bottom:0}
+ .operatorDesk.guideShell{max-width:1600px;width:100%;margin:0 auto;padding:10px 20px;flex:1;min-height:0;display:flex;flex-direction:column;gap:8px}
+ .operatorDesk .simpleScoreStrip{flex:none;margin:0}.operatorDesk .simpleScoreStrip>div{padding:7px 14px}.operatorDesk .guideRoundLine{flex:none;margin:0}
+ .operatorDesk .guideStep{flex:1;min-height:0;margin:0;padding:16px;display:flex;flex-direction:column;gap:10px;overflow:hidden}
+ .operatorDesk .guideStepHeading{flex:none;margin:0;gap:16px;align-items:center}.operatorDesk .guideStepHeading h1{font-size:22px;margin:3px 0}.operatorDesk .guideStepHeading p{display:none}.operatorDesk .guideStepNumber{font-size:9px}
+ .operatorDesk .guideClock{display:flex;align-items:center;flex-wrap:wrap;gap:8px;padding:8px 12px;width:auto;max-width:none}
+ .operatorDesk .guideClock>span{font-size:25px}.operatorDesk .guideClock>button{padding:8px;margin:0;border:1px solid #dcd6ec;border-radius:8px}.operatorDesk .guideClock form{font-size:12px}.operatorDesk .guideClock form button{padding:8px;background:#eee9fc;border-radius:7px}
+ .operatorDesk .guideRead,.operatorDesk .guideAnswer{flex:1;min-height:0;margin:0;padding:12px 16px;display:flex;flex-direction:column;gap:8px;overflow:hidden}
+ .operatorDesk .guideRead>span,.operatorDesk .guideAnswer>span{display:flex;flex:none;font-size:10px}
+ .operatorDesk .guideRead>p,.operatorDesk .guideAnswer>p{flex:1;min-height:0;margin:0;overflow:hidden;white-space:pre-wrap;overflow-wrap:anywhere;line-height:1.35}
+ .operatorDesk .guideStep:has(>.simpleGrades){display:grid;grid-template-columns:minmax(0,1.4fr) minmax(0,1fr);grid-template-rows:auto minmax(0,1fr) auto auto;gap:10px}
+ .operatorDesk .guideStep:has(>.simpleGrades)>.guideStepHeading{grid-column:1/-1;grid-row:1}
+ .operatorDesk .guideStep:has(>.simpleGrades)>.guideRead{grid-column:1;grid-row:2}
+ .operatorDesk .guideStep:has(>.simpleGrades)>.guideAnswer{grid-column:2;grid-row:2}
+ .operatorDesk .guideStep:has(>.simpleGrades)>.simpleGrades{grid-column:1;grid-row:3/5;align-self:stretch}
+ .operatorDesk .guideStep:has(>.simpleGrades)>.simpleChallenge{grid-column:2;grid-row:3/5}
+ .operatorDesk .guideStep:has(>.simpleGrades)>.guideActivePower{grid-column:1/-1;grid-row:5;font-size:11px;margin:0;padding:4px}
+ .operatorDesk .guideTimeUp{display:none}
+ .operatorDesk .simpleGrades{margin:0;display:flex;gap:10px}.operatorDesk .simpleGrades>button{flex:1;min-height:60px;padding:10px;font-size:15px}.operatorDesk .simpleGrades>button b{font-size:17px}
+ .operatorDesk .simpleChallenge{padding:8px;margin:0;border:1px solid #e7e0f2;border-radius:10px;display:flex;align-items:center;justify-content:space-between;gap:8px}
+ .operatorDesk .simpleChallenge small{font-size:11px}.operatorDesk .simpleChallenge b{font-size:12px}
+ .guidedApp .operatorDesk .simpleChallenge .challengeCardButton{flex-direction:row;min-width:0;padding:5px 10px;gap:8px}.guidedApp .operatorDesk .simpleChallenge .challengeChoiceArt{height:64px;width:auto}
+ .operatorDesk .guideQuestionImage{max-height:100px;object-fit:contain;margin:0}
+ .operatorDesk .guideNext{margin:0;flex:none}.operatorDesk .guidePrimary{padding:12px 18px;min-height:44px}
+ .operatorDesk .cardHand{flex:1;min-height:0;margin:0}.guidedApp .operatorDesk .cardHand .powerChoiceArt{height:clamp(90px,25vh,230px)}
+ .operatorDesk .simpleTeamGrid{margin:0;gap:8px}.operatorDesk .simpleTeamGrid>button{padding:10px}
+ .operatorDesk .questionBoard{min-height:0;gap:8px;margin:8px 0}.operatorDesk .questionTile{min-height:55px;padding:8px}
+ .operatorDesk .simplePreview{margin:0;padding:8px;font-size:12px}
+ .operatorDesk .guideStep:has(>.guideQuestionImage)>.guideQuestionImage{grid-column:1;grid-row:5;justify-self:start}
+}
+@media(min-width:700px){
+ .operatorDesk .guideStepAside{width:auto;max-width:none;flex:0 0 auto}
+ .operatorDesk .guideClock{display:grid;grid-template-columns:auto auto;gap:6px 12px;min-width:340px}
+ .operatorDesk .guideClock>span{grid-column:1;grid-row:1;display:flex;align-items:center;gap:6px}
+ .operatorDesk .guideClock>button{grid-column:2;grid-row:1;font-size:12px}
+ .operatorDesk .guideClock>form{grid-column:1/-1;grid-row:2;justify-content:flex-end}
+}
+@media(min-width:700px){
+ .operator-hint .guideStep:has(.cardHand){display:grid;grid-template-columns:minmax(0,1fr) minmax(0,2fr);grid-template-rows:auto minmax(0,1fr) auto auto}
+ .operator-hint .guideStepHeading{grid-column:1/-1}.operator-hint .guideRead{grid-column:1;grid-row:2;height:100%}
+ .guidedApp .operator-hint .cardHand{grid-column:2;grid-row:2;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));grid-template-rows:minmax(0,1fr);height:100%;gap:10px}
+ .guidedApp .operator-hint .cardHand>.cardHandOption{min-height:0;padding:10px;overflow:hidden}
+ .guidedApp .operator-hint .cardHand>.noPowerOption{grid-column:auto;order:0;align-items:center;justify-content:center;padding:10px}
+ .guidedApp .operator-hint .cardHand .powerChoiceArt{height:clamp(60px,20vh,180px);margin:0}
+ .operator-hint .guideNext,.operator-hint .guideBack,.operator-hint .guideInlineNote{grid-column:1/-1;margin:0}
+}
