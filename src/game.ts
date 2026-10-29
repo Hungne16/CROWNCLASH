@@ -38,6 +38,7 @@ export type Settings = {
 export type CardActivation = { id: string; card: CardType; team: number; teamName: string; targetName?: string; result?: {delta:number; total:number; correct:boolean; sourceName:string}; at: number };
 export type Game = {
   introSlide?: number | null;
+  cardPreview?: "none" | "double" | "safe";
   rulesVersion?: number;
   drawOrders?: Record<number,number[]>;
   hostTurns?: {round:number;team:number;questionId:string}[];

@@ -35,7 +35,7 @@ describe("audience disclosure follows the source rules", () => {
     expect(html).not.toContain(question.answer);
     expect(html).not.toContain(question.hint);
   });
-  it("shows only the hint before and after the MC finishes reading it", () => {
+  it("shows hint then card choices without revealing the question", () => {
     const hint = prepareHint(confirmRules(setup()));
     for (const g of [
       hint,
@@ -43,7 +43,7 @@ describe("audience disclosure follows the source rules", () => {
       { ...hint, answerRevealed: true },
     ]) {
       const html = render(g);
-      expect(html).toContain(question.hint);
+      expect(html).toContain(g.hintRead ? "Chọn quyền năng" : question.hint);
       expect(html).not.toContain(question.text);
       expect(html).not.toContain(question.answer);
       expect(html).not.toContain(question.image);

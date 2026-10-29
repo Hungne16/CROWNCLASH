@@ -123,7 +123,7 @@ export default function GuidedControl() {
   const [power, setPower] = useState<Power>(
       game.usedCard === "double" || game.usedCard === "safe"
         ? game.usedCard
-        : "none",
+        : game.cardPreview ?? "none",
     ),
     [choosingChallenge, setChoosingChallenge] = useState(false);
   const [sound, setSound] = useState(
@@ -187,7 +187,7 @@ export default function GuidedControl() {
       setPower(
         game.usedCard === "double" || game.usedCard === "safe"
           ? game.usedCard
-          : "none",
+          : game.cardPreview ?? "none",
       );
   }, [game.phase, game.questionIndex]);
   useEffect(() => {
@@ -616,7 +616,7 @@ export default function GuidedControl() {
                           key={option.id}
                           className={`cardHandOption ${selected ? "selected" : ""} ${option.id === "none" ? "noPowerOption" : ""}`}
                           disabled={unavailable || !!game.usedCard}
-                          onClick={() => setPower(option.id)}
+                          onClick={() => {setPower(option.id);commit(g=>({...g,cardPreview:option.id}));}}
                           aria-pressed={selected}
                         >
                           {option.id !== "none" && <><CardArt card={option.id} className="powerChoiceArt"/><span className="cardHandCount">{game.teams[game.host!].cards[option.id]} thẻ</span></>}

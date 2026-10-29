@@ -1,3 +1,4 @@
+import {PowerChoiceStage} from './PowerChoiceStage';
 import {SelectionStage} from './SelectionStage';
 import {GameIntro} from './GameIntro';
 import { BannerLeaderboard } from './leaderboard/BannerLeaderboard';
@@ -8,6 +9,7 @@ import { DIFFICULTY, gameRounds, questionSeconds, rankTeams, type Game } from '.
 import { currentQuestion, questionTime, tiedLeaders, rankingRows, hasHostedRound } from './controller';
 import { CardArt, Cards, formatTime, teamStyle } from './Common';
 import './presentation.css';
+import './show-effects.css';
 export function Presentation({game,now,onBuzz,sound=false,onToggleSound}:{game:Game;now:number;onBuzz:(index:number)=>void;sound?:boolean;onToggleSound?:()=>void}){
  const q=currentQuestion(game),time=questionTime(game,now),ranks=rankTeams(game.teams);
  const roundQuestions=game.questions.filter(item=>item.round===game.round);
@@ -28,10 +30,11 @@ export function Presentation({game,now,onBuzz,sound=false,onToggleSound}:{game:G
    <div className="showHeaderActions">{onToggleSound&&<button className="showFullscreen" title={sound?"Tắt âm thanh":"Bật âm thanh"} aria-label={sound?"Tắt âm thanh":"Bật âm thanh"} onClick={onToggleSound}>{sound?<Volume2 size={19}/>:<VolumeX size={19}/>}</button>}<button className="showFullscreen" title="Toàn màn hình" aria-label="Toàn màn hình" onClick={()=>document.fullscreenElement?document.exitFullscreen():document.documentElement.requestFullscreen()}><Expand size={20}/></button></div>
   </header>
   <section className="showStage" aria-label="Sân khấu câu hỏi">
-   <div className="showStageFrame"/>
+   <div className="showStageFrame"/><div className="arenaCorners" aria-hidden="true"><i/><i/><i/><i/></div>
    <div className="showStageContent" key={`${game.phase}-${q?.id??game.round}`}>
    {game.phase==='setup'&&<SelectionStage game={game}/>}
-   {isQuestion&&<div className={`showQuestionLayout ${game.phase==='question'?'hasTimer':''}`}>
+   {game.phase==='hint'&&game.hintRead&&<PowerChoiceStage game={game}/>}
+   {isQuestion&&!(game.phase==='hint'&&game.hintRead)&&<div className={`showQuestionLayout ${game.phase==='question'?'hasTimer':''}`}>
     <div className="showQuestionPanel">
      <div className="showQuestionMeta"><span className="showQuestionIndex">{String(questionNumber).padStart(2,'0')}</span>{game.phase!=='question'&&<span className="showPhaseLabel">{phaseLabel}</span>}<span className="showPoints">{DIFFICULTY[q.difficulty].points}<small>ĐIỂM</small></span></div>
      <div className={`showQuestionBody ${q.image&&game.phase!=='hint'?'withImage':''}`}><FitText text={text||(game.phase==='hint'?'Lắng nghe gợi ý từ MC.':'')} />{q.image&&game.phase!=='hint'&&<img src={q.image} alt="Hình minh họa câu hỏi"/>}</div>
