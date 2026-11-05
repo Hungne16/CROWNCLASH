@@ -539,7 +539,7 @@ export default function GuidedControl() {
               {q && game.boardSelectedId===q.id && <>
                 <div className="boardSelectedMeta"><b>Question {questionNumber}</b><span>{difficulty?.label} · {difficulty?.points} points · {q ? questionSeconds(q) : 0} seconds</span></div>
                 <div className="guideNext"><button className="guidePrimary" disabled={game.host===null} onClick={()=>game.rulesConfirmed?commit(prepareHint):setDialog("rules")}>Reveal Hint · Question {questionNumber}<ArrowRight size={19}/></button></div>
-                <details className="simplePreview questionBoardHelp"><summary>Host Preview<ChevronDown size={13}/></summary><p>{q.text}</p><span>Answer: {q.answer}</span></details>
+                <details className="simplePreview questionBoardHelp"><summary>Host Preview<ChevronDown size={13}/></summary><div className="hostPreviewContent" tabIndex={0}><p>{q.text}</p><p><b>Answer:</b> {q.answer}</p></div></details>
               </>}
               {!roundQuestions.length && <div className="guideEmpty"><BookOpen size={30}/><h3>This round has no questions</h3><button className="guidePrimary" onClick={()=>showPage("questions")}>Edit Questions<ArrowRight size={17}/></button></div>}
               {remainingQuestions(game).length===0 && <button className="guidePrimary" onClick={()=>setDialog("round")}>Round Summary</button>}
@@ -916,12 +916,12 @@ export default function GuidedControl() {
             >
               <ResultChanges game={game} />
               {game.answerRevealed && q && (
-                <div className="publishedAnswer">
+                <div className="publishedAnswer compactHostAnswer">
                   <span>
                     <Check size={17} />
                     ANSWER REVEALED
                   </span>
-                  <p>{q.answer}</p>
+                  <p tabIndex={0}>{q.answer}</p>
                 </div>
               )}
 
@@ -1480,12 +1480,12 @@ function OperatorText({text}:{text:string}) {
 }
 function Answer({ text }: { text: string }) {
   return (
-    <div className="guideAnswer">
+    <div className="guideAnswer compactHostAnswer">
       <span>
         <Shield size={14} />
         ANSWER · HOST ONLY
       </span>
-      <OperatorText text={text}/>
+      <p tabIndex={0}>{text}</p>
     </div>
   );
 }
