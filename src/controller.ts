@@ -4,6 +4,7 @@ import {
   questionSeconds,
   DIFFICULTY,
   initialGame,
+  englishTeamName,
   rankTeams,
   remainingCards,
   useCard,
@@ -152,11 +153,25 @@ export function normalizeGame(value: unknown): Game {
     "sudden-death",
     "finished",
   ];
+  const keepScores = (g.rulesVersion ?? 0) >= 3 || g.history.length > 0 || Boolean(g.playedQuestionIds?.length);
+  const teams = g.teams.map((team, index) => ({
+    ...team,
+    name: englishTeamName(team.name, index),
+    score: keepScores || team.score !== 0 ? team.score : 10,
+  }));
+  const history = g.history.map((entry) => ({
+    ...entry,
+    label: entry.label.replace(/^(.*) · (đúng|sai) · (chủ nhà|Challenge|Steal)$/, (_, name, verdict, kind) => {
+      const team = g.teams.findIndex((item) => item.name === name);
+      return `${teams[team]?.name ?? name} · ${verdict === "đúng" ? "correct" : "incorrect"} · ${kind === "chủ nhà" ? "original team" : kind}`;
+    }),
+  }));
   return {
     ...base,
     ...g,
     rulesVersion:4,
-    teams:(g.rulesVersion??0)>=3 || g.history.length || g.playedQuestionIds?.length ? g.teams : g.teams.map(t=>({...t,score:t.score===0?10:t.score})),
+    teams,
+    history,
     phase: phases.includes(g.phase) ? g.phase : "setup",
     settings: { ...base.settings, ...g.settings, ...(g.rulesVersion===4?{}:{hostMode:"manual" as const}) },
     playedQuestionIds: g.playedQuestionIds ?? [],
@@ -199,13 +214,13 @@ export function prepareHint(g: Game): Game {
   if (!g.rulesConfirmed)
     return {
       ...g,
-      notice: "Cần thống nhất 5 quy ước bổ sung trước khi bắt đầu trận.",
+      notice: "Confirm the match settings before starting.",
     };
   if (!currentQuestion(g)!.hint.trim())
     return {
       ...g,
       notice:
-        "Câu này chưa có gợi ý. Hãy bổ sung gợi ý trong bộ câu hỏi trước khi chơi.",
+        "Add a hint in the question bank before playing this question.",
     };
   return {
     ...g,
@@ -319,7 +334,7 @@ export function challengeTeam(g: Game, index: number, now = Date.now()): Game {
   const result = useCard(g, g.host, "challenge", now);
   if (!result.ok) return { ...g, notice: result.error ?? "" };
   const burned = g.usedCard
-    ? ` Thẻ ${g.usedCard === "double" ? "Double" : "Safe"} của chủ nhà đã cháy.`
+    ? ` The original team's ${g.usedCard === "double" ? "Double High Risk" : "Safe Choice"} card was discarded.`
     : "";
   return {
     ...result.game,
@@ -328,7 +343,7 @@ export function challengeTeam(g: Game, index: number, now = Date.now()): Game {
     answering: index,
     usedCard: null,
     challengeAt: now,
-    notice: `${g.teams[index].name} bị Challenge.${burned}`,
+    notice: `${g.teams[index].name} was challenged.${burned}`,
   };
 }
 export function scoreAnswer(
@@ -365,8 +380,8 @@ export function scoreAnswer(
     answering: index,
     answerRevealed: false,
     notice: correct
-      ? "Đã ghi nhận câu trả lời đúng."
-      : "Đã ghi nhận câu trả lời sai.",
+      ? "Correct answer recorded."
+      : "Incorrect answer recorded.",
   };
   if (kind === "challenge") {
     if (correct && g.settings.challengeCorrect === "host")
@@ -375,14 +390,14 @@ export function scoreAnswer(
         phase: "host-answer",
         answering: g.host,
         usedCard: null,
-        notice: "Challenge đúng. Chủ nhà tiếp tục theo quy ước đã chọn.",
+        notice: "Correct Challenge answer. The original team answers next.",
       };
     return {
       ...next,
       usedCard: null,
       notice: correct
-        ? "Challenge đúng. Câu hỏi kết thúc."
-        : "Challenge sai. Câu hỏi kết thúc, không có Steal.",
+        ? "Correct Challenge answer. The question is over."
+        : "Wrong Challenge answer. The question ends without Steal.",
     };
   }
   if (kind === "host" && !correct && !g.stealUsed) {
@@ -392,14 +407,14 @@ export function scoreAnswer(
         ...next,
         phase: "steal-window",
         stealDeadline: now + g.settings.stealSeconds * 1000,
-        notice: "Chọn đội giơ thẻ Steal nhanh nhất.",
+        notice: "Select the first eligible team to raise its Steal card.",
       };
     if (g.settings.noSteal === "host")
       return {
         ...next,
         phase: "host-answer",
         answering: g.host,
-        notice: "Không có lượt Steal. Chủ nhà được trả lời lại theo quy ước.",
+        notice: "No Steal attempt. The original team can answer again.",
       };
   }
   return next;
@@ -413,7 +428,7 @@ export function stealTeam(g: Game, index: number, now = Date.now()): Game {
     return closeSteal(g);
   const result = useCard(g, index, "steal", now);
   return result.ok
-    ? { ...result.game, notice: `${g.teams[index].name} giành quyền Steal.` }
+    ? { ...result.game, notice: `${g.teams[index].name} won the Steal attempt.` }
     : { ...g, notice: result.error ?? "" };
 }
 export function closeSteal(g: Game): Game {
@@ -424,8 +439,8 @@ export function closeSteal(g: Game): Game {
     answering: g.settings.noSteal === "host" ? g.host : g.answering,
     notice:
       g.settings.noSteal === "host"
-        ? "Không có đội Steal. Chủ nhà được trả lời lại theo quy ước."
-        : "Không có đội Steal. Câu hỏi kết thúc.",
+        ? "No team played Steal. The original team can answer again."
+        : "No team played Steal. The question is over.",
   };
 }
 export function nextQuestion(g: Game): Game {
@@ -520,7 +535,7 @@ export function scoreSudden(g: Game, correct: boolean): Game {
       suddenTeams: left,
       answering: null,
       notice:
-        "Đội trả lời sai dừng tham gia câu phụ này. Các đội còn lại tiếp tục.",
+        "The team that answered incorrectly is out of this tiebreaker. The remaining teams continue.",
     };
   if (g.settings.multiTie === "bracket" && (g.suddenQueue?.length ?? 0) > 0) {
     const [next, ...queue] = g.suddenQueue!;
@@ -531,7 +546,7 @@ export function scoreSudden(g: Game, correct: boolean): Game {
       answering: null,
       suddenQuestion: "",
       suddenAnswer: "",
-      notice: `${g.teams[winner].name} thắng lượt đối đầu. Tiếp tục với ${g.teams[next].name}.`,
+      notice: `${g.teams[winner].name} won the matchup. Next opponent is ${g.teams[next].name}.`,
     };
   }
   return {
@@ -539,12 +554,12 @@ export function scoreSudden(g: Game, correct: boolean): Game {
     phase: "finished",
     suddenWinner: winner,
     answering: null,
-    notice: "Đã xác định đội vô địch bằng Sudden Death.",
+    notice: "The champion was decided in Sudden Death.",
   };
 }
 export function validateQuestions(value: unknown): Question[] {
   if (!Array.isArray(value) || value.length === 0)
-    throw new Error("File cần chứa một mảng câu hỏi.");
+    throw new Error("The file must contain an array of questions.");
   const ids = new Set<string>();
   return value.map((q, i) => {
     if (
@@ -559,9 +574,9 @@ export function validateQuestions(value: unknown): Question[] {
       !q.answer.trim()
     )
       throw new Error(
-        `Câu ${i + 1} thiếu gợi ý, nội dung, đáp án hoặc sai vòng / độ khó.`,
+        `Question ${i + 1} is missing a hint, question, or answer, or has an invalid round or difficulty.`,
       );
-    if (q.seconds !== undefined && (!Number.isInteger(q.seconds) || q.seconds < 5 || q.seconds > 600)) throw new Error(`Câu ${i + 1}: thời gian phải từ 5 đến 600 giây.`);
+    if (q.seconds !== undefined && (!Number.isInteger(q.seconds) || q.seconds < 5 || q.seconds > 600)) throw new Error(`Question ${i + 1}: the time limit must be 5 to 600 seconds.`);
     const id =
       typeof q.id === "string" && !ids.has(q.id) ? q.id : crypto.randomUUID();
     ids.add(id);

@@ -24,9 +24,9 @@ export function CardResultOverlay({event,onFinish,sound=false}:{event:CardActiva
   const hide=()=>{if(document.hidden)onFinish(event.id);};document.addEventListener('visibilitychange',hide);
   return()=>{ctx.revert();burst?.reset();clearTimeout(watchdog);document.removeEventListener('visibilitychange',hide);if(audio)void audio.close().catch(()=>{});};
  },[event.id]);
- return <div ref={root} className={`cardResult ${result.delta<0?'resultLoss':'resultGain'}`} style={{'--power-color':config.color} as CSSProperties} role="status" aria-label={`${event.teamName}: ${result.delta} điểm`}>
+ return <div ref={root} className={`cardResult ${result.delta<0?'resultLoss':'resultGain'}`} style={{'--power-color':config.color} as CSSProperties} role="status" aria-label={`${event.teamName}: ${result.delta} points`}>
   <div className="resultHalo"/><canvas ref={canvas} className="cardCanvas"/>
   <div className="resultArt"><img src={config.image} alt={config.name}/></div>
-  <div className="resultCopy"><h1>{event.teamName}</h1><strong className="resultDelta">{result.delta>0?'+':''}{result.delta}<span>ĐIỂM</span></strong><h2>{result.delta===0&&event.card==='safe'?'ĐƯỢC BẢO VỆ':result.correct?'CHÍNH XÁC':'CHƯA CHÍNH XÁC'}</h2><p>Tổng điểm <b>{result.total}</b></p>{event.card==='challenge'&&<div className="resultSource">Thách đấu từ {result.sourceName}</div>}</div>
+  <div className="resultCopy"><h1>{event.teamName}</h1><strong className="resultDelta">{result.delta>0?'+':''}{result.delta}<span>POINTS</span></strong><h2>{result.delta===0&&event.card==='safe'?'PROTECTED':result.correct?'CORRECT':'INCORRECT'}</h2><p>Total Score <b>{result.total}</b></p>{event.card==='challenge'&&<div className="resultSource">Challenged by {result.sourceName}</div>}</div>
  </div>;
 }

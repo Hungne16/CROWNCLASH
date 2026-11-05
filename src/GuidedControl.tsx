@@ -93,8 +93,6 @@ type Commit = (fn: (g: Game) => Game) => void;
 const INTRO = "dautri-guided-intro-v1";
 const signed = (n: number) =>
   n > 0 ? `+${n}` : n < 0 ? `−${Math.abs(n)}` : "0";
-const friendly = (s: string) =>
-  s.replaceAll("Challenge", "Thách đố").replaceAll("Steal", "Cướp điểm");
 
 export default function GuidedControl() {
   const presentation = location.pathname === "/presentation",
@@ -156,7 +154,7 @@ export default function GuidedControl() {
     ? game.answering
     : game.host;
   const hostName =
-    game.host === null ? "đội chủ nhà" : game.teams[game.host].name;
+    game.host === null ? "the original team" : game.teams[game.host].name;
   const roundQuestions = game.questions.filter(
       (item) => item.round === game.round,
     ),
@@ -310,16 +308,16 @@ export default function GuidedControl() {
         }
       }}
     >
-      {animation.event && <div className="animationStatus"><b>{animation.event.result ? "Kết quả" : "Đang phát"} · {animation.event.teamName}</b><button onClick={animation.skip}>Bỏ qua hoạt ảnh</button></div>}
+      {animation.event && <div className="animationStatus"><b>{animation.event.result ? "Result" : "Playing"} · {animation.event.teamName}</b><button onClick={animation.skip}>Skip Animation</button></div>}
       {practice && (
         <div className="practiceBanner">
           <span>
             <Zap size={16} />
-            <b>Đang tập điều khiển</b>
+            <b>Practice Mode</b>
 
           </span>
           <button onClick={returnToReal}>
-            Về trận thật <ArrowRight size={15} />
+            Back to Live Match <ArrowRight size={15} />
           </button>
         </div>
       )}
@@ -335,7 +333,7 @@ export default function GuidedControl() {
             <Gamepad2 size={24} />
           </span>
           <b>
-            ĐẤU TRÍ
+            CROWN CLASH
           </b>
         </button>
         <div className="guideHeaderActions">
@@ -343,15 +341,15 @@ export default function GuidedControl() {
           <a
             className="guideOutline guideAccount"
             href="/account"
-            aria-label="Tài khoản admin"
-            title="Soạn và lưu bộ đề trên tài khoản"
+            aria-label="Admin Account"
+            title="Edit and save your question set online"
           >
             <UserRound size={17} />
-            <span>Tài khoản admin</span>
+            <span>Admin Account</span>
           </a>
           <button className="guideOutline" onClick={openAudience}>
             <Monitor size={17} />
-            <span>Màn hình người chơi</span>
+            <span>Audience Screen</span>
           </button>
           <div className="guideMenuWrap" ref={menuRef}>
             <button
@@ -360,14 +358,14 @@ export default function GuidedControl() {
               aria-expanded={menu}
             >
               <Settings2 size={17} />
-              <span>Quản lý</span>
+              <span>Manage</span>
               <ChevronDown size={14} />
             </button>
             {menu && (
-              <nav className="guideMenu" aria-label="Quản lý trận">
+              <nav className="guideMenu" aria-label="Match Management">
                 <button onClick={() => showPage("play")}>
                   <Play size={16} />
-                  Trở lại trò chơi
+                  Back to Game
                 </button>
                 <button onClick={() => showPage("settings")}>
                   <Settings2 size={16} />
@@ -375,14 +373,14 @@ export default function GuidedControl() {
                 </button>
                 <button onClick={() => showPage("questions")}>
                   <BookOpen size={16} />
-                  Soạn bộ câu hỏi
+                  Edit Questions
                 </button>
-                <a href={practice?"/leaderboard?practice=1":"/leaderboard"} target="_blank" rel="noreferrer">Bảng xếp hạng trực tiếp ↗</a>
-                <a href={practice?"/leaderboard?edit=1&practice=1":"/leaderboard?edit=1"} target="_blank" rel="noreferrer">Edit Overlay · Căn chữ trên cờ ↗</a>
-                <a href="/animation-preview" target="_blank" rel="noreferrer">Thử thẻ quyền năng ↗</a>
+                <a href={practice?"/leaderboard?practice=1":"/leaderboard"} target="_blank" rel="noreferrer">Live Leaderboard ↗</a>
+                <a href={practice?"/leaderboard?edit=1&practice=1":"/leaderboard?edit=1"} target="_blank" rel="noreferrer">Edit Overlay · Adjust Banner Text ↗</a>
+                <a href="/animation-preview" target="_blank" rel="noreferrer">Preview Power Cards ↗</a>
                 <button onClick={() => showPage("history")}>
                   <History size={16} />
-                  Xem lịch sử điểm
+                  View Score History
                 </button>
                 <hr />
                 <button
@@ -392,7 +390,7 @@ export default function GuidedControl() {
                   }}
                 >
                   <HelpCircle size={16} />
-                  Cách điều khiển
+                  Host Guide
                 </button>
                 <button
                   onClick={() => {
@@ -405,8 +403,7 @@ export default function GuidedControl() {
                     });
                   }}
                 >
-                  {sound ? <Volume2 size={16} /> : <VolumeX size={16} />}Âm
-                  thanh: {sound ? "đang bật" : "đang tắt"}
+                  {sound ? <Volume2 size={16} /> : <VolumeX size={16} />} Sound {sound ? "On" : "Off"}
                 </button>
                 <button
                   onClick={() => {
@@ -415,7 +412,7 @@ export default function GuidedControl() {
                   }}
                 >
                   <RotateCcw size={16} />
-                  Tạo trận mới
+                  New Match
                 </button>
               </nav>
             )}
@@ -431,13 +428,13 @@ export default function GuidedControl() {
 
       {welcome ? (
         <main className="guideWelcome">
-          <h1>Sẵn sàng chơi?</h1>
+          <h1>Ready to Play?</h1>
           <div className="welcomeSteps">
             <div>
               <span>
                 <Target size={24} />
               </span>
-              <b>1. Chọn đội</b>
+              <b>1. Select a Team</b>
 
             </div>
             <ChevronRight size={19} />
@@ -445,7 +442,7 @@ export default function GuidedControl() {
               <span>
                 <BookOpen size={24} />
               </span>
-              <b>2. Mở câu hỏi</b>
+              <b>2. Reveal Question</b>
 
             </div>
             <ChevronRight size={19} />
@@ -453,7 +450,7 @@ export default function GuidedControl() {
               <span>
                 <Check size={25} />
               </span>
-              <b>3. Chấm câu trả lời</b>
+              <b>3. Score the Answer</b>
 
             </div>
           </div>
@@ -465,10 +462,10 @@ export default function GuidedControl() {
               }
             >
               {!game.questions.length
-                ? "Soạn câu hỏi đầu tiên"
+                ? "Write the First Question"
                 : game.history.length || isLive(game)
-                  ? "Tiếp tục trận đã lưu"
-                  : "Bắt đầu điều khiển"}
+                  ? "Resume Saved Match"
+                  : "Start Hosting"}
               <ArrowRight size={19} />
             </button>
             <button
@@ -477,32 +474,32 @@ export default function GuidedControl() {
               disabled={!game.questions.length}
               title={
                 !game.questions.length
-                  ? "Soạn ít nhất một câu hỏi trước khi tập"
+                  ? "Add at least one question before practicing"
                   : undefined
               }
             >
               <Play size={18} />
-              Tập thử một câu trước
+              Practice a Question
             </button>
           </div>
           <p className="practicePromise">
             {game.questions.length
-              ? "Chế độ tập hoàn toàn riêng. Bạn có thể bấm thử mà không thay đổi trận thật."
-              : "Bộ câu hỏi đang trống. Admin có thể tự soạn hoặc nhập bộ đề JSON."}
+              ? "Practice mode runs separately from your live match."
+              : "Your question bank is empty. Add questions or import a JSON file."}
           </p>
           <button
             className="welcomePrepare"
             onClick={() => showPage("settings")}
           >
-            Chưa chuẩn bị đội và câu hỏi?{" "}
+            Need to set up teams and questions?{" "}
             <span>
-              Chuẩn bị trận đấu <ArrowRight size={13} />
+              Set Up the Match <ArrowRight size={13} />
             </span>
           </button>
         </main>
       ) : page === "play" ? game.introSlide != null ? (<IntroControl game={game} commit={commit} onAudience={openAudience}/>) : (
         <main className={`guideShell operatorDesk operator-${game.phase}`}>
-          <div className="simpleScoreStrip" aria-label="Điểm hiện tại">
+          <div className="simpleScoreStrip" aria-label="Current Scores">
             {game.teams.map((team, i) => (
               <div key={i} style={teamStyle(i)}>
                 <span>
@@ -511,41 +508,41 @@ export default function GuidedControl() {
                 </span>
                 <b>
                   {team.score}
-                  <small>điểm</small>
+                  <small>points</small>
                 </b>
               </div>
             ))}
           </div>
           <div className="guideRoundLine">
             <span>
-              Vòng <b>{game.round}</b> / {gameRounds(game).length} · {gameRounds(game)[game.round - 1]}
+              Round <b>{game.round}</b> / {gameRounds(game).length} · {gameRounds(game)[game.round - 1]}
               {q && (game.phase !== "setup" || game.boardSelectedId === q.id) && (
                 <>
                   <i />
-                  Câu <b>{questionNumber}</b> / {roundQuestions.length}
+                  Question <b>{questionNumber}</b> / {roundQuestions.length}
                 </>
               )}
-              {q?.id.startsWith("demo") && <em>CÂU MẪU</em>}
+              {q?.id.startsWith("demo") && <em>SAMPLE QUESTION</em>}
             </span>
             <button onClick={() => setDialog("scores")}>
-              Xem điểm & thẻ <ChevronRight size={14} />
+              View Scores & Cards <ChevronRight size={14} />
             </button>
           </div>
 
           {game.phase === "setup" && (
-            <Step number={1} title="Chọn đội và ô câu hỏi" instruction="Đội chọn số, MC bấm ô tương ứng rồi mở gợi ý.">
+            <Step number={1} title="Select a Team and Question" instruction="Ask the team to pick a number, select that tile, and reveal the hint.">
               <div className="simpleTeamGrid boardTeamGrid">
-                {game.teams.map((team,i)=><button key={i} style={teamStyle(i)} disabled={hasHostedRound(game,i)} className={game.host===i?"selected":""} onClick={()=>commit(g=>selectHost(g,i))}><span className="simpleTeamInitial">{i+1}</span><b>{team.name}</b><span className="simpleTeamCheck">{hasHostedRound(game,i)?"Đã dùng lượt":game.host===i&&<Check size={17}/>}</span></button>)}
+                {game.teams.map((team,i)=><button key={i} style={teamStyle(i)} disabled={hasHostedRound(game,i)} className={game.host===i?"selected":""} onClick={()=>commit(g=>selectHost(g,i))}><span className="simpleTeamInitial">{i+1}</span><b>{team.name}</b><span className="simpleTeamCheck">{hasHostedRound(game,i)?"Turn Used":game.host===i&&<Check size={17}/>}</span></button>)}
               </div>
               <QuestionBoard game={game} disabled={game.host===null} onChoose={id=>commit(g=>chooseQuestion(g,id))}/>
-              {game.host===null && <div className="boardNoHost">Chọn đội đến lượt trước.</div>}
+              {game.host===null && <div className="boardNoHost">Select the team whose turn it is first.</div>}
               {q && game.boardSelectedId===q.id && <>
-                <div className="boardSelectedMeta"><b>Câu {questionNumber}</b><span>{difficulty?.label} · {difficulty?.points} điểm · {q ? questionSeconds(q) : 0} giây</span></div>
-                <div className="guideNext"><button className="guidePrimary" disabled={game.host===null} onClick={()=>game.rulesConfirmed?commit(prepareHint):setDialog("rules")}>Mở gợi ý · Câu {questionNumber}<ArrowRight size={19}/></button></div>
-                <details className="simplePreview questionBoardHelp"><summary>Xem trước (MC)<ChevronDown size={13}/></summary><p>{q.text}</p><span>Đáp án: {q.answer}</span></details>
+                <div className="boardSelectedMeta"><b>Question {questionNumber}</b><span>{difficulty?.label} · {difficulty?.points} points · {q ? questionSeconds(q) : 0} seconds</span></div>
+                <div className="guideNext"><button className="guidePrimary" disabled={game.host===null} onClick={()=>game.rulesConfirmed?commit(prepareHint):setDialog("rules")}>Reveal Hint · Question {questionNumber}<ArrowRight size={19}/></button></div>
+                <details className="simplePreview questionBoardHelp"><summary>Host Preview<ChevronDown size={13}/></summary><p>{q.text}</p><span>Answer: {q.answer}</span></details>
               </>}
-              {!roundQuestions.length && <div className="guideEmpty"><BookOpen size={30}/><h3>Vòng này chưa có câu hỏi</h3><button className="guidePrimary" onClick={()=>showPage("questions")}>Soạn câu hỏi<ArrowRight size={17}/></button></div>}
-              {remainingQuestions(game).length===0 && <button className="guidePrimary" onClick={()=>setDialog("round")}>Tổng kết vòng</button>}
+              {!roundQuestions.length && <div className="guideEmpty"><BookOpen size={30}/><h3>This round has no questions</h3><button className="guidePrimary" onClick={()=>showPage("questions")}>Edit Questions<ArrowRight size={17}/></button></div>}
+              {remainingQuestions(game).length===0 && <button className="guidePrimary" onClick={()=>setDialog("round")}>Round Summary</button>}
             </Step>
           )}
 
@@ -554,32 +551,32 @@ export default function GuidedControl() {
               number={2}
               title={
                 game.hintRead
-                  ? `Chốt thẻ cho ${hostName}.`
-                  : `Đọc gợi ý cho ${hostName}.`
+                  ? `Confirm the card for ${hostName}.`
+                  : `Read the hint to ${hostName}.`
               }
               instruction={
                 game.hintRead
-                  ? "Đội đã nghe gợi ý nhưng chưa biết câu hỏi. Ghi nhận lựa chọn thẻ, rồi mới mở câu hỏi."
-                  : "Câu hỏi chính vẫn đang ẩn. Đọc gợi ý bên dưới cho đội nghe, rồi bấm “Đã đọc xong gợi ý”."
+                  ? "Record the team's card choice before revealing the question."
+                  : "Read the hint aloud, then select “Hint Read”."
               }
             >
               <ReadAloud
                 label={
                   game.hintRead
-                    ? "GỢI Ý ĐÃ ĐỌC · CÂU HỎI VẪN ĐANG ẨN"
-                    : "BẠN ĐỌC GỢI Ý NÀY"
+                    ? "HINT READ · QUESTION HIDDEN"
+                    : "READ THIS HINT ALOUD"
                 }
                 text={
                   q.hint ||
-                  "Câu này chưa có gợi ý. MC có thể đọc gợi ý trực tiếp."
+                  "There is no saved hint. The host can give one aloud."
                 }
               />
               {game.hintRead ? (
                 <>
                   <div className="powerQuestion">
-                    <h3>{hostName} chọn cách chơi nào?</h3>
+                    <h3>Which card will {hostName} play?</h3>
                     <span>
-                      Chọn một trong ba cách. Thẻ chỉ bị trừ khi bạn mở câu hỏi.
+                      Choose an option. The card is spent when you reveal the question.
                     </span>
                   </div>
                   <div className="simplePowers cardHand">
@@ -587,19 +584,19 @@ export default function GuidedControl() {
                       [
                         {
                           id: "none",
-                          name: "Không dùng thẻ",
+                          name: "No Card",
                           correct: difficulty!.points,
                           wrong: -difficulty!.points,
                         },
                         {
                           id: "double",
-                          name: "Cược lớn",
+                          name: "Double High Risk",
                           correct: difficulty!.points * 2,
                           wrong: -difficulty!.points * 2,
                         },
                         {
                           id: "safe",
-                          name: "An toàn",
+                          name: "Safe Choice",
                           correct: difficulty!.points,
                           wrong: 0,
                         },
@@ -618,15 +615,15 @@ export default function GuidedControl() {
                           onClick={() => {setPower(option.id);commit(g=>({...g,cardPreview:option.id}));}}
                           aria-pressed={selected}
                         >
-                          {option.id !== "none" && <><CardArt card={option.id} className="powerChoiceArt"/><span className="cardHandCount">{game.teams[game.host!].cards[option.id]} thẻ</span></>}
+                          {option.id !== "none" && <><CardArt card={option.id} className="powerChoiceArt"/><span className="cardHandCount">{game.teams[game.host!].cards[option.id]} cards</span></>}
                           <span className="powerRadio">
                             {selected && <Check size={12} />}
                           </span>
                           <strong>{option.name}</strong>
                           <span>
                             {unavailable
-                              ? "Đã hết thẻ"
-                              : `Đúng ${signed(option.correct)} · Sai ${signed(option.wrong)}`}
+                              ? "No Cards Left"
+                              : `Correct ${signed(option.correct)} · Incorrect ${signed(option.wrong)}`}
                           </span>
                         </button>
                       );
@@ -634,14 +631,13 @@ export default function GuidedControl() {
                   </div>
                   {game.usedCard && (
                     <p className="guideInlineNote">
-                      Thẻ đã được dùng ở lượt đang lưu. Bạn có thể tiếp tục mở
-                      câu hỏi.
+                      The card was already played in this saved turn. You can reveal the question.
                     </p>
                   )}
                   <div className="guideNext">
                     <button className="guidePrimary" onClick={openWithPower}>
                       <Play size={18} />
-                      Mở câu hỏi lên màn chiếu · {q ? questionSeconds(q) : 0} giây
+                      Reveal Question on Audience Screen · {q ? questionSeconds(q) : 0} seconds
                     </button>
                   </div>
                 </>
@@ -651,7 +647,7 @@ export default function GuidedControl() {
                     className="guidePrimary"
                     onClick={() => commit(acknowledgeHint)}
                   >
-                    Đã đọc xong gợi ý — chọn thẻ <ArrowRight size={18} />
+                    Hint Read — Choose a Card <ArrowRight size={18} />
                   </button>
                 </div>
               )}
@@ -667,7 +663,7 @@ export default function GuidedControl() {
                 }
               >
                 <ArrowLeft size={14} />
-                Quay lại chọn đội
+                Back to Team Selection
               </button>
             </Step>
           )}
@@ -675,11 +671,11 @@ export default function GuidedControl() {
           {game.phase === "question" && q && !choosingChallenge && (
             <Step
               number={3}
-              title={`Nghe ${hostName} trả lời.`}
+              title={`Listen to ${hostName}'s answer.`}
               instruction={
                 practice
-                  ? "Giả sử đội đã trả lời. So với đáp án bên dưới và bấm Đúng hoặc Sai."
-                  : "Đọc câu hỏi, nghe câu trả lời của đội, rồi bấm Đúng hoặc Sai."
+                  ? "Assume the team has answered. Check the answer below and mark it correct or incorrect."
+                  : "Read the question, listen to the answer, and mark it correct or incorrect."
               }
               aside={
                 <GuideClock
@@ -695,27 +691,27 @@ export default function GuidedControl() {
               {time.seconds === 0 && (
                 <div className="guideTimeUp">
                   <Clock size={18} />
-                  Đã hết giờ. Bạn vẫn là người xác nhận đúng hoặc sai.
+                  Time is up. You can still score the answer.
                 </div>
               )}
               <ReadAloud
-                label="CÂU HỎI ĐANG HIỆN VỚI NGƯỜI CHƠI"
+                label="QUESTION ON THE AUDIENCE SCREEN"
                 text={q.text}
               />
               {q.image && (
                 <img
                   className="guideQuestionImage"
                   src={q.image}
-                  alt="Minh họa câu hỏi"
+                  alt="Question Illustration"
                 />
               )}
               <Answer text={q.answer} />
               {game.usedCard && (
                 <div className="guideActivePower">
                   <CardArt card={game.usedCard} className="inlineCardArt"/>
-                  Đội đã chọn{" "}
-                  <b>{game.usedCard === "double" ? "Cược lớn" : "An toàn"}</b>.
-                  Điểm trên hai nút đã được tính sẵn.
+                  The team played{" "}
+                  <b>{game.usedCard === "double" ? "Double High Risk" : "Safe Choice"}</b>.
+                  The score buttons include the card effect.
                 </div>
               )}
               <GradeActions game={game} onGrade={grade} />
@@ -723,13 +719,13 @@ export default function GuidedControl() {
                 game.teams[game.host].cards.challenge > 0 && (
                   <div className="simpleChallenge">
                     <span>
-                      <b>Đội có yêu cầu Thách đố?</b>
+                      <b>Does the team want to play Challenge?</b>
                       <small>
                         {challengeAvailable
-                          ? `Còn ${challengeSeconds} giây để chỉ định đội khác.`
+                          ? `Choose another team within ${challengeSeconds} seconds.`
                           : game.paused
-                            ? "Tiếp tục đồng hồ nếu đội muốn dùng thẻ."
-                            : "Đã hết thời gian dùng thẻ cho câu này."}
+                            ? "Resume the timer to use this card."
+                            : "The Challenge window has closed."}
                       </small>
                     </span>
                     <button
@@ -738,7 +734,7 @@ export default function GuidedControl() {
                       onClick={() => setChoosingChallenge(true)}
                     >
                       <CardArt card="challenge" className="challengeChoiceArt"/>
-                      <b>Dùng Thách đố</b>
+                      <b>Play Challenge</b>
                     </button>
                   </div>
                 )}
@@ -749,12 +745,12 @@ export default function GuidedControl() {
             (game.phase === "challenge" && game.answering === null)) && (
             <Step
               number={3}
-              title={`${hostName} thách đố đội nào?`}
-              instruction="Bấm đội mà chủ nhà chỉ định. Đội đó phải trả lời ngay."
+              title={`Which team will ${hostName} challenge?`}
+              instruction="Select the nominated team. It must answer immediately."
               aside={
                 game.phase === "question" ? (
                   <span className="challengeDeadline">
-                    Còn {challengeSeconds}s
+                    {challengeSeconds}s left
                   </span>
                 ) : undefined
               }
@@ -763,16 +759,15 @@ export default function GuidedControl() {
                 <div className="guideBurn">
                   <Zap size={19} />
                   <span>
-                    Thẻ{" "}
-                    <b>{game.usedCard === "double" ? "Cược lớn" : "An toàn"}</b>{" "}
-                    đã đặt sẽ cháy. Chủ nhà mất cả thẻ đó và thẻ Thách đố.
+                    The{" "}
+                    <b>{game.usedCard === "double" ? "Double High Risk" : "Safe Choice"}</b>{" "}
+                    is discarded. The original team spends both cards.
                   </span>
                 </div>
               )}
               {!challengeAvailable && game.phase === "question" && (
                 <div className="guideTimeUp">
-                  Đã hết hạn Thách đố. Hãy quay lại để chấm câu trả lời của chủ
-                  nhà.
+                  The Challenge window has closed. Go back to score the original team's answer.
                 </div>
               )}
               <div className="guideTargetList">
@@ -791,7 +786,7 @@ export default function GuidedControl() {
                         }}
                       >
                         <span className="simpleTeamInitial">{i + 1}</span>
-                        <b>Thách đố {team.name}</b>
+                        <b>Challenge {team.name}</b>
                         <ArrowRight size={18} />
                       </button>
                     ),
@@ -803,7 +798,7 @@ export default function GuidedControl() {
                   onClick={() => setChoosingChallenge(false)}
                 >
                   <ArrowLeft size={14} />
-                  Không dùng thẻ, quay lại câu hỏi
+                  Return to Question
                 </button>
               )}
             </Step>
@@ -816,32 +811,32 @@ export default function GuidedControl() {
                 number={3}
                 title={
                   game.phase === "challenge"
-                    ? `${game.teams[responder].name} phải trả lời ngay.`
-                    : `Nghe ${game.teams[responder].name} trả lời.`
+                    ? `${game.teams[responder].name} must answer now.`
+                    : `Listen to ${game.teams[responder].name}'s answer.`
                 }
                 instruction={
                   game.phase === "challenge"
-                    ? "Chủ nhà đã dùng Thách đố. Bạn nghe câu trả lời và chấm kết quả."
+                    ? "The original team played Challenge. Listen to the answer and score it."
                     : game.phase === "steal-answer"
-                      ? "Đội này đã giành quyền cướp điểm. Nghe và chấm câu trả lời cho chính câu vừa rồi."
-                      : "Theo quy ước đã chọn, chủ nhà được tiếp tục trả lời câu hỏi này."
+                      ? "This team won the Steal attempt. Score its answer to the same question."
+                      : "The match rules allow the original team to answer this question again."
                 }
               >
-                {game.phase === "challenge" && game.notice.includes("cháy") && (
+                {game.phase === "challenge" && game.notice.includes("discarded") && (
                   <div className="guideBurn">
                     <Zap size={18} />
-                    {friendly(game.notice)}
+                    {game.notice}
                   </div>
                 )}
-                <ReadAloud label="CÂU HỎI" text={q.text} />
+                <ReadAloud label="QUESTION" text={q.text} />
                 <Answer text={q.answer} />
                 <GradeActions game={game} onGrade={grade} />
                 <p className="guideInlineNote">
                   {game.phase === "challenge"
-                    ? "Nếu đội bị Thách đố trả lời sai, câu hỏi kết thúc ngay và không có cướp điểm."
+                    ? "A wrong Challenge answer ends the question without a Steal attempt."
                     : game.phase === "steal-answer"
-                      ? "Đây là lượt cướp điểm duy nhất. Dù đúng hay sai, câu hỏi sẽ kết thúc."
-                      : "Điểm trên hai nút đã được tính theo thẻ còn hiệu lực."}
+                      ? "The question ends after this Steal attempt."
+                      : "The score buttons include any active card effect."}
                 </p>
               </Step>
             )}
@@ -849,11 +844,11 @@ export default function GuidedControl() {
           {game.phase === "steal-window" && (
             <Step
               number={3}
-              title="Có đội nào giơ thẻ cướp điểm?"
+              title="Who Raised a Steal Card?"
               instruction={
                 practice
-                  ? "Giả sử Đội 2 giơ thẻ nhanh nhất. Bấm vào Đội 2 để cho đội trả lời."
-                  : "Chủ nhà vừa trả lời sai. Nhìn các đội giơ thẻ và bấm vào đội giơ nhanh nhất."
+                  ? "Assume Team 2 raised its card first. Select Team 2 to let it answer."
+                  : "The original team answered incorrectly. Select the first eligible team to raise a Steal card."
               }
               aside={
                 <span className="challengeDeadline">
@@ -862,7 +857,7 @@ export default function GuidedControl() {
                     0,
                     Math.ceil(((game.stealDeadline ?? now) - now) / 1000),
                   )}{" "}
-                  giây
+                  seconds
                 </span>
               }
             >
@@ -878,11 +873,11 @@ export default function GuidedControl() {
                       >
                         <span className="simpleTeamInitial">{i + 1}</span>
                         <span>
-                          <b><CardArt card="steal" className="inlineCardArt"/>{team.name} giơ nhanh nhất</b>
+                          <b><CardArt card="steal" className="inlineCardArt"/>{team.name} raised its card first</b>
                           <small>
                             {team.cards.steal
-                              ? `Còn ${team.cards.steal} thẻ cướp điểm · chọn sẽ dùng 1 thẻ`
-                              : "Đã hết thẻ cướp điểm"}
+                              ? `${team.cards.steal} Steal cards left · selecting spends one`
+                              : "No Steal Cards Left"}
                           </small>
                         </span>
                         <ArrowRight size={18} />
@@ -896,12 +891,11 @@ export default function GuidedControl() {
                   className="guideOutline full"
                   onClick={() => commit(closeSteal)}
                 >
-                  Không đội nào giơ thẻ <ArrowRight size={17} />
+                  No Team Raised a Card <ArrowRight size={17} />
                 </button>
               </div>
               <p className="guideInlineNote">
-                Mỗi câu chỉ có một lượt cướp điểm. Website tự trừ thẻ và tính
-                điểm.
+                Each question allows one Steal attempt. The game spends the card and calculates points.
               </p>
             </Step>
           )}
@@ -911,13 +905,13 @@ export default function GuidedControl() {
               number={4}
               title={
                 practice
-                  ? "Bạn vừa điều khiển xong một câu!"
-                  : "Câu này đã xong."
+                  ? "You Hosted a Practice Question!"
+                  : "Question Complete"
               }
               instruction={
                 game.answerRevealed
-                  ? "Người chơi đã thấy đáp án. Bạn có thể chuyển sang lượt tiếp theo."
-                  : "Điểm đã được cập nhật. Bấm nút phía dưới để công bố đáp án cho người chơi."
+                  ? "The answer is visible. You can move to the next turn."
+                  : "Scores are updated. Reveal the answer when ready."
               }
             >
               <ResultChanges game={game} />
@@ -925,7 +919,7 @@ export default function GuidedControl() {
                 <div className="publishedAnswer">
                   <span>
                     <Check size={17} />
-                    ĐÁP ÁN ĐÃ CÔNG BỐ
+                    ANSWER REVEALED
                   </span>
                   <p>{q.answer}</p>
                 </div>
@@ -947,18 +941,18 @@ export default function GuidedControl() {
                   }
                 >
                   {!game.answerRevealed
-                    ? "Công bố đáp án cho người chơi"
+                    ? "Reveal Answer"
                     : practice
-                      ? "Tôi hiểu rồi — vào trận thật"
+                      ? "Go to Live Match"
                       : hasNext
-                        ? "Về bảng chọn câu"
-                        : `Tổng kết vòng ${game.round}`}
+                        ? "Back to Question Board"
+                        : `Round Summary ${game.round}`}
                   <ArrowRight size={19} />
                 </button>
               </div>
               {practice && game.answerRevealed && (
                 <button className="guideBack" onClick={finishQuestion}>
-                  Tập thêm một câu nữa <ArrowRight size={14} />
+                  Practice Another Question <ArrowRight size={14} />
                 </button>
               )}
             </Step>
@@ -966,8 +960,8 @@ export default function GuidedControl() {
 
           {game.phase === "round-summary" && (
             <Step
-              title={`Đã hoàn thành vòng ${game.round}.`}
-              instruction="Điểm và những thẻ chưa dùng được giữ nguyên. Bạn không cần cấp lại thẻ hay nhập lại điểm."
+              title={`Round ${game.round} Complete`}
+              instruction="Scores and unused cards carry over to the next round."
             >
               <SimpleRanking game={game} />
               <div className="guideNext">
@@ -976,8 +970,8 @@ export default function GuidedControl() {
                   onClick={() => commit(finishRound)}
                 >
                   {game.round >= gameRounds(game).length
-                    ? "Xem kết quả chung cuộc"
-                    : `Bắt đầu vòng ${game.round + 1}`}
+                    ? "View Final Results"
+                    : `Start Round ${game.round + 1}`}
                   <ArrowRight size={19} />
                 </button>
               </div>
@@ -988,13 +982,13 @@ export default function GuidedControl() {
             <Step
               title={
                 game.suddenWinner !== null || tiedLeaders(game).length === 1
-                  ? "Trận đấu đã có nhà vô địch!"
-                  : "Cần một câu hỏi phụ để phân thắng thua."
+                  ? "We Have a Champion!"
+                  : "A Tiebreaker Is Needed"
               }
               instruction={
                 game.suddenWinner !== null || tiedLeaders(game).length === 1
-                  ? "Xếp hạng được tính theo điểm, rồi số thẻ còn lại."
-                  : "Các đội dẫn đầu bằng cả điểm và số thẻ còn lại. Bạn sẽ tổ chức một câu phụ, không dùng thẻ."
+                  ? "Rankings are based on scores, then unused cards."
+                  : "The leaders are tied on points and unused cards. Run a tiebreaker without power cards."
               }
             >
               <div className="guideWinner">
@@ -1020,8 +1014,8 @@ export default function GuidedControl() {
                   }
                 >
                   {game.suddenWinner === null && tiedLeaders(game).length > 1
-                    ? "Bắt đầu câu hỏi phụ"
-                    : "Tạo trận mới"}
+                    ? "Start Tiebreaker"
+                    : "New Match"}
                   <ArrowRight size={19} />
                 </button>
               </div>
@@ -1032,21 +1026,20 @@ export default function GuidedControl() {
             <Step
               title={
                 game.answering === null
-                  ? "Đội nào bấm chuông trước?"
-                  : `Nghe ${game.teams[game.answering].name} trả lời.`
+                  ? "Who Buzzed In First?"
+                  : `Listen to ${game.teams[game.answering].name}'s answer.`
               }
               instruction={
                 game.answering === null
-                  ? "Đọc câu hỏi phụ. Khi một đội giành chuông, bấm vào tên đội đó. Chuông từ màn hình người chơi cũng được nhận tự động."
-                  : "Đối chiếu đáp án rồi chấm. Câu phụ không dùng thẻ và không cộng trừ điểm."
+                  ? "Read the tiebreaker question and select the first team to buzz in. Buzzes from the audience screen register automatically."
+                  : "Check the answer and score it. The tiebreaker uses no cards and awards no points."
               }
             >
               {game.suddenQuestion ? (
-                <ReadAloud label="CÂU HỎI PHỤ" text={game.suddenQuestion} />
+                <ReadAloud label="TIEBREAKER QUESTION" text={game.suddenQuestion} />
               ) : (
                 <div className="guideSubline">
-                  Bạn có thể đọc câu phụ trực tiếp, hoặc nhập để đưa lên màn
-                  hình người chơi.
+                  Read the tiebreaker aloud or enter it for the audience screen.
                 </div>
               )}
               <button
@@ -1059,7 +1052,7 @@ export default function GuidedControl() {
                   setDialog("sudden");
                 }}
               >
-                Nhập câu hỏi phụ & đáp án <ChevronRight size={14} />
+                Enter Tiebreaker Question & Answer <ChevronRight size={14} />
               </button>
               {game.answering === null ? (
                 <div className="guideTargetList">
@@ -1070,7 +1063,7 @@ export default function GuidedControl() {
                       onClick={() => commit((g) => buzz(g, i))}
                     >
                       <span className="simpleTeamInitial">{i + 1}</span>
-                      <b>{game.teams[i].name} giành chuông</b>
+                      <b>{game.teams[i].name} buzzed in</b>
                       <Zap size={18} />
                     </button>
                   ))}
@@ -1081,20 +1074,20 @@ export default function GuidedControl() {
                   <div className="simpleGrades">
                     <button className="gradeWrong" onClick={() => grade(false)}>
                       <X size={24} />
-                      <b>Trả lời sai</b>
+                      <b>Incorrect</b>
                     </button>
                     <button
                       className="gradeCorrect"
                       onClick={() => grade(true)}
                     >
                       <Check size={24} />
-                      <b>Trả lời đúng</b>
+                      <b>Correct</b>
                     </button>
                   </div>
                 </>
               )}
               {game.notice && (
-                <p className="guideInlineNote">{friendly(game.notice)}</p>
+                <p className="guideInlineNote">{game.notice}</p>
               )}
             </Step>
           )}
@@ -1103,7 +1096,7 @@ export default function GuidedControl() {
             ["setup", "hint", "question"].includes(game.phase) && (
               <div className="guideFeedback" role="status">
                 <Info size={15} />
-                {friendly(game.notice)}
+                {game.notice}
               </div>
             )}
           <div className="guideUtilities">
@@ -1112,22 +1105,22 @@ export default function GuidedControl() {
               onClick={() => {
                 undo();
                 notify(
-                  "Đã quay lại thao tác trước. Điểm và thẻ đã được khôi phục.",
+                  "Previous action undone. Scores and cards restored.",
                 );
               }}
             >
               <RotateCcw size={15} />
-              Bấm nhầm? Quay lại thao tác trước
+              Undo Last Action
             </button>
             <button onClick={() => setDialog("help")}>
               <HelpCircle size={15} />
-              Tôi cần hướng dẫn
+              Host Guide
             </button>
           </div>
           {game.phase === "setup" && q && (
             <div className="guideQuietActions">
               <button onClick={() => setDialog("round")}>
-                Kết thúc vòng sớm
+                End Round Early
               </button>
 
             </div>
@@ -1137,15 +1130,15 @@ export default function GuidedControl() {
         <main className="guideManagement">
           <button className="managementBack" onClick={() => setPage("play")}>
             <ArrowLeft size={16} />
-            {isLive(game) ? "Trở lại câu đang chơi" : "Quay lại trò chơi"}
+            {isLive(game) ? "Return to Current Question" : "Back to Game"}
           </button>
           {page === "settings" ? (
             <>
               <div className="managementPrepHint">
-                Chuẩn bị theo thứ tự: <b>1. Teams & Match Rules</b>
+                Match Setup <b>1. Teams & Match Rules</b>
                 <ArrowRight size={14} />
                 <button onClick={() => setPage("questions")}>
-                  2. Soạn câu hỏi
+                  2. Edit Questions
                 </button>
                 <ArrowRight size={14} />
                 <button
@@ -1153,7 +1146,7 @@ export default function GuidedControl() {
                     begin();
                   }}
                 >
-                  3. Bắt đầu chơi
+                  3. Start Playing
                 </button>
               </div>
               <GameSettings game={game} commit={commit} notify={notify} />
@@ -1161,9 +1154,9 @@ export default function GuidedControl() {
           ) : page === "questions" ? (
             <>
               <div className="managementPrepHint">
-                Soạn xong bộ đề?{" "}
+                Questions ready?{" "}
                 <button onClick={begin}>
-                  Bắt đầu điều khiển <ArrowRight size={14} />
+                  Start Hosting <ArrowRight size={14} />
                 </button>
               </div>
               <QuestionBank game={game} commit={commit} notify={notify} />
@@ -1250,8 +1243,8 @@ export default function GuidedControl() {
       )}
       {dialog === "scores" && (
         <Modal
-          title="Điểm và thẻ của 4 đội"
-          description="Mỗi đội có 5 thẻ cho cả ba vòng. Thẻ đã dùng không được cấp lại."
+          title="Team Scores & Cards"
+          description="Each team gets five cards for the entire match. Used cards are not replaced."
           onClose={() => setDialog(null)}
           wide
         >
@@ -1263,15 +1256,15 @@ export default function GuidedControl() {
                     <i />
                     {team.name}
                   </span>
-                  <b>{team.score} điểm</b>
+                  <b>{team.score} points</b>
                 </div>
                 <dl>
                   {(
                     [
-                      { key: "double", name: "Cược lớn" },
-                      { key: "safe", name: "An toàn" },
-                      { key: "challenge", name: "Thách đố" },
-                      { key: "steal", name: "Cướp điểm" },
+                      { key: "double", name: "Double High Risk" },
+                      { key: "safe", name: "Safe Choice" },
+                      { key: "challenge", name: "Challenge" },
+                      { key: "steal", name: "Steal" },
                     ] as const
                   ).map((card) => (
                     <div
@@ -1279,7 +1272,7 @@ export default function GuidedControl() {
                       className={!team.cards[card.key] ? "exhausted" : ""}
                     >
                       <dt><CardArt card={card.key} className="detailCardArt"/>{card.name}</dt>
-                      <dd>{team.cards[card.key]} thẻ</dd>
+                      <dd>{team.cards[card.key]} cards</dd>
                     </div>
                   ))}
                 </dl>
@@ -1290,73 +1283,72 @@ export default function GuidedControl() {
       )}
       {dialog === "help" && (
         <Modal
-          title="Bạn chỉ cần đi theo màn hình"
-          description="Mỗi bước sẽ nói rõ bạn cần đọc gì, hỏi đội điều gì và bấm nút nào."
+          title="Host Guide"
+          description="Follow the on-screen instructions at each step."
           onClose={() => setDialog(null)}
         >
           <ol className="simpleHelp">
             <li>
-              <b>Chọn đội trả lời trước.</b>
-              <span>Đó là đội chủ nhà của câu hỏi.</span>
+              <b>Choose the team that answers first.</b>
+              <span>That team gets the first attempt at the question.</span>
             </li>
             <li>
-              <b>Đọc gợi ý, hỏi đội có dùng thẻ không.</b>
+              <b>Read the hint and ask the team whether it wants to play a card.</b>
               <span>
-                Không dùng thẻ, Cược lớn hoặc An toàn. Sau đó mở câu hỏi.
+                Choose No Card, Double High Risk, or Safe Choice. Then reveal the question.
               </span>
             </li>
             <li>
-              <b>Nghe câu trả lời và bấm Đúng / Sai.</b>
+              <b>Listen to the answer and mark it correct or incorrect.</b>
               <span>
-                Đáp án nằm ngay trên hai nút. Bạn không phải tính điểm.
+                The answer appears above the score buttons. The game calculates points.
               </span>
             </li>
             <li>
-              <b>Nếu có thẻ phát sinh, làm theo hướng dẫn.</b>
+              <b>Follow the prompts for any power cards.</b>
               <span>
-                Thách đố: chọn đội bị ép trả lời. Cướp điểm: chọn đội giơ thẻ
-                nhanh nhất.
+                For Challenge, select the nominated team. For Steal, select the first eligible team to raise its card.
               </span>
             </li>
             <li>
-              <b>Công bố đáp án rồi sang câu tiếp.</b>
-              <span>Website giữ nguyên điểm và thẻ qua ba vòng.</span>
+              <b>Reveal the answer and move to the next question.</b>
+              <span>Scores and cards carry over between rounds.</span>
             </li>
           </ol>
           <button className="guidePrimary full" onClick={practiceStart}>
             <Play size={17} />
-            Tập thử một câu riêng
+            Practice a Question
           </button>
           <p className="practicePromise">
-            Không thay đổi điểm hoặc thẻ của trận thật.
+            Practice runs separately from your live match.
           </p>
         </Modal>
       )}
       {dialog === "reset" && (
         <Modal
-          title="Tạo một trận mới?"
-          description="Điểm, thẻ và lịch sử sẽ được làm mới. Tên đội, bộ câu hỏi và các quy ước được giữ lại. Bạn có thể hoàn tác nếu bấm nhầm."
+          title="Start a New Match?"
+          description="Reset scores, cards, and history for a new match using the current teams, questions, and rules. You can undo this action."
           onClose={() => setDialog(null)}
         >
           <div className="modalFooter">
             <button className="guideOutline" onClick={() => setDialog(null)}>
-              Giữ trận hiện tại
+              Keep Current Match
             </button>
             <button className="guidePrimary" onClick={reset}>
-              Tạo trận mới <ArrowRight size={16} />
+              New Match <ArrowRight size={16} />
             </button>
           </div>
         </Modal>
       )}
       {dialog === "round" && (
         <Modal
-          title={`Kết thúc vòng ${game.round} sớm?`}
-          description={`Vòng này còn ${remainingQuestions(game).length} câu chưa chơi. Điểm và thẻ vẫn được giữ nguyên.`}
+          title={`End Round ${game.round} Early?`}
+          description={`This round has ${remainingQuestions(game).length} unplayed questions. Scores and cards carry over.`}
           onClose={() => setDialog(null)}
         >
           <div className="modalFooter">
             <button className="guideOutline" onClick={() => setDialog(null)}>
-              Chơi tiếp
+              Keep Playing
             </button>
             <button
               className="guidePrimary"
@@ -1374,15 +1366,15 @@ export default function GuidedControl() {
                 setDialog(null);
               }}
             >
-              Xem tổng kết vòng
+              View Round Summary
             </button>
           </div>
         </Modal>
       )}
       {dialog === "sudden" && (
         <Modal
-          title="Chuẩn bị câu hỏi phụ"
-          description="Chỉ nội dung câu hỏi được đưa lên màn hình người chơi. Đáp án dành riêng cho bạn."
+          title="Prepare Tiebreaker"
+          description="The audience sees the question. The host sees the answer."
           onClose={() => setDialog(null)}
         >
           <form
@@ -1397,7 +1389,7 @@ export default function GuidedControl() {
             }}
           >
             <label>
-              Câu hỏi phụ
+              Tiebreaker Question
               <textarea
                 value={suddenDraft.question}
                 onChange={(e) =>
@@ -1407,7 +1399,7 @@ export default function GuidedControl() {
               />
             </label>
             <label>
-              Đáp án
+              Answer
               <input
                 value={suddenDraft.answer}
                 onChange={(e) =>
@@ -1417,7 +1409,7 @@ export default function GuidedControl() {
             </label>
             <div className="modalFooter">
               <button className="guidePrimary" type="submit">
-                Hiện câu hỏi phụ <ArrowRight size={16} />
+                Show Tiebreaker Question <ArrowRight size={16} />
               </button>
             </div>
           </form>
@@ -1450,7 +1442,7 @@ function Step({
     <section className="guideStep">
       <div className="guideStepHeading">
         <div>
-          {number && <span className="guideStepNumber">BƯỚC {number} / 4</span>}
+          {number && <span className="guideStepNumber">STEP {number} / 4</span>}
           <h1>{title}</h1>
           <p>{instruction}</p>
         </div>
@@ -1491,7 +1483,7 @@ function Answer({ text }: { text: string }) {
     <div className="guideAnswer">
       <span>
         <Shield size={14} />
-        ĐÁP ÁN · CHỈ BẠN THẤY
+        ANSWER · HOST ONLY
       </span>
       <OperatorText text={text}/>
     </div>
@@ -1519,11 +1511,11 @@ function GuideClock({
       </span>
       <button disabled={seconds === 0} onClick={onToggle}>
         {paused ? <Play size={13} /> : <Pause size={13} />}{" "}
-        {paused ? (waiting ? "Bắt đầu bấm giờ" : "Tiếp tục") : "Tạm dừng"}
+        {paused ? (waiting ? "Start Timer" : "Resume") : "Pause"}
       </button>
       <form onSubmit={e=>{e.preventDefault();onSet(Number(draft));}} style={{display:"flex",gap:6,alignItems:"center"}}>
-        <input aria-label="Thời gian câu hỏi (giây)" type="number" min="1" max="3600" required value={draft} onChange={e=>setDraft(e.target.value)} style={{width:78,padding:8}}/> giây
-        <button type="submit">Đặt giờ</button>
+        <input aria-label="Question Time (seconds)" type="number" min="1" max="3600" required value={draft} onChange={e=>setDraft(e.target.value)} style={{width:78,padding:8}}/> seconds
+        <button type="submit">Set Time</button>
       </form>
     </div>
   );
@@ -1550,17 +1542,17 @@ function GradeActions({
       <button className="gradeWrong" onClick={() => onGrade(false)}>
         <X size={24} />
         <span>
-          <b>Trả lời sai</b>
+          <b>Incorrect</b>
           <small>
-            {wrong === 0 ? "Không mất điểm" : `${signed(wrong)} điểm`}
+            {wrong === 0 ? "No Points Lost" : `${signed(wrong)} points`}
           </small>
         </span>
       </button>
       <button className="gradeCorrect" onClick={() => onGrade(true)}>
         <Check size={24} />
         <span>
-          <b>Trả lời đúng</b>
-          <small>{signed(correct)} điểm</small>
+          <b>Correct</b>
+          <small>{signed(correct)} points</small>
         </span>
       </button>
     </div>
@@ -1579,20 +1571,20 @@ function ResultChanges({ game }: { game: Game }) {
           <div key={`${entry.time}-${i}`}>
             <span>
               <b>
-                {team} trả lời {verdict}
+                {team} answered {verdict}
               </b>
               <small>
                 {kind === "Challenge"
-                  ? "Lượt bị Thách đố"
+                  ? "Challenge Attempt"
                   : kind === "Steal"
-                    ? "Lượt cướp điểm"
-                    : "Lượt của chủ nhà"}
+                    ? "Steal Attempt"
+                    : "Original Team Attempt"}
               </small>
             </span>
             <strong
               className={amount > 0 ? "positive" : amount < 0 ? "negative" : ""}
             >
-              {amount === 0 ? "Không đổi điểm" : `${signed(amount)} điểm`}
+              {amount === 0 ? "No Score Change" : `${signed(amount)} points`}
             </strong>
           </div>
         );
@@ -1606,20 +1598,20 @@ function SimpleRanking({ game }: { game: Game }) {
     <div className="simpleRanking">
       {ranks.map(({ team, index, place, shared }) => (
         <div key={index} style={teamStyle(index)}>
-          <span title={shared ? `Đồng hạng ${place}` : `Hạng ${place}`}>
+          <span title={shared ? `Tied for Place ${place}` : `Place ${place}`}>
             {shared ? `=${place}` : place}
           </span>
           <b>
             <i />
             {team.name}
           </b>
-          <small>{remainingCards(team)} thẻ còn lại</small>
-          <strong>{team.score} điểm</strong>
+          <small>{remainingCards(team)} cards left</small>
+          <strong>{team.score} points</strong>
         </div>
       ))}
       {ranks.some((row) => row.shared) && (
         <p className="guideInlineNote">
-          Dấu = là đồng hạng: các đội đang bằng cả điểm và số thẻ còn lại.
+          An equals sign marks teams tied on both points and unused cards.
         </p>
       )}
     </div>
@@ -1628,7 +1620,7 @@ function SimpleRanking({ game }: { game: Game }) {
 function SimpleHistory({ game }: { game: Game }) {
   return (
     <div className="simpleHistory">
-      <h1>Lịch sử điểm</h1>
+      <h1>Score History</h1>
 
       {game.history
         .slice()
@@ -1636,18 +1628,18 @@ function SimpleHistory({ game }: { game: Game }) {
         .map((entry, i) => (
           <div key={`${entry.time}-${i}`}>
             <time>
-              {new Date(entry.time).toLocaleTimeString("vi-VN", {
+              {new Date(entry.time).toLocaleTimeString("en-US", {
                 hour: "2-digit",
                 minute: "2-digit",
               })}
             </time>
-            <b>{friendly(entry.label)}</b>
+            <b>{entry.label}</b>
             <strong>
-              {signed(entry.delta.reduce((a, b) => a + b, 0))} điểm
+              {signed(entry.delta.reduce((a, b) => a + b, 0))} points
             </strong>
           </div>
         ))}
-      {!game.history.length && <span>Chưa có câu trả lời nào được chấm.</span>}
+      {!game.history.length && <span>No answers have been scored yet.</span>}
     </div>
   );
 }

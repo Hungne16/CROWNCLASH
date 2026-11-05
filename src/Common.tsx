@@ -7,27 +7,27 @@ export const teamStyle = (index: number) =>
   ({ "--team": COLORS[index] }) as CSSProperties;
 export const CARD_INFO = {
   double: {
-    name: "Cược lớn",
+    name: "Double High Risk",
     english: "Double",
-    description: "Đúng ×2 · Sai −×2",
+    description: "Correct ×2 · Incorrect −×2",
     icon: Zap,
   },
   safe: {
-    name: "An toàn",
+    name: "Safe Choice",
     english: "Safe",
-    description: "Đúng +điểm · Sai 0",
+    description: "Correct +points · Incorrect 0",
     icon: Shield,
   },
   challenge: {
-    name: "Thách đố",
+    name: "Challenge",
     english: "Challenge",
-    description: "Chỉ định đội khác trả lời",
+    description: "Make another team answer",
     icon: Swords,
   },
   steal: {
-    name: "Cướp lượt",
+    name: "Steal",
     english: "Steal",
-    description: "Trả lời sau khi chủ nhà sai",
+    description: "Answer after the original team misses",
     icon: Hand,
   },
 };
@@ -42,8 +42,8 @@ export function Cards({ cards }: { cards: Record<CardType, number> }) {
           <span
             key={key}
             className={cards[key] ? "" : "empty"}
-            title={`${CARD_INFO[key].english}: ${cards[key]} thẻ`}
-            aria-label={`${CARD_INFO[key].name}: ${cards[key]} thẻ`}
+            title={`${CARD_INFO[key].english}: ${cards[key]} cards`}
+            aria-label={`${CARD_INFO[key].name}: ${cards[key]} cards`}
           >
             <CardArt card={key} />
             <b>{cards[key]}</b>
@@ -59,7 +59,7 @@ export function Modal({
   children,
   onClose,
   wide = false,
-  lang = "vi",
+  lang = "en",
 }: {
   title: string;
   description?: string;
@@ -124,7 +124,7 @@ export function Modal({
             <h2>{title}</h2>
             {description && <p>{description}</p>}
           </div>
-          <button className="iconBtn" onClick={onClose} aria-label={lang === "en" ? "Close" : "Đóng"}>
+          <button className="iconBtn" onClick={onClose} aria-label={"Close"}>
             <X size={20} />
           </button>
         </div>

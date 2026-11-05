@@ -20,13 +20,13 @@ export function PowerChoiceStage({game}:{game:Game}){
  },[card]);
  if(host===null)return null;
  return <div className="powerChoiceStage" ref={root} style={teamStyle(host)}>
- <div className="choiceHeading"><span>{game.teams[host].name}</span><h1>Chọn quyền năng</h1></div>
+ <div className="choiceHeading"><span>{game.teams[host].name}</span><h1>Choose a Power Card</h1></div>
  <div className="choiceDeck">{(['none','double','safe'] as const).map((id,i)=>{
  const empty=id!=='none'&&game.teams[host].cards[id]===0&&game.usedCard!==id;
  return <div key={id} className={`powerChoiceTile ${card===id?'selected':''} ${empty?'unavailable':''}`} style={{'--card-accent':['#a9bdd2','#ffbb69','#73dfde'][i]} as CSSProperties}>
  <div className="choiceHalo"/><div className="choiceArt">{id==='none'?<div className="choiceNoCard"><ShieldCheck size={64}/></div>:<CardArt card={id}/>}</div>
- <div className="choiceTileCaption"><b>{id==='none'?'Giữ thẻ':id==='double'?'Cược lớn':'An toàn'}</b><span>{empty?'Đã hết thẻ':id==='double'?`+${points*2} / −${points*2}`:id==='safe'?`+${points} / 0`:`+${points} / −${points}`}</span></div>
- {card===id&&<div className="choiceSeal"><Sparkles size={14}/>{game.usedCard?'ĐÃ KÍCH HOẠT':'ĐANG CHỌN'}</div>}
+ <div className="choiceTileCaption"><b>{id==='none'?'Save Your Cards':id==='double'?'Double High Risk':'Safe Choice'}</b><span>{empty?'No Cards Left':id==='double'?`+${points*2} / −${points*2}`:id==='safe'?`+${points} / 0`:`+${points} / −${points}`}</span></div>
+ {card===id&&<div className="choiceSeal"><Sparkles size={14}/>{game.usedCard?'ACTIVATED':'SELECTED'}</div>}
  </div>})}</div>
  </div>;
 }

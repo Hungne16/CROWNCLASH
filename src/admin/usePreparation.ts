@@ -73,7 +73,7 @@ export function usePreparation(ownerId: string) {
           savedAt: remote?.updatedAt ?? null,
           status: "conflict",
           error:
-            "Bản đang soạn trên máy và bản trên tài khoản khác nhau. Chọn bản bạn muốn tiếp tục.",
+            "Your local draft differs from the saved account version. Choose which version to use.",
           latest: remote,
         });
         return;

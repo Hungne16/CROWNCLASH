@@ -19,10 +19,10 @@ export function SelectionStage({game}:{game:Game}){
   return ()=>ctx.revert();
  },[game.boardSelectedId]);
  return <div ref={root} className="showBoard selectionStage" style={{...(game.host===null?{}:teamStyle(game.host)),'--board-columns':columns,'--board-rows':rows} as CSSProperties}>
-  <div className="selectionHeading"><h1>Chọn câu hỏi</h1></div>
+  <div className="selectionHeading"><h1>Choose a Question</h1></div>
   <div className={`showBoardTurn ${game.host===null?'waiting':''}`} aria-live="polite">
    
-   <div><span className="selectionTurnLabel">{game.host===null?'SẴN SÀNG ĐÓN THỬ THÁCH':'ĐỘI ĐANG CHỌN'}</span><strong>{game.host===null?'Chờ quản trò chọn đội':game.teams[game.host].name}</strong></div>
+   <div><span className="selectionTurnLabel">{game.host===null?'READY TO PLAY':'TEAM CHOOSING'}</span><strong>{game.host===null?'Waiting for the host to select a team':game.teams[game.host].name}</strong></div>
    {game.host!==null&&<Crown className="selectionCrown" size={28}/>}
   </div>
   <QuestionBoard game={game} audience/>

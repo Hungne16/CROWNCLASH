@@ -3,19 +3,19 @@ import { db } from "./firebase";
 import { parsePreparation, type Preparation } from "./preparation";
 export type SavedPreparation = {payload:Preparation;revision:number;updatedAt:string};
 export class PreparationConflict extends Error {
-  constructor(public latest:SavedPreparation|null) { super("Bộ đề đã được thay đổi trên máy khác. Hãy chọn bản muốn giữ."); }
+  constructor(public latest:SavedPreparation|null) { super("The question set changed on another device. Choose which version to keep."); }
 }
 export function parseRecord(value: Record<string,unknown>): SavedPreparation {
-  if (typeof value.revision !== "number" || !Number.isSafeInteger(value.revision) || value.revision < 1 || !(value.updatedAt instanceof Timestamp)) throw new Error("Phiên bản bộ đề không hợp lệ.");
+  if (typeof value.revision !== "number" || !Number.isSafeInteger(value.revision) || value.revision < 1 || !(value.updatedAt instanceof Timestamp)) throw new Error("Invalid question set version.");
   return {payload:parsePreparation(value.payload), revision:value.revision,updatedAt:value.updatedAt.toDate().toISOString()};
 }
 export async function loadPreparation(ownerId:string):Promise<SavedPreparation|null> {
-  if (!db) throw new Error("Tài khoản chưa được kết nối.");
+  if (!db) throw new Error("No account connected.");
   const snapshot = await getDocFromServer(doc(db,"adminPreparations",ownerId));
   return snapshot.exists() ? parseRecord(snapshot.data()) : null;
 }
 export async function savePreparation(ownerId:string,payload:Preparation,revision:number|null):Promise<SavedPreparation> {
-  if (!db) throw new Error("Tài khoản chưa được kết nối.");
+  if (!db) throw new Error("No account connected.");
   const clean = parsePreparation(payload);
   const ref = doc(db,"adminPreparations",ownerId);
   return runTransaction(db,async transaction => {

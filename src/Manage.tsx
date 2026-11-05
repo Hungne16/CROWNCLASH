@@ -67,12 +67,12 @@ export function QuestionBank({
       const raw = Array.isArray(data) ? data : data.questions;
       const questions = Array.isArray(raw) && raw.length === 0 ? [] : validateQuestions(raw);
       const names = Array.isArray(data) ? undefined : data.roundNames;
-      if(names !== undefined && (!Array.isArray(names) || !names.length || names.length > 100 || !names.every(n=>typeof n==='string' && n.trim() && n.length<=80) || questions.some(q=>q.round>names.length))) throw new Error('Danh sách vòng thi không hợp lệ.');
-      commit((g) => ({...replaceQuestions(g, questions), settings:{...g.settings,roundNames:names ?? Array.from({length:Math.max(1,...questions.map(q=>q.round))},(_,i)=>`Vòng ${i+1}`)}, round:1, boardSelectedId:null, playedQuestionIds:[]}));
+      if(names !== undefined && (!Array.isArray(names) || !names.length || names.length > 100 || !names.every(n=>typeof n==='string' && n.trim() && n.length<=80) || questions.some(q=>q.round>names.length))) throw new Error('Invalid round list.');
+      commit((g) => ({...replaceQuestions(g, questions), settings:{...g.settings,roundNames:names ?? Array.from({length:Math.max(1,...questions.map(q=>q.round))},(_,i)=>`Round ${i+1}`)}, round:1, boardSelectedId:null, playedQuestionIds:[]}));
       setRound(1);
-      notify(`Đã nhập ${questions.length} câu hỏi.`);
+      notify(`Imported ${questions.length} questions.`);
     } catch (e) {
-      notify(e instanceof Error ? e.message : "Không đọc được file JSON.");
+      notify(e instanceof Error ? e.message : "Could not read the JSON file.");
     }
     if (file.current) file.current.value = "";
   };
@@ -82,39 +82,39 @@ export function QuestionBank({
         <div className="localBankNotice">
           <Cloud size={19} />
           <div>
-            <b>Lưu trên máy này</b>
+            <b>Saved on This Device</b>
 
           </div>
           <a href="/account">
-            Tài khoản admin <ArrowRight size={14} />
+            Admin Account <ArrowRight size={14} />
           </a>
         </div>
       )}
       <div className="pageTitle">
         <div>
-          <h1>Ngân hàng câu hỏi</h1>
+          <h1>Question Bank</h1>
 
         </div>
         <div className="buttonRow">
           <button className="btn secondary" disabled={live} onClick={() => {
-            if (game.questions.length && !window.confirm("Thay bộ câu hỏi hiện tại bằng 12 câu Group 7 – Chapter 8?")) return;
+            if (game.questions.length && !window.confirm("Replace the current set with 12 questions from Group 7 · Chapter 8?")) return;
             commit(g => isLive(g) ? g : ({ ...replaceQuestions(g, validateQuestions(chapter8)), settings:{...g.settings,roundNames:["Warm-up", "Identifying Types of Barriers", "Sơn Tùng M-TP Case Study"]}, round:1, boardSelectedId: null, playedQuestionIds: [] }));
-            notify("Đã nạp Group 7 – Chapter 8: 3 vòng, mỗi vòng 4 câu.");
-          }}>Nạp bộ Group 7 · Chapter 8</button>
+            notify("Loaded Group 7 · Chapter 8 with three rounds of four questions.");
+          }}>Load Group 7 · Chapter 8</button>
           <button className="btn secondary" onClick={exportFile}>
             <Download size={16} />
-            Xuất JSON
+            Export JSON
           </button>
           <button
             className="btn secondary"
             disabled={live}
             title={
-              live ? "Kết thúc câu hiện tại trước khi thay bộ câu hỏi." : ""
+              live ? "Finish the current question before replacing the question set." : ""
             }
             onClick={() => file.current?.click()}
           >
             <Upload size={16} />
-            Nhập JSON
+            Import JSON
           </button>
           <button
             className="btn primary"
@@ -130,7 +130,7 @@ export function QuestionBank({
             }
           >
             <Plus size={17} />
-            Thêm câu hỏi
+            Add Question
           </button>
           <input
             ref={file}
@@ -145,8 +145,7 @@ export function QuestionBank({
         <div className="infoBanner">
           <Info size={17} />
           <span>
-            Bộ câu hỏi có dữ liệu <b>DEMO</b>. Thay bằng nội dung chính thức
-            trước khi thi đấu.
+            This set contains <b>DEMO</b> questions. Replace them before the match.
           </span>
         </div>
       )}
@@ -159,7 +158,7 @@ export function QuestionBank({
               key={n}
               onClick={() => setRound(n)}
             >
-              {n === 0 ? "Tất cả" : `${n}. ${gameRounds(game)[n-1]}`}
+              {n === 0 ? "All" : `${n}. ${gameRounds(game)[n-1]}`}
               <span>
                 {game.questions.filter((q) => n === 0 || q.round === n).length}
               </span>
@@ -169,7 +168,7 @@ export function QuestionBank({
         <label className="searchField">
           <Search size={16} />
           <input
-            placeholder="Tìm nội dung, gợi ý, đáp án…"
+            placeholder="Search questions, hints, and answers…"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
           />
@@ -191,29 +190,29 @@ export function QuestionBank({
                     {DIFFICULTY[q.difficulty].label}
                   </span>
                   <span className="muted small">
-                    Vòng {q.round} · Ô {game.questions.filter(item=>item.round===q.round).findIndex(item=>item.id===q.id)+1} · {DIFFICULTY[q.difficulty].points} điểm ·{" "}
+                    Round {q.round} · Tile {game.questions.filter(item=>item.round===q.round).findIndex(item=>item.id===q.id)+1} · {DIFFICULTY[q.difficulty].points} points ·{" "}
                     {questionSeconds(q)}s
                   </span>
                   {q.id.startsWith("demo") && (
                     <span className="demoTag">DEMO</span>
                   )}
-                  {active && <span className="statusTag">Đang dùng</span>}
+                  {active && <span className="statusTag">In Use</span>}
                   {played && (
                     <span className="muted small">
-                      <Check size={12} /> Đã chơi
+                      <Check size={12} /> Played
                     </span>
                   )}
                 </div>
                 <h3>{q.text}</h3>
-                <p>Gợi ý: {q.hint || "—"}</p>
-                <div className="bankAnswer">Đáp án: {q.answer}</div>
+                <p>Hint: {q.hint || "—"}</p>
+                <div className="bankAnswer">Answer: {q.answer}</div>
               </div>
               <div className="buttonRow">
                 <button
                   className="iconBtn"
                   disabled={active}
                   onClick={() => setDraft({ ...q })}
-                  aria-label="Sửa câu hỏi"
+                  aria-label="Edit Question"
                 >
                   <Pencil size={16} />
                 </button>
@@ -221,7 +220,7 @@ export function QuestionBank({
                   className="iconBtn dangerText"
                   disabled={active}
                   onClick={() => setDeleteId(q.id)}
-                  aria-label="Xóa câu hỏi"
+                  aria-label="Delete Question"
                 >
                   <Trash2 size={16} />
                 </button>
@@ -234,13 +233,13 @@ export function QuestionBank({
             <Search size={30} />
             <h3>
               {game.questions.length
-                ? "Chưa có câu hỏi phù hợp"
-                : "Bộ câu hỏi đang trống"}
+                ? "No Matching Questions"
+                : "Question Set Is Empty"}
             </h3>
             <p>
               {game.questions.length
-                ? "Thêm câu hỏi hoặc chọn bộ lọc khác."
-                : "Bấm “Thêm câu hỏi” để admin tự soạn, hoặc “Nhập JSON” để tải bộ đề của mình."}
+                ? "Add a question or change the filter."
+                : "Select “Add Question” to write one or “Import JSON” to load a set."}
             </p>
           </div>
         )}
@@ -249,10 +248,10 @@ export function QuestionBank({
         <Modal
           title={
             game.questions.some((q) => q.id === draft.id)
-              ? "Chỉnh sửa câu hỏi"
-              : "Thêm câu hỏi"
+              ? "Edit Question"
+              : "Add Question"
           }
-          description="Gợi ý được trình chiếu trước câu hỏi. Đáp án chỉ công bố theo thao tác của MC."
+          description="The audience sees the hint first. The host decides when to reveal the answer."
           wide
           onClose={() => setDraft(null)}
         >
@@ -266,7 +265,7 @@ export function QuestionBank({
                 !draft.answer.trim()
               ) {
                 notify(
-                  "Gợi ý, câu hỏi và đáp án đều cần được soạn trước khi chơi.",
+                  "Enter a hint, a question, and an answer before playing.",
                 );
                 return;
               }
@@ -282,12 +281,12 @@ export function QuestionBank({
                 ),
               );
               setDraft(null);
-              notify("Đã lưu câu hỏi.");
+              notify("Question saved.");
             }}
           >
             <div className="formColumns">
               <label>
-                Vòng thi
+                Round
                 <select
                   value={draft.round}
                   onChange={(e) =>
@@ -299,13 +298,13 @@ export function QuestionBank({
                 >
                   {gameRounds(game).map((_,i)=>i+1).map((n) => (
                     <option value={n} key={n}>
-                      Vòng {n}
+                      Round {n}
                     </option>
                   ))}
                 </select>
               </label>
               <label>
-                Độ khó
+                Difficulty
                 <select
                   value={draft.difficulty}
                   onChange={(e) =>
@@ -317,47 +316,47 @@ export function QuestionBank({
                 >
                   {Object.entries(DIFFICULTY).map(([key, d]) => (
                     <option key={key} value={key}>
-                      {d.label} · {d.points} điểm · {d.seconds} giây
+                      {d.label} · {d.points} points · {d.seconds} seconds
                     </option>
                   ))}
                 </select>
               </label>
             </div>
             <label>
-              Thời gian trả lời (giây)
+              Answer Time (seconds)
               <input type="number" min={5} max={600} value={draft.seconds ?? ""} placeholder={String(DIFFICULTY[draft.difficulty].seconds)} onChange={e => setDraft({...draft, seconds: e.target.value ? Number(e.target.value) : undefined})}/>
             </label>
             <label>
-              1. Gợi ý trước khi chọn thẻ
+              1. Hint Before Card Selection
               <textarea
                 required
                 value={draft.hint}
                 onChange={(e) => setDraft({ ...draft, hint: e.target.value })}
-                placeholder="Nhập gợi ý, không kèm đáp án."
+                placeholder="Enter the hint without the answer."
               />
 
             </label>
             <label>
-              2. Câu hỏi
+              2. Question
               <textarea
                 required
                 value={draft.text}
                 onChange={(e) => setDraft({ ...draft, text: e.target.value })}
-                placeholder="Nhập đầy đủ nội dung câu hỏi…"
+                placeholder="Enter the full question…"
                 rows={4}
               />
             </label>
             <label>
-              3. Đáp án (MC)
+              3. Answer (MC)
               <textarea
                 required
                 value={draft.answer}
                 onChange={(e) => setDraft({ ...draft, answer: e.target.value })}
-                placeholder="Đáp án và cách chấp nhận câu trả lời…"
+                placeholder="Enter the answer and any accepted variants…"
               />
             </label>
             <label>
-              URL hình ảnh <span className="muted">· Không bắt buộc</span>
+              Image URL <span className="muted">· Optional</span>
               <input
                 type="url"
                 value={draft.image ?? ""}
@@ -371,11 +370,11 @@ export function QuestionBank({
                 className="btn secondary"
                 onClick={() => setDraft(null)}
               >
-                Hủy
+                Cancel
               </button>
               <button className="btn primary" type="submit">
                 <Save size={16} />
-                Lưu câu hỏi
+                Save Question
               </button>
             </div>
           </form>
@@ -383,17 +382,17 @@ export function QuestionBank({
       )}
       {deleteId && (
         <Modal
-          title="Xóa câu hỏi này?"
+          title="Delete This Question?"
           description={
             cloudMode
-              ? "Câu hỏi sẽ được gỡ và thay đổi sẽ tự động lưu vào bộ đề của tài khoản."
-              : "Câu hỏi sẽ được gỡ khỏi bộ đề. Có thể hoàn tác sau khi xóa."
+              ? "The question will be removed and the account set will save automatically."
+              : "The question will be removed from the set. You can undo this."
           }
           onClose={() => setDeleteId(null)}
         >
           <div className="modalFooter">
             <button className="btn secondary" onClick={() => setDeleteId(null)}>
-              Giữ lại
+              Keep Question
             </button>
             <button
               className="btn danger"
@@ -407,7 +406,7 @@ export function QuestionBank({
                 setDeleteId(null);
               }}
             >
-              Xóa câu hỏi
+              Delete Question
             </button>
           </div>
         </Modal>
@@ -445,7 +444,7 @@ export function GameSettings({ game, commit }: Props) {
             <label key={i} style={teamStyle(i)}>
               <span className="teamLabel">
                 <i />
-                Đội {i + 1}
+                Team {i + 1}
               </span>
               <input
                 key={team.name}

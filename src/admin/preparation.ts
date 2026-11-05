@@ -1,4 +1,4 @@
-import { initialGame, type Game, type Question, type Settings } from "../game";
+import { englishTeamName, englishRoundName, initialGame, type Game, type Question, type Settings } from "../game";
 import {
   isLive,
   normalizeGame,
@@ -21,7 +21,7 @@ export const emptyPreparation = (): Preparation => ({
 });
 export function parsePreparation(input: unknown): Preparation {
   if (!input || typeof input !== "object")
-    throw new Error("Bộ đề trên tài khoản không đúng định dạng.");
+    throw new Error("The saved question set has an invalid format.");
   const p = input as Preparation;
   if (
     p.schemaVersion !== 1 ||
@@ -34,9 +34,9 @@ export function parsePreparation(input: unknown): Preparation {
     ) ||
     !p.settings
   )
-    throw new Error("Bộ đề thiếu tên đội hoặc nội dung hợp lệ.");
+    throw new Error("The question set needs valid team names and questions.");
   const s = p.settings;
-  if (s.roundNames !== undefined && (!Array.isArray(s.roundNames) || !s.roundNames.length || s.roundNames.length > 100 || !s.roundNames.every(n => typeof n === 'string' && n.trim().length > 0 && n.length <= 80) || p.questions.some(q => q.round > s.roundNames!.length))) throw new Error('Danh sách vòng thi không hợp lệ.');
+  if (s.roundNames !== undefined && (!Array.isArray(s.roundNames) || !s.roundNames.length || s.roundNames.length > 100 || !s.roundNames.every(n => typeof n === 'string' && n.trim().length > 0 && n.length <= 80) || p.questions.some(q => q.round > s.roundNames!.length))) throw new Error('Invalid round list.');
   if (
     !["manual", "rotate", "random"].includes(s.hostMode) ||
     !["end", "host"].includes(s.challengeCorrect) ||
@@ -46,18 +46,18 @@ export function parsePreparation(input: unknown): Preparation {
     s.stealSeconds < 0 ||
     s.stealSeconds > 120
   )
-    throw new Error("Quy ước trong bộ đề không hợp lệ.");
+    throw new Error("Invalid match settings in the question set.");
   if (
     p.questions.some((q) => typeof q?.id !== "string" || !q.id) ||
     new Set(p.questions.map((q) => q.id)).size !== p.questions.length
   )
-    throw new Error("Mã câu hỏi bị thiếu hoặc trùng lặp.");
+    throw new Error("Question IDs are missing or duplicated.");
   return {
     schemaVersion: 1,
     questions: p.questions.length ? validateQuestions(p.questions) : [],
-    teamNames: p.teamNames.map((n) => n.trim()),
+    teamNames: p.teamNames.map((name, index) => englishTeamName(name.trim(), index)),
     settings: {
-      ...(s.roundNames ? {roundNames: s.roundNames.map(n => n.trim())} : {}),
+      ...(s.roundNames ? {roundNames: s.roundNames.map((name, index) => englishRoundName(name.trim(), index))} : {}),
       hostMode: s.hostMode,
       challengeCorrect: s.challengeCorrect,
       stealSeconds: s.stealSeconds,
@@ -91,12 +91,12 @@ export function installPreparation(p: Preparation): void {
   );
   if (isLive(previous))
     throw new Error(
-      "Máy này đang có câu hỏi thi đấu. Hoàn tất câu đó trước khi dùng bộ đề mới.",
+      "Finish the current live question before loading a different set.",
     );
   const next = preparationGame(p),
     first = next.questions.findIndex((q) => q.round === 1);
   if (first < 0)
-    throw new Error("Bộ đề cần ít nhất một câu hỏi ở vòng 1 để bắt đầu.");
+    throw new Error("Add at least one question to Round 1 before starting.");
   next.questionIndex = first;
   let undo: Game[] = [];
   try {

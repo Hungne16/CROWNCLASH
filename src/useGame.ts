@@ -112,7 +112,7 @@ export function useGame(presentation: boolean, practice = false) {
       setStorageError("");
     } catch {
       setStorageError(
-        "Không thể lưu trên trình duyệt. Hãy kiểm tra dung lượng lưu trữ.",
+        "Could not save in this browser. Check available storage.",
       );
     }
     channel.current?.postMessage({ type: "state", game });

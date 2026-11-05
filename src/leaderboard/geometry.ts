@@ -5,8 +5,8 @@ export type BannerId='red'|'green'|'purple'|'blue';
 export type Region={centerX:number;centerY:number;width:number;height:number;scale:number;rotation:number;lineHeight:number};
 export type Layout=Record<BannerId,Region>;
 export const FLAGS: {id:BannerId;rank:number;label:string}[]=[
-  {id:'red',rank:4,label:'Đỏ · TOP 4'}, {id:'green',rank:2,label:'Xanh lá · TOP 2'},
-  {id:'purple',rank:1,label:'Tím · TOP 1'}, {id:'blue',rank:3,label:'Xanh dương · TOP 3'},
+  {id:'red',rank:4,label:'Red · TOP 4'}, {id:'green',rank:2,label:'Green · TOP 2'},
+  {id:'purple',rank:1,label:'Purple · TOP 1'}, {id:'blue',rank:3,label:'Blue · TOP 3'},
 ];
 // Measured on source frames at 0, 4 and 8 seconds. Rectangles deliberately
 // exclude the large crest above and gold stars / hems below each fabric area.

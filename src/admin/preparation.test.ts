@@ -68,7 +68,7 @@ describe("account preparation data", () => {
         ...emptyPreparation(),
         questions: [testQuestions[0]],
       }),
-    ).toThrow("đang có câu hỏi");
+    ).toThrow("current live question");
     expect(localStorage.getItem(STORE)).toBe(stored);
     expect(localStorage.getItem(UNDO_STORE)).toBeNull();
   });
@@ -91,6 +91,6 @@ describe("account preparation data", () => {
     ).toBe(40);
   });
   it("requires round-one content before starting an event", () => {
-    expect(() => installPreparation(emptyPreparation())).toThrow("vòng 1");
+    expect(() => installPreparation(emptyPreparation())).toThrow("Round 1");
   });
 });

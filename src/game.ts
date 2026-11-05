@@ -79,15 +79,23 @@ export const DIFFICULTY: Record<
   Difficulty,
   { points: number; seconds: number; challenge: number; label: string }
 > = {
-  easy: { points: 10, seconds: 30, challenge: 15, label: "Dễ" },
-  medium: { points: 20, seconds: 45, challenge: 20, label: "Trung bình" },
-  hard: { points: 30, seconds: 60, challenge: 30, label: "Khó" },
+  easy: { points: 10, seconds: 30, challenge: 15, label: "Easy" },
+  medium: { points: 20, seconds: 45, challenge: 20, label: "Medium" },
+  hard: { points: 30, seconds: 60, challenge: 30, label: "Hard" },
 };
+export function englishTeamName(name: string, index: number): string {
+  return name === `Đội ${index + 1}` ? `Team ${index + 1}` : name;
+}
+
+export function englishRoundName(name: string, index: number): string {
+  return name === `Vòng ${index + 1}` ? `Round ${index + 1}` : name;
+}
+
 export const initialGame = (): Game => ({
   rulesVersion:4,
   drawOrders:{},
   hostTurns: [],
-  teams: ["Đội 1", "Đội 2", "Đội 3", "Đội 4"].map((name) => ({
+  teams: ["Team 1", "Team 2", "Team 3", "Team 4"].map((name) => ({
     name,
     score: 10,
     cards: { double: 1, safe: 1, challenge: 1, steal: 2 },
@@ -158,7 +166,7 @@ export function applyOutcome(
   const history = [
     ...g.history,
     {
-      label: `${teams[teamIndex].name} · ${correct ? "đúng" : "sai"} · ${kind === "host" ? "chủ nhà" : kind === "challenge" ? "Challenge" : "Steal"}`,
+      label: `${teams[teamIndex].name} · ${correct ? "correct" : "incorrect"} · ${kind === "host" ? "original team" : kind === "challenge" ? "Challenge" : "Steal"}`,
       delta,
       time: Date.now(),
     },
@@ -178,40 +186,40 @@ export function useCard(
   });
   const host = g.host;
   if (!Number.isInteger(team) || team < 0 || team >= g.teams.length)
-    return fail("Đội không hợp lệ.");
+    return fail("Invalid team.");
   if (
     host === null ||
     (card === "steal" && team === host) ||
     (card !== "steal" && team !== host)
   )
-    return fail("Đội này không được dùng thẻ vào thời điểm hiện tại.");
-  if (g.teams[team].cards[card] <= 0) return fail("Đội này đã hết thẻ đó.");
+    return fail("This team cannot play a card right now.");
+  if (g.teams[team].cards[card] <= 0) return fail("This team has no copies of that card left.");
   if (card === "double" || card === "safe") {
     if (g.phase !== "hint")
-      return fail("Thẻ này chỉ dùng sau gợi ý, trước khi mở câu hỏi.");
+      return fail("Play this card after the hint and before revealing the question.");
     if (!g.hintRead)
-      return fail("MC cần đọc xong gợi ý trước khi nhận lựa chọn thẻ.");
+      return fail("Read the hint before taking card choices.");
     if (g.usedCard)
-      return fail("Mỗi câu chỉ dùng một thẻ trước khi mở câu hỏi.");
+      return fail("Only one card can be played before revealing a question.");
   } else if (card === "challenge") {
     if (g.phase !== "question")
-      return fail("Challenge chỉ dùng khi câu hỏi đang mở.");
-    if (g.paused) return fail("Hãy tiếp tục đồng hồ trước khi dùng Challenge.");
+      return fail("Play Challenge while the question is open.");
+    if (g.paused) return fail("Resume the timer before playing Challenge.");
     if (
       g.startedAt === null ||
       g.questionIndex === null ||
       !g.questions[g.questionIndex]
     )
-      return fail("Câu hỏi chưa được mở.");
+      return fail("The question has not been revealed.");
     const elapsed = (now - (g.startedAt ?? now)) / 1000,
       limit = DIFFICULTY[g.questions[g.questionIndex!].difficulty].challenge;
-    if (elapsed > limit) return fail("Đã hết thời hạn Challenge.");
+    if (elapsed > limit) return fail("The Challenge window has closed.");
   } else if (card === "steal") {
     if (g.phase !== "steal-window")
-      return fail("Steal chỉ dùng sau khi chủ nhà trả lời sai.");
-    if (g.stealUsed) return fail("Câu này đã có một lượt Steal.");
+      return fail("Play Steal after the original team answers incorrectly.");
+    if (g.stealUsed) return fail("This question already had a Steal attempt.");
     if (g.stealDeadline != null && now >= g.stealDeadline)
-      return fail("Đã hết thời gian nhận Steal.");
+      return fail("The Steal window has closed.");
   }
   const teams = g.teams.map((t, i) => {
     if (i !== team) return t;
@@ -244,5 +252,5 @@ export const questionSeconds = (q: Question) => q.seconds ?? DIFFICULTY[q.diffic
 export function gameRounds(g: Pick<Game, 'questions' | 'settings'>): string[] {
   const names = g.settings.roundNames ?? (g.questions.length === 12 && g.questions.every(q=>q.id.startsWith('group7-ch8-')) ? ['Warm-up','Identifying Types of Barriers','Sơn Tùng M-TP Case Study'] : undefined);
   const count = Math.max(names?.length ?? 3, ...g.questions.map(q => q.round));
-  return Array.from({length: count}, (_, i) => names?.[i] || `Vòng ${i + 1}`);
+  return Array.from({length: count}, (_, i) => englishRoundName(names?.[i] || `Round ${i + 1}`, i));
 }

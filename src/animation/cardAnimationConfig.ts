@@ -7,7 +7,7 @@ export const cardAnimationConfig:Record<CardType,{name:string;message:string;col
  steal:{name:'STEAL',message:'STEAL ACTIVATED',color:'#f4c46b',image:CARD_ASSETS.steal,symbol:'♛'},
 };
 export const CARD_BACK = CARD_BACK_ASSET;
-export const cardAbility:Record<CardType,string> = {double:'ĐÚNG ×2 · SAI ×2',safe:'SAI KHÔNG MẤT ĐIỂM',challenge:'CHUYỂN QUYỀN TRẢ LỜI',steal:'GIÀNH QUYỀN TRẢ LỜI'};
+export const cardAbility:Record<CardType,string> = {double:'CORRECT ×2 · INCORRECT −×2',safe:'NO PENALTY FOR A WRONG ANSWER',challenge:'PASS THE QUESTION',steal:'TAKE OVER THE QUESTION'};
 export const ANIMATION_MS = 4000;
 export function preloadCards() { return [CARD_BACK,...Object.values(cardAnimationConfig).map(c=>c.image)].map(src=>{const image=new Image();image.src=src;return image;}); }
 

@@ -84,22 +84,22 @@ export default function AdminApp({
     try {
       if (auth.recovery) {
         if (password.length < 10)
-          throw new Error("Mật khẩu cần ít nhất 10 ký tự.");
+          throw new Error("Use at least 10 characters for your password.");
         if (password !== confirmation)
-          throw new Error("Hai mật khẩu chưa trùng nhau.");
+          throw new Error("The passwords do not match.");
         const code = new URLSearchParams(location.search).get("oobCode");
-        if (!code) throw new Error("Liên kết đặt mật khẩu không hợp lệ. Hãy yêu cầu gửi lại.");
+        if (!code) throw new Error("Invalid password reset link. Request a new one.");
         await confirmPasswordReset(firebaseAuth, code, password);
         setMode("login");
         setPassword("");
         setConfirmation("");
         auth.setRecovery(false);
         history.replaceState(null, "", "/account");
-        setMessage("Đã đặt mật khẩu mới.");
+        setMessage("New password saved.");
       } else if (mode === "forgot") {
         await sendPasswordResetEmail(firebaseAuth, email.trim(), {url: `${location.origin}/account`});
         setMessage(
-          "Nếu email này thuộc tài khoản đã được cấp, bạn sẽ nhận được hướng dẫn đặt lại mật khẩu.",
+          "If this email is registered, you will receive password reset instructions.",
         );
       } else {
         await signInWithEmailAndPassword(firebaseAuth, email.trim(), password);
@@ -124,7 +124,7 @@ export default function AdminApp({
         </a>
         <a className="guideOutline" href="/">
           <ArrowLeft size={16} />
-          Về trò chơi
+          Back to Game
         </a>
       </header>
       <main className="accountEntry">
@@ -132,8 +132,8 @@ export default function AdminApp({
           <span className="accountIcon">
             <Cloud size={28} />
           </span>
-          <h1>Bộ câu hỏi của bạn</h1>
-          <p>Đăng nhập để đồng bộ.</p>
+          <h1>Your Questions</h1>
+          <p>Sign in to sync your questions.</p>
         </div>
         <section className="accountCard">
           {!firebaseAuth ? (
@@ -141,28 +141,27 @@ export default function AdminApp({
               <div className="accountCardIcon">
                 <CloudOff size={24} />
               </div>
-              <h2>Tài khoản chưa được bật</h2>
+              <h2>Accounts Are Unavailable</h2>
               <p>{authConfigurationError}</p>
               <div className="accountNotice">
-                Chủ website cần kết nối cấu hình Firebase, bật đăng nhập Email/Password
-                và thiết lập Firestore. Sau đó có thể cấp tài khoản cho từng admin.
+                The site owner needs to configure Firebase, enable Email/Password sign-in, and set up Firestore before creating admin accounts.
               </div>
               <a className="guidePrimary full" href="/">
-                Tiếp tục dùng trên máy này <ArrowRight size={17} />
+                Continue on This Device <ArrowRight size={17} />
               </a>
             </>
           ) : auth.loading || auth.checking ? (
             <div className="accountLoading">
               <LoaderCircle className="spinning" size={26} />
-              <p>Đang kiểm tra tài khoản…</p>
+              <p>Checking your account…</p>
             </div>
           ) : auth.session && !auth.membership && !auth.recovery ? (
             <>
-              <h2>Chưa được cấp quyền admin</h2>
+              <h2>Admin Access Required</h2>
               <p>
                 {error ||
                   auth.error ||
-                  "Tài khoản đã đăng nhập nhưng chưa được chủ website cấp quyền soạn bộ đề."}
+                  "Ask the site owner for permission to edit question sets."}
               </p>
               <p className="accountEmail">{auth.session.user.email}</p>
               <button
@@ -171,7 +170,7 @@ export default function AdminApp({
                 onClick={logout}
               >
                 <LogOut size={16} />
-                Đăng xuất
+                Sign Out
               </button>
             </>
           ) : (
@@ -181,16 +180,16 @@ export default function AdminApp({
               </div>
               <h2>
                 {auth.recovery
-                  ? "Đặt mật khẩu mới"
+                  ? "Set a New Password"
                   : mode === "forgot"
-                    ? "Quên mật khẩu?"
-                    : "Đăng nhập admin"}
+                    ? "Forgot Password?"
+                    : "Admin Sign-In"}
               </h2>
               {(auth.recovery || mode === "forgot") && <p>
                 {auth.recovery
-                  ? "Đặt mật khẩu để đăng nhập tài khoản trên các thiết bị của bạn."
+                  ? "Set a password to sign in on your devices."
                   : mode === "forgot"
-                    ? "Nhập email đã được cấp tài khoản."
+                    ? "Enter the email associated with your account."
                     : ""}
               </p>}
               {(error || auth.error) && (
@@ -220,8 +219,8 @@ export default function AdminApp({
                 {(mode === "login" || (auth.recovery)) && (
                   <label>
                     {auth.recovery
-                      ? "Mật khẩu mới"
-                      : "Mật khẩu"}
+                      ? "New Password"
+                      : "Password"}
                     <input
                       type="password"
                       required
@@ -238,7 +237,7 @@ export default function AdminApp({
                 )}
                 {auth.recovery && (
                   <label>
-                    Nhập lại mật khẩu mới
+                    Confirm New Password
                     <input
                       type="password"
                       required
@@ -257,18 +256,18 @@ export default function AdminApp({
                   {busy ? (
                     <>
                       <LoaderCircle size={17} className="spinning" />
-                      Đang xử lý…
+                      Working…
                     </>
                   ) : auth.recovery ? (
-                    "Lưu mật khẩu mới"
+                    "Save New Password"
                   ) : mode === "forgot" ? (
                     <>
                       <Mail size={17} />
-                      Gửi hướng dẫn đặt lại
+                      Send Reset Instructions
                     </>
                   ) : (
                     <>
-                      Đăng nhập <ArrowRight size={17} />
+                      Sign In <ArrowRight size={17} />
                     </>
                   )}
                 </button>
@@ -282,7 +281,7 @@ export default function AdminApp({
                     setMessage("");
                   }}
                 >
-                  {mode === "login" ? "Quên mật khẩu?" : "Quay lại đăng nhập"}
+                  {mode === "login" ? "Forgot Password?" : "Back to Sign-In"}
                 </button>
               )}
 
@@ -348,22 +347,22 @@ function CloudWorkspace({
     const ok = await onLogout();
     setActionBusy(false);
     if (ok) setDialog(null);
-    else notify("Chưa đăng xuất được. Kiểm tra mạng rồi thử lại.");
+    else notify("Could not sign out. Check your connection and try again.");
   };
   const savedLabel =
     cloud.status === "loading"
-      ? "Đang tải bộ đề…"
+      ? "Loading question set…"
       : cloud.status === "saving"
-        ? "Đang lưu lên tài khoản…"
+        ? "Saving to account…"
         : cloud.status === "unsaved"
-          ? "Đang chờ lưu…"
+          ? "Save pending…"
           : cloud.status === "conflict"
-            ? "Cần chọn phiên bản"
+            ? "Choose a Version"
             : cloud.status === "error"
-              ? "Chưa lưu được lên tài khoản"
+              ? "Could Not Save to Account"
               : cloud.savedAt
-                ? `Đã lưu lúc ${new Date(cloud.savedAt).toLocaleTimeString("vi-VN", { hour: "2-digit", minute: "2-digit" })}`
-                : "Chưa có thay đổi";
+                ? `Saved at ${new Date(cloud.savedAt).toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit" })}`
+                : "No Changes";
   return (
     <div className="guidedApp adminApp">
       <header className="accountHeader">
@@ -390,14 +389,14 @@ function CloudWorkspace({
             }
           >
             <LogOut size={16} />
-            Đăng xuất
+            Sign Out
           </button>
         </div>
       </header>
       <main className="cloudWorkspace">
         <div className="cloudHeading">
           <div>
-            <h1>Bộ đề của bạn</h1>
+            <h1>Your Question Set</h1>
 
           </div>
           <button
@@ -409,7 +408,7 @@ function CloudWorkspace({
             }
             onClick={() => setDialog("start")}
           >
-            Dùng bộ đề để tổ chức <ArrowRight size={17} />
+            Host With This Set <ArrowRight size={17} />
           </button>
         </div>
         <div className="cloudToolbar">
@@ -418,13 +417,13 @@ function CloudWorkspace({
               className={tab === "questions" ? "selected" : ""}
               onClick={() => setTab("questions")}
             >
-              1. Bộ câu hỏi
+              1. Question Set
             </button>
             <button
               className={tab === "settings" ? "selected" : ""}
               onClick={() => setTab("settings")}
             >
-              2. Đội & quy ước
+              2. Teams & Match Rules
             </button>
           </nav>
           <span className={`cloudSaveState ${cloud.status}`} role="status">
@@ -444,42 +443,40 @@ function CloudWorkspace({
             <div>
               <b>
                 {cloud.status === "conflict"
-                  ? "Bộ đề có thay đổi trên máy khác"
+                  ? "Question Set Changed on Another Device"
                   : cloud.error}
               </b>
               {cloud.status === "conflict" ? (
                 <>
                   <p>
-                    Bản bạn đang soạn vẫn được giữ trên máy. Chọn bản trên tài
-                    khoản hoặc xác nhận dùng bản đang soạn.
+                    Your draft is stored on this device. Choose the account version or keep the local draft.
                   </p>
                   <div className="buttonRow">
                     <button
                       className="guideOutline"
                       onClick={() => setDialog("remote")}
                     >
-                      Dùng bản trên tài khoản
+                      Use Account Version
                     </button>
                     <button
                       className="guideOutline"
                       onClick={() => setDialog("local")}
                     >
-                      Giữ bản đang soạn
+                      Keep Local Draft
                     </button>
                   </div>
                 </>
               ) : (
                 <>
                   <p>
-                    Nội dung hiện tại vẫn có bản nháp trên máy này. Chỉ trạng
-                    thái “Đã lưu” mới xác nhận dữ liệu đã lên tài khoản.
+                    Your draft is stored on this device. Wait for the saved status to confirm it has synced.
                   </p>
                   <button
                     className="guideOutline"
                     onClick={() => void cloud.reload()}
                   >
                     <RefreshCw size={15} />
-                    Kết nối và thử lại
+                    Reconnect and Retry
                   </button>
                 </>
               )}
@@ -493,24 +490,23 @@ function CloudWorkspace({
             <div className="localBankNotice">
               <Cloud size={18} />
               <div>
-                <b>Máy này đang có một bộ câu hỏi.</b>
+                <b>This device has a local question set.</b>
                 <p>
-                  Bạn có thể chép bộ đề đang lưu trên máy vào tài khoản để dùng
-                  trên thiết bị khác.
+                  Copy the local question set to your account to use it on other devices.
                 </p>
               </div>
               <button
                 className="guideOutline"
                 onClick={() => setDialog("import-local")}
               >
-                Chuyển vào tài khoản
+                Copy to Account
               </button>
             </div>
           )}
         {cloud.status === "loading" ? (
           <div className="cloudLoading">
             <LoaderCircle size={28} className="spinning" />
-            <h2>Đang lấy bộ đề của tài khoản…</h2>
+            <h2>Loading your saved question set…</h2>
           </div>
         ) : (
           cloud.draft && (
@@ -536,13 +532,13 @@ function CloudWorkspace({
       </main>
       {dialog === "import-local" && (
         <Modal
-          title="Chuyển bộ đề trên máy vào tài khoản?"
-          description="Câu hỏi, tên đội và quy ước trên máy này sẽ được chép vào bộ đề của tài khoản và tự động lưu lên máy chủ."
+          title="Copy Local Questions to Your Account?"
+          description="Copy local questions, team names, and rules to your account."
           onClose={() => setDialog(null)}
         >
           <div className="modalFooter">
             <button className="guideOutline" onClick={() => setDialog(null)}>
-              Hủy
+              Cancel
             </button>
             <button
               className="guidePrimary"
@@ -556,43 +552,43 @@ function CloudWorkspace({
                 }
               }}
             >
-              Chuyển bộ đề
+              Copy Question Set
             </button>
           </div>
         </Modal>
       )}
       {dialog === "start" && (
         <Modal
-          title="Tổ chức với bộ đề này?"
-          description={`Sử dụng ${cloud.draft?.questions.length ?? 0} câu hỏi, tên đội và quy ước đã chuẩn bị. Điểm, thẻ và lịch sử trên máy này sẽ bắt đầu một trận mới. Bạn có thể hoàn tác ở bàn điều khiển.`}
+          title="Host With This Set?"
+          description={`Start a new match with ${cloud.draft?.questions.length ?? 0} questions, the saved teams, and match settings. This resets local scores, cards, and history. You can undo it in the control panel.`}
           onClose={() => setDialog(null)}
         >
           <div className="modalFooter">
             <button className="guideOutline" onClick={() => setDialog(null)}>
-              Chưa bắt đầu
+              Not Yet
             </button>
             <button className="guidePrimary" onClick={beginMatch}>
-              Bắt đầu trận trên máy này <ArrowRight size={16} />
+              Start Match on This Device <ArrowRight size={16} />
             </button>
           </div>
         </Modal>
       )}
       {dialog === "logout" && (
         <Modal
-          title="Bản mới chưa được lưu xong"
-          description="Nội dung đang soạn vẫn có bản nháp trên trình duyệt này. Máy khác sẽ chỉ thấy phiên bản đã lưu thành công lên tài khoản."
+          title="Changes Are Still Pending"
+          description="Your draft is stored in this browser. Other devices show the last version saved to your account."
           onClose={() => setDialog(null)}
         >
           <div className="modalFooter">
             <button className="guidePrimary" onClick={() => setDialog(null)}>
-              Ở lại để lưu
+              Stay and Save
             </button>
             <button
               className="guideOutline"
               disabled={actionBusy}
               onClick={() => void signOut()}
             >
-              Đăng xuất
+              Sign Out
             </button>
           </div>
         </Modal>
@@ -601,19 +597,19 @@ function CloudWorkspace({
         <Modal
           title={
             dialog === "remote"
-              ? "Dùng bản trên tài khoản?"
-              : "Lưu bản đang soạn thay cho bản trên tài khoản?"
+              ? "Use Account Version?"
+              : "Replace the Account Version With Your Local Draft?"
           }
           description={
             dialog === "remote"
-              ? "Những thay đổi chưa lưu trên máy này sẽ được thay bằng bản đã lưu trên tài khoản."
-              : "Bản đang soạn trên máy này sẽ được lưu lên tài khoản, thay cho phiên bản đang có. Nếu máy khác tiếp tục thay đổi, hệ thống sẽ yêu cầu chọn lại."
+              ? "The account version will replace unsaved changes on this device."
+              : "Your local draft will replace the account version. If it changes again on another device, you will be asked to choose again."
           }
           onClose={() => setDialog(null)}
         >
           <div className="modalFooter">
             <button className="guideOutline" onClick={() => setDialog(null)}>
-              Hủy
+              Cancel
             </button>
             <button
               className="guidePrimary"
@@ -622,7 +618,7 @@ function CloudWorkspace({
                 setDialog(null);
               }}
             >
-              Xác nhận dùng bản này
+              Confirm Version
             </button>
           </div>
         </Modal>

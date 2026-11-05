@@ -43,7 +43,7 @@ describe("audience disclosure follows the source rules", () => {
       { ...hint, answerRevealed: true },
     ]) {
       const html = render(g);
-      expect(html).toContain(g.hintRead ? "Chọn quyền năng" : question.hint);
+      expect(html).toContain(g.hintRead ? "Choose a Power Card" : question.hint);
       expect(html).not.toContain(question.text);
       expect(html).not.toContain(question.answer);
       expect(html).not.toContain(question.image);
