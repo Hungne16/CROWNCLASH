@@ -339,7 +339,7 @@ export default function GuidedControl() {
           </b>
         </button>
         <div className="guideHeaderActions">
-          {game.phase === "setup" && <button className="guideOutline" onClick={()=>{localStorage.setItem(INTRO,"done");setWelcome(false);setPage("play");commit(g=>({...g,introSlide:0}));}}>Giới thiệu luật</button>}
+          {game.phase === "setup" && <button className="guideOutline" onClick={()=>{localStorage.setItem(INTRO,"done");setWelcome(false);setPage("play");commit(g=>({...g,introSlide:0}));}} lang="en">Game Rules</button>}
           <a
             className="guideOutline guideAccount"
             href="/account"
@@ -371,7 +371,7 @@ export default function GuidedControl() {
                 </button>
                 <button onClick={() => showPage("settings")}>
                   <Settings2 size={16} />
-                  Đặt tên đội & quy ước
+                  Teams & Match Rules
                 </button>
                 <button onClick={() => showPage("questions")}>
                   <BookOpen size={16} />
@@ -1142,7 +1142,7 @@ export default function GuidedControl() {
           {page === "settings" ? (
             <>
               <div className="managementPrepHint">
-                Chuẩn bị theo thứ tự: <b>1. Đặt tên đội & quy ước</b>
+                Chuẩn bị theo thứ tự: <b>1. Teams & Match Rules</b>
                 <ArrowRight size={14} />
                 <button onClick={() => setPage("questions")}>
                   2. Soạn câu hỏi
@@ -1176,52 +1176,53 @@ export default function GuidedControl() {
 
       {dialog === "rules" && (
         <Modal
-          title="Thống nhất quy ước trước trận"
-          description="File luật gốc chưa xác định 5 tình huống dưới đây. Đây là lựa chọn bổ sung của ban tổ chức, không phải luật mặc định chính thức."
+          lang="en"
+          title="Confirm Match Rules"
+          description="Review the five match settings chosen by the organizers."
           onClose={() => setDialog(null)}
         >
           <ol className="rulesSummary">
             <li>
-              <b>Chọn chủ nhà</b>
+              <b>Team selection</b>
               <span>
                 {game.settings.hostMode === "manual"
-                  ? "MC chọn từng câu"
+                  ? "Host selects the team for each question"
                   : game.settings.hostMode === "rotate"
-                    ? "Luân phiên theo số câu đã chơi"
-                    : "Bốc thăm thứ tự một lần cho mỗi vòng"}
+                    ? "Rotate through teams"
+                    : "Draw a team order for each round"}
               </span>
             </li>
             <li>
-              <b>Đội bị Thách đố trả lời đúng</b>
+              <b>Correct Challenge answer</b>
               <span>
                 {game.settings.challengeCorrect === "end"
-                  ? "Kết thúc câu hỏi"
-                  : "Chủ nhà tiếp tục, tính điểm gốc"}
+                  ? "End the question"
+                  : "Original team answers for base points"}
               </span>
             </li>
             <li>
-              <b>Thời gian chờ cướp điểm</b>
+              <b>Steal window</b>
               <span>
-                {game.settings.stealSeconds} giây
+                {game.settings.stealSeconds} seconds
                 {game.settings.stealSeconds === 0
-                  ? " (không mở cửa cướp điểm)"
+                  ? " (Steal disabled)"
                   : ""}
               </span>
             </li>
             <li>
-              <b>Không đội nào cướp điểm</b>
+              <b>No team plays Steal</b>
               <span>
                 {game.settings.noSteal === "end"
-                  ? "Kết thúc câu hỏi"
-                  : "Chủ nhà được trả lời lại"}
+                  ? "End the question"
+                  : "Original team answers again"}
               </span>
             </li>
             <li>
-              <b>Hơn hai đội hòa</b>
+              <b>Tie between more than two teams</b>
               <span>
                 {game.settings.multiTie === "bracket"
-                  ? "Đối đầu lần lượt"
-                  : "Câu hỏi chung, tranh chuông"}
+                  ? "Head-to-head matches"
+                  : "Shared buzzer question"}
               </span>
             </li>
           </ol>
@@ -1233,7 +1234,7 @@ export default function GuidedControl() {
                 showPage("settings");
               }}
             >
-              Đổi quy ước
+              Edit Match Rules
             </button>
             <button
               className="guidePrimary"
@@ -1242,7 +1243,7 @@ export default function GuidedControl() {
                 setDialog(null);
               }}
             >
-              Đã thống nhất — đọc gợi ý <ArrowRight size={16} />
+              Confirm and Reveal Hint <ArrowRight size={16} />
             </button>
           </div>
         </Modal>

@@ -428,7 +428,7 @@ export function GameSettings({ game, commit }: Props) {
     <div className="managePage">
       <div className="pageTitle">
         <div>
-          <h1>Đội thi & quy ước</h1>
+          <h1>Teams & Match Rules</h1>
 
         </div>
         <Settings2 className="pageDecoration" size={34} />
@@ -436,7 +436,7 @@ export function GameSettings({ game, commit }: Props) {
       <section className="surface settingsTeams">
         <div className="sectionHeading">
           <div>
-            <h2>Bốn đội tham gia</h2>
+            <h2>Participating Teams</h2>
 
           </div>
         </div>
@@ -452,7 +452,7 @@ export function GameSettings({ game, commit }: Props) {
                 defaultValue={team.name}
                 maxLength={35}
                 onBlur={(e) => {
-                  const name = e.target.value.trim() || `Đội ${i + 1}`;
+                  const name = e.target.value.trim() || `Team ${i + 1}`;
                   if (name !== team.name)
                     commit((g) => ({
                       ...g,
@@ -461,7 +461,7 @@ export function GameSettings({ game, commit }: Props) {
                       ),
                     }));
                 }}
-                aria-label={`Tên đội ${i + 1}`}
+                aria-label={`Team name ${i + 1}`}
               />
             </label>
           ))}
@@ -471,21 +471,21 @@ export function GameSettings({ game, commit }: Props) {
         <section className="surface">
           <div className="sectionHeading">
             <div>
-              <h2>Năm quy ước bổ sung</h2>
+              <h2>Match Settings</h2>
 
             </div>
-            <span className="demoTag">MC CẦN THỐNG NHẤT</span>
+            <span className="demoTag">HOST CONFIRMATION</span>
           </div>
           {locked && (
             <div className="infoBanner compact">
               <Info size={16} />
-              Hoàn tất câu đang chơi để thay đổi quy ước.
+              Finish the current question before editing match rules.
             </div>
           )}
           <Setting
             number="01"
-            title="Phân đội chủ nhà"
-            description="MC có thể đổi đội ngay ở bước chuẩn bị của mỗi câu."
+            title="Team selection"
+            description="The host can change the team before revealing each hint."
           >
             <select
               disabled={locked}
@@ -494,15 +494,15 @@ export function GameSettings({ game, commit }: Props) {
                 patch("hostMode", e.target.value as Settings["hostMode"])
               }
             >
-              <option value="manual">MC chọn thủ công</option>
-              <option value="rotate">Luân phiên theo câu đã chơi</option>
-              <option value="random">Bốc thăm thứ tự cả vòng (luật mới)</option>
+              <option value="manual">Host selects the team</option>
+              <option value="rotate">Rotate through teams</option>
+              <option value="random">Draw a team order for each round</option>
             </select>
           </Setting>
           <Setting
             number="02"
-            title="Đội bị Challenge trả lời đúng"
-            description="Thẻ Double / Safe đã đặt luôn bị cháy khi tung Challenge."
+            title="Correct Challenge answer"
+            description="Challenge discards any Double High Risk or Safe Choice already played."
           >
             <select
               disabled={locked}
@@ -514,14 +514,14 @@ export function GameSettings({ game, commit }: Props) {
                 )
               }
             >
-              <option value="end">Kết thúc câu hỏi</option>
-              <option value="host">Chủ nhà tiếp tục, tính điểm gốc</option>
+              <option value="end">End the question</option>
+              <option value="host">Original team answers for base points</option>
             </select>
           </Setting>
           <Setting
             number="03"
-            title="Thời gian nhận Steal"
-            description="Hết thời gian, hệ thống xử lý theo quy ước bên dưới."
+            title="Steal window"
+            description="When time runs out, apply the setting below."
           >
             <div className="numberField">
               <input
@@ -537,13 +537,13 @@ export function GameSettings({ game, commit }: Props) {
                   )
                 }
               />
-              <span>giây</span>
+              <span>seconds</span>
             </div>
           </Setting>
           <Setting
             number="04"
-            title="Không có đội nhận Steal"
-            description="Áp dụng cả khi hết giờ hoặc MC đóng cửa Steal sớm."
+            title="No team plays Steal"
+            description="Applies when the timer expires or the host closes the Steal window early."
           >
             <select
               disabled={locked}
@@ -552,17 +552,17 @@ export function GameSettings({ game, commit }: Props) {
                 patch("noSteal", e.target.value as Settings["noSteal"])
               }
             >
-              <option value="end">Kết thúc câu hỏi</option>
-              <option value="host">Cho chủ nhà trả lời lại</option>
+              <option value="end">End the question</option>
+              <option value="host">Original team answers again</option>
             </select>
           </Setting>
           <Setting
             number="05"
-            title="Sudden Death với hơn hai đội"
+            title="Sudden Death with more than two teams"
             description={
               game.settings.multiTie === "bracket"
-                ? "Hai đội đầu đối đầu; đội thắng gặp đội tiếp theo cho đến khi còn một đội."
-                : "Các đội cùng tranh chuông. Sai bị loại khỏi lượt; đúng thắng. Khi còn hai đội, một đội sai thì đội kia thắng."
+                ? "The first two teams compete, then the winner faces the next team until one remains."
+                : "Teams buzz in together. A wrong answer eliminates the team and a correct answer wins. With two teams left, a wrong answer gives the other team the win."
             }
           >
             <select
@@ -572,40 +572,40 @@ export function GameSettings({ game, commit }: Props) {
                 patch("multiTie", e.target.value as Settings["multiTie"])
               }
             >
-              <option value="bracket">Đối đầu lần lượt</option>
-              <option value="shared">Câu hỏi chung, tranh chuông</option>
+              <option value="bracket">Head-to-head matches</option>
+              <option value="shared">Shared buzzer question</option>
             </select>
           </Setting>
         </section>
         <section className="surface ruleReference">
           <div className="sectionHeading">
             <div>
-              <h2>Luật cố định</h2>
+              <h2>Core Rules</h2>
 
             </div>
           </div>
           <div className="difficultyTable">
             {Object.entries(DIFFICULTY).map(([key, d]) => (
               <div key={key}>
-                <span className={`difficulty ${key}`}>{d.label}</span>
-                <b>{d.points} điểm</b>
+                <span className={`difficulty ${key}`}>{key}</span>
+                <b>{d.points} points</b>
                 <span>{d.seconds}s</span>
-                <small>Challenge {d.challenge}s đầu</small>
+                <small>Challenge within {d.challenge}s</small>
               </div>
             ))}
           </div>
           <ul>
-            <li>Điểm âm được phép.</li>
-            <li>Double và Safe chỉ dùng sau gợi ý, trước câu hỏi.</li>
-            <li>Challenge làm cháy thẻ Double / Safe đã đặt.</li>
-            <li>Challenge và Steal luôn tính điểm gốc.</li>
-            <li>Challenge sai: kết thúc ngay, không Steal.</li>
-            <li>Mỗi câu chỉ có tối đa một lượt Steal.</li>
-            <li>Hết giờ: MC quyết định kết quả, không tự chấm sai.</li>
+            <li>Scores can go below zero.</li>
+            <li>Play Double High Risk or Safe Choice after the hint and before the reveal.</li>
+            <li>Challenge discards any Double High Risk or Safe Choice already played.</li>
+            <li>Challenge and Steal use base points.</li>
+            <li>A wrong Challenge answer ends the question immediately.</li>
+            <li>Each question allows one Steal attempt.</li>
+            <li>When time expires, the host marks the answer.</li>
           </ul>
           <div className="ruleFoot">
-            <b>Xếp hạng cuối trận</b>
-            <p>Tổng điểm → số thẻ còn lại → Sudden Death.</p>
+            <b>Final Rankings</b>
+            <p>Total points → unused cards → Sudden Death.</p>
           </div>
         </section>
       </div>

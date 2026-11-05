@@ -59,12 +59,14 @@ export function Modal({
   children,
   onClose,
   wide = false,
+  lang = "vi",
 }: {
   title: string;
   description?: string;
   children: ReactNode;
   onClose: () => void;
   wide?: boolean;
+  lang?: "vi" | "en";
 }) {
   const ref = useRef<HTMLDivElement>(null),
     close = useRef(onClose);
@@ -112,6 +114,7 @@ export function Modal({
       <div
         ref={ref}
         className={`modal ${wide ? "wide" : ""}`}
+        lang={lang}
         role="dialog"
         aria-modal="true"
         aria-label={title}
@@ -121,7 +124,7 @@ export function Modal({
             <h2>{title}</h2>
             {description && <p>{description}</p>}
           </div>
-          <button className="iconBtn" onClick={onClose} aria-label="Đóng">
+          <button className="iconBtn" onClick={onClose} aria-label={lang === "en" ? "Close" : "Đóng"}>
             <X size={20} />
           </button>
         </div>
