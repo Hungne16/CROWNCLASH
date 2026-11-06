@@ -5,17 +5,16 @@ import { BannerLeaderboard } from './leaderboard/BannerLeaderboard';
 import { QuestionBoard } from './QuestionBoard';
 import { Crown, Expand, Check, Pause, Trophy, Zap, Swords, Shield, Sparkles, Volume2, VolumeX } from 'lucide-react';
 import {useLayoutEffect, useRef, type CSSProperties} from 'react';
-import { DIFFICULTY, gameRounds, questionSeconds, rankTeams, type Game } from './game';
-import { currentQuestion, questionTime, tiedLeaders, rankingRows, hasHostedRound } from './controller';
+import { DIFFICULTY, gameRounds, questionSeconds, type Game } from './game';
+import { currentQuestion, questionTime, hasHostedRound } from './controller';
 import { CardArt, Cards, formatTime, teamStyle } from './Common';
 import './presentation.css';
 import './show-effects.css';
 export function Presentation({game,now,onBuzz,sound=false,onToggleSound}:{game:Game;now:number;onBuzz:(index:number)=>void;sound?:boolean;onToggleSound?:()=>void}){
- const q=currentQuestion(game),time=questionTime(game,now),ranks=rankTeams(game.teams);
+ const q=currentQuestion(game),time=questionTime(game,now);
  const roundQuestions=game.questions.filter(item=>item.round===game.round);
  const questionNumber=q?roundQuestions.findIndex(item=>item.id===q.id)+1:0;
  const response=['challenge','steal-answer'].includes(game.phase)?game.answering:game.host;
- const winner=game.suddenWinner??(tiedLeaders(game).length===1?ranks[0].index:null);
  const isQuestion=q&&!['setup','round-summary','finished','sudden-death'].includes(game.phase);
  const text=game.phase==='hint'?q?.hint:q?.text;
  const progress=q?Math.max(0,Math.min(100,time.remaining/(questionSeconds(q)*1000)*100)):0;
@@ -49,7 +48,18 @@ export function Presentation({game,now,onBuzz,sound=false,onToggleSound}:{game:G
   </section>
   <section className="showPodiums" aria-label="Team Scores">{game.teams.map((team,i)=>{
    const active=response===i&&(game.phase==='setup'||!!isQuestion&&game.phase!=='result');
-   return <div key={i} style={teamStyle(i)} className={`showPodium ${active?'responding':''} ${hasHostedRound(game,i)?'turnComplete':''} ${winner===i&&game.phase==='finished'?'champion':''}`}><div className="showPodiumTop"><span className="showTeamCrest" aria-hidden="true"><span>{String(i+1).padStart(2,'0')}</span></span><b>{team.name}</b>{active&&<span className="showOnAir" aria-label="Active Team"/>}</div><strong className="showTeamScore" key={team.score}>{team.score}</strong><Cards cards={team.cards}/><div className="showPodiumBase"/></div>;
+   return (
+    <div key={i} style={teamStyle(i)} data-team={i + 1} className={`showPodium ${active ? 'responding' : ''} ${hasHostedRound(game, i) ? 'turnComplete' : ''}`}>
+     <div className="showPodiumTop teamNameplate">
+      <span className="teamFrameArt" aria-hidden="true" />
+      <b className={team.name.length > 24 ? "longTeamName" : undefined} title={team.name}>{team.name}</b>
+      {active && <span className="showOnAir" aria-label="Active Team" />}
+     </div>
+     <strong className="showTeamScore" key={team.score}>{team.score}</strong>
+     <Cards cards={team.cards} />
+     <div className="showPodiumBase" />
+    </div>
+   );
   })}</section>
  </main>;
 }
