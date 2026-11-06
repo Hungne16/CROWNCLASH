@@ -589,7 +589,7 @@ export function GameSettings({ game, commit }: Props) {
                 <span className={`difficulty ${key}`}>{key}</span>
                 <b>{d.points} points</b>
                 <span>{d.seconds}s</span>
-                <small>Challenge within {d.challenge}s</small>
+                <small>Challenge within {d.seconds / 2}s by default</small>
               </div>
             ))}
           </div>

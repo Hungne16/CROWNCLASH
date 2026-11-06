@@ -39,6 +39,7 @@ import {
   DIFFICULTY,
   gameRounds,
   questionSeconds,
+  challengeWindowSeconds,
   initialGame,
   rankTeams,
   remainingCards,
@@ -139,15 +140,15 @@ export default function GuidedControl() {
   const q = currentQuestion(game),
     time = questionTime(game, now),
     difficulty = q ? DIFFICULTY[q.difficulty] : null;
-  const challengeSeconds = difficulty
-    ? Math.max(0, Math.ceil(difficulty.challenge - time.elapsed / 1000))
-    : 0;
+  const challengeRemaining = q ? challengeWindowSeconds(q) - time.elapsed / 1000 : -1;
+  const challengeSeconds = Math.max(0, Math.ceil(challengeRemaining));
   const challengeAvailable =
     game.phase === "question" &&
     game.host !== null &&
     game.teams[game.host].cards.challenge > 0 &&
     !game.paused &&
-    challengeSeconds > 0;
+    game.startedAt !== null &&
+    challengeRemaining >= 0;
   const responder = ["challenge", "steal-answer", "sudden-death"].includes(
     game.phase,
   )

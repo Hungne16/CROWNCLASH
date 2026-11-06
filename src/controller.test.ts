@@ -78,7 +78,7 @@ describe("MC control flow", () => {
   });
   it.each([
     ["demo-1", 10, 30, 15],
-    ["demo-2", 20, 45, 20],
+    ["demo-2", 20, 45, 22.5],
     ["demo-3", 30, 60, 30],
   ] as const)(
     "applies the source difficulty, time and Challenge deadline for %s",

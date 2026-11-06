@@ -77,11 +77,11 @@ export type Game = {
 };
 export const DIFFICULTY: Record<
   Difficulty,
-  { points: number; seconds: number; challenge: number; label: string }
+  { points: number; seconds: number; label: string }
 > = {
-  easy: { points: 10, seconds: 30, challenge: 15, label: "Easy" },
-  medium: { points: 20, seconds: 45, challenge: 20, label: "Medium" },
-  hard: { points: 30, seconds: 60, challenge: 30, label: "Hard" },
+  easy: { points: 10, seconds: 30, label: "Easy" },
+  medium: { points: 20, seconds: 45, label: "Medium" },
+  hard: { points: 30, seconds: 60, label: "Hard" },
 };
 export function englishTeamName(name: string, index: number): string {
   return name === `Đội ${index + 1}` ? `Team ${index + 1}` : name;
@@ -212,7 +212,7 @@ export function useCard(
     )
       return fail("The question has not been revealed.");
     const elapsed = (now - (g.startedAt ?? now)) / 1000,
-      limit = DIFFICULTY[g.questions[g.questionIndex!].difficulty].challenge;
+      limit = challengeWindowSeconds(g.questions[g.questionIndex]);
     if (elapsed > limit) return fail("The Challenge window has closed.");
   } else if (card === "steal") {
     if (g.phase !== "steal-window")
@@ -248,6 +248,7 @@ export function useCard(
 }
 
 export const questionSeconds = (q: Question) => q.seconds ?? DIFFICULTY[q.difficulty].seconds;
+export const challengeWindowSeconds = (q: Question) => questionSeconds(q) / 2;
 
 export function gameRounds(g: Pick<Game, 'questions' | 'settings'>): string[] {
   const names = g.settings.roundNames ?? (g.questions.length === 12 && g.questions.every(q=>q.id.startsWith('group7-ch8-')) ? ['Warm-up','Identifying Types of Barriers','Sơn Tùng M-TP Case Study'] : undefined);
