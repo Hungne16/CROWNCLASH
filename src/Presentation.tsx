@@ -66,7 +66,7 @@ export function Presentation({game,now,onBuzz,sound=false,onToggleSound}:{game:G
 }
 
 function TeamFireBorder() {
- const positions = [8, 21, 35, 51, 65, 80, 94];
+ const positions = [5, 11, 18, 25, 33, 40, 48, 55, 63, 70, 78, 85, 92, 97];
  return (
   <span className="teamFireBorder" aria-hidden="true">
    {positions.map((position, index) => (
@@ -74,8 +74,9 @@ function TeamFireBorder() {
      key={position}
      style={{
       "--flame-position": `${position}%`,
-      "--flame-delay": `${-index * .19}s`,
-      "--flame-size": `${14 + (index * 7) % 15}px`,
+      "--flame-delay": `${-index * .37}s`,
+      "--flame-size": `${12 + (index * 7) % 19}px`,
+      "--flame-duration": `${1.5 + (index % 4) * .27}s`,
      } as CSSProperties}
     />
    ))}

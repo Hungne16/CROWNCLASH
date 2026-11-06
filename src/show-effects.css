@@ -63,87 +63,95 @@
   .presentation .teamNameplate .showOnAir { right: 5%; width: 4px; height: 4px; }
 }
 
-/* Fire follows the active podium without covering its name, score or cards. */
+/* A hot, continuous rim with fine translucent wisps. Content stays unobstructed. */
 .presentation .showPodium.responding {
-  border-color: #ffb35e;
-  box-shadow: 0 0 19px #ff773467, inset 0 0 22px #ff9d3626;
+  border-color: #ffc578;
+  box-shadow: 0 0 2px #fff1c9, 0 0 14px #ff8a3445, inset 0 0 24px #ff9d3618;
 }
-.responding .teamFrameArt {
-  filter: brightness(1.16) saturate(1.1);
-}
+.responding .teamFrameArt { filter: brightness(1.12) saturate(1.08); }
 .teamFireBorder {
   position: absolute;
   z-index: 1;
-  inset: 0;
+  inset: -1px;
   border-radius: inherit;
-  border: 1px solid #ffe5ae;
-  box-shadow: 0 0 9px #ff7a2e, inset 0 0 10px #ff9e4a60;
+  border: 1px solid #ffe4a7;
+  box-shadow: 0 0 4px #ffc56d, 0 0 12px #ff702b88, inset 0 0 7px #ff9e4a40;
   pointer-events: none;
-  animation: teamFireIgnite .42s ease-out both;
+  animation: teamFireIgnite .55s ease-out both;
 }
-.teamFireBorder::before {
+.teamFireBorder::before, .teamFireBorder::after {
   content: '';
   position: absolute;
   inset: -2px;
   border-radius: inherit;
-  padding: 3px;
-  background: repeating-conic-gradient(#ff602e 0%, #ffbd57 6%, #fff2bc 9%, #ff8233 13%, #ff602e 17%);
+  padding: 2px;
+  background: conic-gradient(from 25deg, #ff792522, #ffb348, #fff4c9, #ff792533 35%, #ff982b, #fff1b0 68%, #ff792522);
   mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
   mask-composite: exclude;
-  animation: teamFireGlow 1.45s ease-in-out infinite alternate;
+  animation: teamFireGlow 2.3s ease-in-out infinite alternate;
+}
+.teamFireBorder::after {
+  inset: -6px;
+  padding: 6px;
+  opacity: .3;
+  filter: blur(5px);
+  animation-delay: -1.1s;
 }
 .teamFireBorder i {
   position: absolute;
   top: 0;
   left: var(--flame-position);
-  width: clamp(9px, 1.6vw, 22px);
+  width: clamp(3px, .5vw, 8px);
   height: var(--flame-size);
-  transform: translate(-50%, -88%);
+  transform: translate(-50%, -96%);
   pointer-events: none;
 }
 .teamFireBorder i::before {
   content: '';
   position: absolute;
   inset: 0;
-  background: linear-gradient(0deg, #fff7ce, #ffbd58 34%, #ff762e 67%, #ff522200);
-  clip-path: polygon(0 100%, 9% 73%, 28% 61%, 25% 43%, 44% 52%, 48% 29%, 66% 0, 61% 41%, 82% 56%, 76% 69%, 94% 83%, 100% 100%);
+  border-radius: 85% 15% 65% 35% / 90% 75% 25% 10%;
+  background: linear-gradient(0deg, #fff0b5 0%, #ffc65c99 25%, #ff7b3138 60%, transparent 100%);
+  filter: blur(.7px);
   transform-origin: 50% 100%;
-  animation: teamFlame 1.05s var(--flame-delay) ease-in-out infinite alternate;
+  animation: teamFlame var(--flame-duration) var(--flame-delay) ease-in-out infinite;
 }
 .teamFireBorder i::after {
   content: '';
   position: absolute;
-  left: 58%;
-  bottom: 40%;
-  width: 3px;
+  left: 50%;
+  bottom: 0;
+  width: 2px;
   height: 3px;
   border-radius: 50%;
-  background: #ffd289;
-  box-shadow: 0 0 5px #ff9b3d;
-  animation: teamEmber 1.8s var(--flame-delay) ease-out infinite;
+  background: #ffe5a3;
+  box-shadow: 0 0 4px #ff9b3d;
+  opacity: 0;
+  animation: teamEmber 2.8s var(--flame-delay) ease-out infinite;
 }
+.teamFireBorder i:nth-child(2n)::after { display: none; }
 @keyframes teamFireIgnite {
-  from { opacity: 0; transform: scale(.985); }
-  to { opacity: 1; transform: scale(1); }
-}
-@keyframes teamFireGlow {
-  from { opacity: .65; }
+  from { opacity: 0; }
   to { opacity: 1; }
 }
+@keyframes teamFireGlow {
+  from { opacity: .45; }
+  to { opacity: .95; }
+}
 @keyframes teamFlame {
-  from { transform: skewX(-13deg) scale(.95, .65); opacity: .68; }
-  to { transform: skewX(13deg) scale(1.1, 1); opacity: .95; }
+  0%, 100% { transform: skewX(-9deg) scale(.65, .55); opacity: .25; }
+  40% { transform: skewX(12deg) scale(1, 1); opacity: .85; }
+  75% { transform: skewX(-5deg) scale(.7, .8); opacity: .45; }
 }
 @keyframes teamEmber {
-  0% { opacity: 0; transform: translate(0, 0); }
-  26% { opacity: .9; }
-  100% { opacity: 0; transform: translate(12px, -30px); }
+  0%, 20% { opacity: 0; transform: translate(0, 0) scale(.6); }
+  30% { opacity: .8; }
+  100% { opacity: 0; transform: translate(9px, -42px) scale(.3); }
 }
 @media (max-height: 650px), (max-width: 700px) {
-  .teamFireBorder i { height: calc(var(--flame-size) * .68); }
+  .teamFireBorder i { height: calc(var(--flame-size) * .7); }
 }
 @media (prefers-reduced-motion: reduce) {
-  .teamFireBorder, .teamFireBorder::before,
-  .teamFireBorder i::before, .teamFireBorder i::after { animation: none; }
-  .teamFireBorder i::after { display: none; }
+  .teamFireBorder, .teamFireBorder::before, .teamFireBorder::after { animation: none; }
+  .teamFireBorder i { display: none; }
 }
