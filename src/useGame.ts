@@ -42,12 +42,21 @@ export function useGame(presentation: boolean, practice = false) {
       const previous = current.current,
         next = action(previous);
       if (next === previous) return;
-      if(next.questionIndex !== previous.questionIndex || next.round !== previous.round || (next.phase === "setup" && previous.phase !== "setup")) animation.skip();
+      const changedScene =
+        next.phase !== previous.phase ||
+        next.questionIndex !== previous.questionIndex ||
+        next.round !== previous.round ||
+        next.introSlide !== previous.introSlide ||
+        next.answerRevealed !== previous.answerRevealed;
+      if (changedScene) animation.skip();
+
+      // An unfinished visual effect must never block a host action.
       if (next.cardActivation && next.cardActivation.id !== previous.cardActivation?.id) {
-        if(animation.active.current && !animation.active.current.result) return;
         animation.play(next.cardActivation);
       }
-      if(next.cardOutcome && next.cardOutcome.id !== previous.cardOutcome?.id) animation.play(next.cardOutcome);
+      if (next.cardOutcome && next.cardOutcome.id !== previous.cardOutcome?.id) {
+        animation.play(next.cardOutcome);
+      }
       undoRef.current = [...undoRef.current.slice(-29), previous];
       setUndoCount(undoRef.current.length);
       current.current = next;
