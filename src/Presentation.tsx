@@ -50,6 +50,7 @@ export function Presentation({game,now,onBuzz,sound=false,onToggleSound}:{game:G
    const active=response===i&&(game.phase==='setup'||!!isQuestion&&game.phase!=='result');
    return (
     <div key={i} style={teamStyle(i)} data-team={i + 1} className={`showPodium ${active ? 'responding' : ''} ${hasHostedRound(game, i) ? 'turnComplete' : ''}`}>
+     {active && <TeamFireBorder />}
      <div className="showPodiumTop teamNameplate">
       <span className="teamFrameArt" aria-hidden="true" />
       <b className={team.name.length > 24 ? "longTeamName" : undefined} title={team.name}>{team.name}</b>
@@ -62,6 +63,24 @@ export function Presentation({game,now,onBuzz,sound=false,onToggleSound}:{game:G
    );
   })}</section>
  </main>;
+}
+
+function TeamFireBorder() {
+ const positions = [8, 21, 35, 51, 65, 80, 94];
+ return (
+  <span className="teamFireBorder" aria-hidden="true">
+   {positions.map((position, index) => (
+    <i
+     key={position}
+     style={{
+      "--flame-position": `${position}%`,
+      "--flame-delay": `${-index * .19}s`,
+      "--flame-size": `${14 + (index * 7) % 15}px`,
+     } as CSSProperties}
+    />
+   ))}
+  </span>
+ );
 }
 
 function FitText({text}:{text:string}) {

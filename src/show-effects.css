@@ -62,3 +62,88 @@
   .presentation .showPodium .teamNameplate { padding-inline: 10%; }
   .presentation .teamNameplate .showOnAir { right: 5%; width: 4px; height: 4px; }
 }
+
+/* Fire follows the active podium without covering its name, score or cards. */
+.presentation .showPodium.responding {
+  border-color: #ffb35e;
+  box-shadow: 0 0 19px #ff773467, inset 0 0 22px #ff9d3626;
+}
+.responding .teamFrameArt {
+  filter: brightness(1.16) saturate(1.1);
+}
+.teamFireBorder {
+  position: absolute;
+  z-index: 1;
+  inset: 0;
+  border-radius: inherit;
+  border: 1px solid #ffe5ae;
+  box-shadow: 0 0 9px #ff7a2e, inset 0 0 10px #ff9e4a60;
+  pointer-events: none;
+  animation: teamFireIgnite .42s ease-out both;
+}
+.teamFireBorder::before {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  border-radius: inherit;
+  padding: 3px;
+  background: repeating-conic-gradient(#ff602e 0%, #ffbd57 6%, #fff2bc 9%, #ff8233 13%, #ff602e 17%);
+  mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  mask-composite: exclude;
+  animation: teamFireGlow 1.45s ease-in-out infinite alternate;
+}
+.teamFireBorder i {
+  position: absolute;
+  top: 0;
+  left: var(--flame-position);
+  width: clamp(9px, 1.6vw, 22px);
+  height: var(--flame-size);
+  transform: translate(-50%, -88%);
+  pointer-events: none;
+}
+.teamFireBorder i::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(0deg, #fff7ce, #ffbd58 34%, #ff762e 67%, #ff522200);
+  clip-path: polygon(0 100%, 9% 73%, 28% 61%, 25% 43%, 44% 52%, 48% 29%, 66% 0, 61% 41%, 82% 56%, 76% 69%, 94% 83%, 100% 100%);
+  transform-origin: 50% 100%;
+  animation: teamFlame 1.05s var(--flame-delay) ease-in-out infinite alternate;
+}
+.teamFireBorder i::after {
+  content: '';
+  position: absolute;
+  left: 58%;
+  bottom: 40%;
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: #ffd289;
+  box-shadow: 0 0 5px #ff9b3d;
+  animation: teamEmber 1.8s var(--flame-delay) ease-out infinite;
+}
+@keyframes teamFireIgnite {
+  from { opacity: 0; transform: scale(.985); }
+  to { opacity: 1; transform: scale(1); }
+}
+@keyframes teamFireGlow {
+  from { opacity: .65; }
+  to { opacity: 1; }
+}
+@keyframes teamFlame {
+  from { transform: skewX(-13deg) scale(.95, .65); opacity: .68; }
+  to { transform: skewX(13deg) scale(1.1, 1); opacity: .95; }
+}
+@keyframes teamEmber {
+  0% { opacity: 0; transform: translate(0, 0); }
+  26% { opacity: .9; }
+  100% { opacity: 0; transform: translate(12px, -30px); }
+}
+@media (max-height: 650px), (max-width: 700px) {
+  .teamFireBorder i { height: calc(var(--flame-size) * .68); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .teamFireBorder, .teamFireBorder::before,
+  .teamFireBorder i::before, .teamFireBorder i::after { animation: none; }
+  .teamFireBorder i::after { display: none; }
+}
