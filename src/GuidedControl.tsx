@@ -941,13 +941,13 @@ export default function GuidedControl() {
                         : finishQuestion()
                   }
                 >
-                  {!game.answerRevealed
+                  <span>{!game.answerRevealed
                     ? "Reveal Answer"
                     : practice
                       ? "Go to Live Match"
                       : hasNext
                         ? "Back to Question Board"
-                        : `Round Summary ${game.round}`}
+                        : `Round Summary ${game.round}`}</span>
                   <ArrowRight size={19} />
                 </button>
               </div>
