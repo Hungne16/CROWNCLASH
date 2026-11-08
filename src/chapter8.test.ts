@@ -13,7 +13,7 @@ describe('Chapter 8 imported question bank', () => {
     expect(questions[9].answer).toContain('Suggested marking guide');
   });
   it('preserves document timings through validation and pause/resume', () => {
-    expect(questions.slice(0,8).map(questionSeconds)).toEqual([15,30,60,30,15,30,60,120]);
+    expect(questions.slice(0,8).map(questionSeconds)).toEqual([15,45,60,30,15,30,60,120]);
     const game = openQuestion({...initialGame(), questions, questionIndex:7, host:0, phase:'hint', hintRead:true},1000);
     expect(questionTime(game,11000).seconds).toBe(110);
     const paused = toggleClock(game,11000);
@@ -26,3 +26,4 @@ describe('Chapter 8 imported question bank', () => {
     expect(questions.slice(8).map(questionSeconds)).toEqual([30,45,45,60]);
   });
 });
+

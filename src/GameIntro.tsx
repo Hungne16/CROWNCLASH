@@ -64,13 +64,12 @@ export function introSlides(game: Game): Slide[] {
       ],
     },
     {
-      title: 'Who takes the crown?',
-      subtitle: 'TOTAL POINTS → UNUSED CARDS → SUDDEN DEATH',
+      title: 'Save Card',
+      subtitle: 'KEEP YOUR CARDS',
       lines: [
-        'The team with the highest total score wins.',
-        'If scores are tied, the team with more unused cards ranks higher.',
-        'If teams are still tied, they face a Sudden Death buzzer question with no cards.',
-        'A correct answer wins. With two teams remaining, a wrong answer hands the win to the other team.',
+        'Do not choose Double High Risk or Safe Choice before the question is revealed.',
+        'Correct answer — Gain the base points.',
+        'Incorrect answer — Lose the base points.',
       ],
     },
   ];

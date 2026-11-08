@@ -170,6 +170,10 @@ export function normalizeGame(value: unknown): Game {
     ...base,
     ...g,
     rulesVersion:4,
+    // Correct the shipped question in saved banks while preserving custom timings.
+    questions: g.questions.map(q => q.id === 'group7-ch8-r1-q2' && q.seconds === 30 && q.hint.includes('Thinking time: 30 seconds')
+      ? {...q, seconds: 45, hint: q.hint.replace('Thinking time: 30 seconds', 'Thinking time: 45 seconds')}
+      : q),
     teams,
     history,
     phase: phases.includes(g.phase) ? g.phase : "setup",
