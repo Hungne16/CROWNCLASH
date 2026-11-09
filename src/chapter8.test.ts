@@ -9,7 +9,7 @@ describe('Chapter 8 imported question bank', () => {
     expect([1,2,3].map(r => questions.filter(q => q.round === r).length)).toEqual([4,4,4]);
     expect(questions[6].text).toContain('E. Fear of ridicule');
     expect(questions[11].text).toContain('D. He chose the safest option');
-    expect(questions[7].text).toContain('Bonus questions:');
+    expect(questions[7].text).toContain('Bonus question:');
     expect(questions[9].answer).toContain('Suggested marking guide');
   });
   it('preserves document timings through validation and pause/resume', () => {

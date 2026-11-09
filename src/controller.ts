@@ -170,10 +170,23 @@ export function normalizeGame(value: unknown): Game {
     ...base,
     ...g,
     rulesVersion:4,
-    // Correct the shipped question in saved banks while preserving custom timings.
-    questions: g.questions.map(q => q.id === 'group7-ch8-r1-q2' && q.seconds === 30 && q.hint.includes('Thinking time: 30 seconds')
-      ? {...q, seconds: 45, hint: q.hint.replace('Thinking time: 30 seconds', 'Thinking time: 45 seconds')}
-      : q),
+    questions: g.questions.map(q => {
+      if (q.id === 'group7-ch8-r1-q2' && q.seconds === 30 && q.hint.includes('Thinking time: 30 seconds')) {
+        return {...q, seconds: 45, hint: q.hint.replace('Thinking time: 30 seconds', 'Thinking time: 45 seconds')};
+      }
+      if (q.id === 'group7-ch8-r2-q4' && q.text.includes('Identify the external and internal barriers and explain how they interact.')) {
+        return {
+          ...q,
+          hint: q.hint.replace('Short answer with bonus questions', 'Short answer with a bonus question'),
+          text: q.text
+            .replace('Identify the external and internal barriers and explain how they interact.',
+              'Name some external and internal barriers.\nYour answer will be considered correct if at least two of your points match the answer key.')
+            .replace('Bonus questions:', 'Bonus question:')
+            .replace('\nWhat remains outside her direct control, even if she takes that step?', ''),
+        };
+      }
+      return q;
+    }),
     teams,
     history,
     phase: phases.includes(g.phase) ? g.phase : "setup",
